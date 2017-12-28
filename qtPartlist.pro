@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -25,10 +25,26 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        cmainwindow.cpp
+        cmainwindow.cpp \
+    cpartlistwindow.cpp \
+    common.cpp \
+    cdistributorwindow.cpp \
+    cpartwindow.cpp \
+    cdistributor.cpp \
+    cdistributoreditdialog.cpp
 
 HEADERS += \
-        cmainwindow.h
+        cmainwindow.h \
+    cpartlistwindow.h \
+    common.h \
+    cdistributorwindow.h \
+    cpartwindow.h \
+    cdistributor.h \
+    cdistributoreditdialog.h
 
 FORMS += \
-        cmainwindow.ui
+        cmainwindow.ui \
+    cpartlistwindow.ui \
+    cdistributorwindow.ui \
+    cpartwindow.ui \
+    cdistributoreditdialog.ui

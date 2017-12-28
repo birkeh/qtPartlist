@@ -1,24 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
  <class>cMainWindow</class>
- <widget class="QMainWindow" name="cMainWindow" >
-  <property name="geometry" >
+ <widget class="QMainWindow" name="cMainWindow">
+  <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>400</width>
-    <height>300</height>
+    <width>711</width>
+    <height>615</height>
    </rect>
   </property>
-  <property name="windowTitle" >
-   <string>cMainWindow</string>
+  <property name="windowTitle">
+   <string>qtPartlist</string>
   </property>
-  <widget class="QMenuBar" name="menuBar" />
-  <widget class="QToolBar" name="mainToolBar" />
-  <widget class="QWidget" name="centralWidget" />
-  <widget class="QStatusBar" name="statusBar" />
+  <widget class="QWidget" name="centralWidget">
+   <layout class="QGridLayout" name="gridLayout">
+    <item row="0" column="0">
+     <widget class="QTabWidget" name="m_lpMainTab">
+      <property name="currentIndex">
+       <number>-1</number>
+      </property>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="m_lpMenuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>711</width>
+     <height>21</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="m_lpMenuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="m_lpMenuFileNewProject"/>
+    <addaction name="m_lpMenuFileOpenProject"/>
+    <addaction name="separator"/>
+    <addaction name="m_lpMenuFileCloseProject"/>
+    <addaction name="separator"/>
+    <addaction name="m_lpMenuFileExport"/>
+    <addaction name="separator"/>
+    <addaction name="m_lpMenuFileClose"/>
+   </widget>
+   <widget class="QMenu" name="m_lpMenuDistributor">
+    <property name="title">
+     <string>&amp;Distributor</string>
+    </property>
+    <addaction name="m_lpMenuDistributorShow"/>
+    <addaction name="m_lpMenuDistributorAdd"/>
+    <addaction name="m_lpMenuDistributorEdit"/>
+    <addaction name="m_lpMenuDistributorDelete"/>
+   </widget>
+   <widget class="QMenu" name="m_lpMenuParts">
+    <property name="title">
+     <string>&amp;Parts</string>
+    </property>
+    <addaction name="m_lpMenuPartsShow"/>
+    <addaction name="m_lpMenuPartsAdd"/>
+    <addaction name="m_lpMenuPartsEdit"/>
+    <addaction name="m_lpMenuPartsDelete"/>
+   </widget>
+   <addaction name="m_lpMenuFile"/>
+   <addaction name="m_lpMenuDistributor"/>
+   <addaction name="m_lpMenuParts"/>
+  </widget>
+  <widget class="QToolBar" name="mainToolBar">
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+  </widget>
+  <widget class="QStatusBar" name="statusBar"/>
+  <action name="m_lpMenuFileOpenProject">
+   <property name="text">
+    <string>&amp;Open Project...</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="m_lpMenuFileCloseProject">
+   <property name="text">
+    <string>&amp;Close Project</string>
+   </property>
+  </action>
+  <action name="m_lpMenuFileNewProject">
+   <property name="text">
+    <string>&amp;New Project...</string>
+   </property>
+  </action>
+  <action name="m_lpMenuFileExport">
+   <property name="text">
+    <string>&amp;Export...</string>
+   </property>
+  </action>
+  <action name="m_lpMenuFileClose">
+   <property name="text">
+    <string>&amp;Close</string>
+   </property>
+  </action>
+  <action name="m_lpMenuDistributorShow">
+   <property name="text">
+    <string>show...</string>
+   </property>
+  </action>
+  <action name="m_lpMenuToolsPart">
+   <property name="text">
+    <string>Part</string>
+   </property>
+  </action>
+  <action name="m_lpMenuDistributorAdd">
+   <property name="text">
+    <string>add...</string>
+   </property>
+  </action>
+  <action name="m_lpMenuDistributorEdit">
+   <property name="text">
+    <string>edit...</string>
+   </property>
+  </action>
+  <action name="m_lpMenuDistributorDelete">
+   <property name="text">
+    <string>delete</string>
+   </property>
+  </action>
+  <action name="m_lpMenuPartsShow">
+   <property name="text">
+    <string>show...</string>
+   </property>
+  </action>
+  <action name="m_lpMenuPartsAdd">
+   <property name="text">
+    <string>add...</string>
+   </property>
+  </action>
+  <action name="m_lpMenuPartsEdit">
+   <property name="text">
+    <string>edit...</string>
+   </property>
+  </action>
+  <action name="m_lpMenuPartsDelete">
+   <property name="text">
+    <string>delete</string>
+   </property>
+  </action>
  </widget>
- <layoutDefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
 </ui>
