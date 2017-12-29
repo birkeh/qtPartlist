@@ -149,8 +149,50 @@ void cDistributorWindow::onAdd()
 
 void cDistributorWindow::onEdit()
 {
+	if(!ui->m_lpDistributorList->selectionModel()->selectedRows().count())
+		return;
 
-	//	distributorChanged();
+	QStandardItem*	lpItem			= m_lpDistributorListModel->itemFromIndex(ui->m_lpDistributorList->selectionModel()->selectedIndexes().at(0));
+	if(!lpItem)
+		return;
+
+	cDistributor*	lpDistributor	= qvariant_cast<cDistributor*>(lpItem->data(Qt::UserRole));
+	if(!lpDistributor)
+		return;
+
+	cDistributorEditDialog*	lpDialog	= new cDistributorEditDialog(this);
+	lpDialog->setValues(lpDistributor);
+
+	if(lpDialog->exec() == QDialog::Rejected)
+	{
+		delete lpDialog;
+		return;
+	}
+
+	qint32	id	= lpDialog->id();
+
+	delete lpDialog;
+
+	distributorChanged(0);
+	showDistributorList();
+
+	for(int x = 0;x < m_lpDistributorListModel->rowCount();x++)
+	{
+		QStandardItem*	lpItem			= m_lpDistributorListModel->item(x, 0);
+		if(!lpItem)
+			continue;
+
+		cDistributor*	lpDistributor	= qvariant_cast<cDistributor*>(lpItem->data(Qt::UserRole));
+		if(!lpDistributor)
+			continue;
+
+		if(lpDistributor->id() == id)
+		{
+			ui->m_lpDistributorList->setCurrentIndex(lpItem->index());
+			ui->m_lpDistributorList->scrollTo(lpItem->index());
+			return;
+		}
+	}
 }
 
 void cDistributorWindow::onDelete()
