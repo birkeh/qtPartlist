@@ -20,6 +20,9 @@
       <property name="currentIndex">
        <number>-1</number>
       </property>
+      <property name="movable">
+       <bool>true</bool>
+      </property>
      </widget>
     </item>
    </layout>
@@ -64,9 +67,22 @@
     <addaction name="m_lpMenuPartsEdit"/>
     <addaction name="m_lpMenuPartsDelete"/>
    </widget>
+   <widget class="QMenu" name="m_lpMenuPartlist">
+    <property name="title">
+     <string>Part&amp;list</string>
+    </property>
+    <addaction name="m_lpMenuPartlistNew"/>
+    <addaction name="m_lpMenuPartlistOpen"/>
+    <addaction name="separator"/>
+    <addaction name="m_lpMenuPartlistClose"/>
+    <addaction name="separator"/>
+    <addaction name="m_lpMenuPartlistSave"/>
+    <addaction name="m_lpMenuPartlistSaveAs"/>
+   </widget>
    <addaction name="m_lpMenuFile"/>
    <addaction name="m_lpMenuDistributor"/>
    <addaction name="m_lpMenuParts"/>
+   <addaction name="m_lpMenuPartlist"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -148,6 +164,31 @@
   <action name="m_lpMenuPartsDelete">
    <property name="text">
     <string>delete</string>
+   </property>
+  </action>
+  <action name="m_lpMenuPartlistNew">
+   <property name="text">
+    <string>&amp;new...</string>
+   </property>
+  </action>
+  <action name="m_lpMenuPartlistOpen">
+   <property name="text">
+    <string>&amp;open...</string>
+   </property>
+  </action>
+  <action name="m_lpMenuPartlistClose">
+   <property name="text">
+    <string>&amp;close</string>
+   </property>
+  </action>
+  <action name="m_lpMenuPartlistSave">
+   <property name="text">
+    <string>&amp;save</string>
+   </property>
+  </action>
+  <action name="m_lpMenuPartlistSaveAs">
+   <property name="text">
+    <string>save &amp;as...</string>
    </property>
   </action>
  </widget>

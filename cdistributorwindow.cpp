@@ -3,7 +3,6 @@
 
 #include "cdistributoreditdialog.h"
 
-
 #include <QString>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -67,6 +66,9 @@ void cDistributorWindow::showDistributorList()
 
 		m_lpDistributorListModel->appendRow(lpItems);
 	}
+
+	for(int z = 0;z < header.count();z++)
+		ui->m_lpDistributorList->resizeColumnToContents(z);
 }
 
 bool cDistributorWindow::somethingSelected()

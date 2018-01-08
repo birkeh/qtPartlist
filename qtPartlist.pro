@@ -31,7 +31,10 @@ SOURCES += \
     cdistributorwindow.cpp \
     cpartwindow.cpp \
     cdistributor.cpp \
-    cdistributoreditdialog.cpp
+    cdistributoreditdialog.cpp \
+    cpartgroup.cpp \
+    cpart.cpp \
+    cparteditdialog.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -40,11 +43,15 @@ HEADERS += \
     cdistributorwindow.h \
     cpartwindow.h \
     cdistributor.h \
-    cdistributoreditdialog.h
+    cdistributoreditdialog.h \
+    cpartgroup.h \
+    cpart.h \
+    cparteditdialog.h
 
 FORMS += \
         cmainwindow.ui \
     cpartlistwindow.ui \
     cdistributorwindow.ui \
     cpartwindow.ui \
-    cdistributoreditdialog.ui
+    cdistributoreditdialog.ui \
+    cparteditdialog.ui

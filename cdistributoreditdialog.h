@@ -19,20 +19,19 @@ public:
 	explicit cDistributorEditDialog(QWidget *parent = 0);
 	~cDistributorEditDialog();
 
-	qint32			id();
-
-	void			setValues(cDistributor* lpDistributor);
+	qint32						id();
+	void						setValues(cDistributor* lpDistributor);
 private slots:
-	void			on_m_lpName_textChanged(const QString &arg1);
+	void						on_m_lpName_textChanged(const QString &arg1);
 
 private:
-	Ui::cDistributorEditDialog *ui;
-	qint32			m_id;
+	Ui::cDistributorEditDialog*	ui;
+	qint32						m_id;
 
-	bool			save();
-	bool			add();
+	bool						save();
+	bool						add();
 protected:
-	void			accept();
+	void						accept();
 };
 
 #endif // CDISTRIBUTOREDITDIALOG_H

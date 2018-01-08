@@ -1,13 +1,19 @@
 #include "cmainwindow.h"
 #include "ui_cmainwindow.h"
 
+#include "cpartlistwindow.h"
+
 #include "common.h"
 
 #include <QSqlQuery>
 #include <QSqlError>
 
+#include <QMessageBox>
+
 #include <QSettings>
 #include <QDir>
+
+#include <QInputDialog>
 
 #include <QDebug>
 
@@ -34,6 +40,8 @@ cMainWindow::cMainWindow(QWidget *parent) :
 	initDB();
 
 	loadDistributorList();
+	loadPartGroupList();
+	loadPartList();
 
 	updateMenu();
 }
@@ -76,12 +84,22 @@ void cMainWindow::initDB()
 
 	QSqlQuery	query;
 
+	if(!m_db.tables().contains("partgroup"))
+	{
+		query.exec("CREATE TABLE partgroup ("
+					"   id                  INTEGER PRIMARY KEY,"
+					"   name                STRING NOT NULL,"
+					"   description         TEXT);");
+	}
+
 	if(!m_db.tables().contains("part"))
 	{
 		query.exec("CREATE TABLE part ("
 					"   id                  INTEGER PRIMARY KEY,"
 					"   name                STRING NOT NULL,"
-					"   description         TEXT);");
+					"   partgroupID         INTEGER REFERENCES partgroup(id),"
+					"   description         TEXT,"
+					"   link                STRING);");
 	}
 
 	if(!m_db.tables().contains("distributor"))
@@ -99,6 +117,18 @@ void cMainWindow::initDB()
 					"   description TEXT);");
 	}
 
+	if(!m_db.tables().contains("part_distributor"))
+	{
+		query.exec("CREATE TABLE part_distributor ("
+					"   id			   INTEGER PRIMARY KEY,"
+					"   name           STRING,"
+					"   description    TEXT,"
+					"   partID         INTEGER REFERENCES part (id),"
+					"   distributorID  INTEGER REFERENCES distributor (id),"
+					"   price          DOUBLE,"
+					"   link           STRING);");
+	}
+
 	if(!m_db.tables().contains("partlist"))
 	{
 		query.exec("CREATE TABLE partlist ("
@@ -110,21 +140,23 @@ void cMainWindow::initDB()
 	if(!m_db.tables().contains("partlistitem"))
 	{
 		query.exec("CREATE TABLE partlistitem ("
-					"   id			   INTEGER PRIMARY KEY,"
-					"   partlistID     INTEGER REFERENCES partlist (id),"
-					"   partID         INTEGER REFERENCES part (id),"
-					"   reference      STRING,"
-					"   description    TEXT,"
-					"   distributorID  INTEGER REFERENCES distributor (id),"
-					"   ordered        BOOLEAN,"
-					"   link           STRING);");
+					"   id			        INTEGER PRIMARY KEY,"
+					"   partlistID          INTEGER REFERENCES partlist (id),"
+					"   part_disttributorID INTEGER REFERENCES part_distributor (id),"
+					"   replaceID           INTEGER REFERENCES partlistitem (id),"
+					"   reference           STRING,"
+					"   description         TEXT,"
+					"   state               INTEGER,"
+					"   price               DOUBLE);");
 	}
 
 	if(!m_db.tables().contains("project"))
 	{
 		query.exec("CREATE TABLE project ("
 					"   id			   INTEGER PRIMARY KEY,"
-					"   name           STRING);");
+					"   name           STRING,"
+					"   initialDate    DATE,"
+					"   description);");
 	}
 
 	if(!m_db.tables().contains("project_partlist"))
@@ -167,6 +199,64 @@ void cMainWindow::loadDistributorList()
 		lpDistributor->setEMail(query.value("email").toString());
 		lpDistributor->setLink(query.value("link").toString());
 		lpDistributor->setDescription(query.value("description").toString());
+	}
+}
+
+void cMainWindow::loadPartGroupList()
+{
+	m_partGroupList.clear();
+
+	QSqlQuery	query;
+	QString		szQuery;
+
+	szQuery	= "SELECT id, name, description FROM partgroup ORDER BY name;";
+
+	if(!query.exec(szQuery))
+	{
+		qDebug() << query.lastError().text();
+		return;
+	}
+
+	while(query.next())
+	{
+		cPartGroup*	lpPartGroup	= m_partGroupList.add(query.value("id").toInt());
+		if(!lpPartGroup)
+			return;
+
+		lpPartGroup->setName(query.value("name").toString());
+		lpPartGroup->setDescription(query.value("description").toString());
+	}
+}
+
+void cMainWindow::loadPartList()
+{
+	m_partList.clear();
+
+	QSqlQuery	query;
+	QString		szQuery;
+
+	szQuery	= "SELECT part.id id, part.name name, part.description description, part.partgroupID partgroupID, part.link FROM part JOIN partgroup ON (part.partgroupID = partgroup.id) ORDER BY partgroup.name, part.name;";
+
+	if(!query.exec(szQuery))
+	{
+		qDebug() << query.lastError().text();
+		return;
+	}
+
+	while(query.next())
+	{
+		cPartGroup*	lpPartGroup	= m_partGroupList.find(query.value("part.partgroupID").toInt());
+		if(!lpPartGroup)
+			return;
+
+		cPart*		lpPart		= m_partList.add(query.value("part.id").toInt());
+		if(!lpPart)
+			return;
+
+		lpPart->setName(query.value("part.name").toString());
+		lpPart->setDescription(query.value("part.description").toString());
+		lpPart->setPartGroup(lpPartGroup);
+		lpPart->setLink(query.value("part.link").toString());
 	}
 }
 
@@ -239,23 +329,36 @@ void cMainWindow::on_m_lpMenuPartsShow_triggered()
 	{
 		m_lpPartWindow	= new cPartWindow(this);
 		ui->m_lpMainTab->addTab(m_lpPartWindow, tr("Parts"));
+		m_lpPartWindow->setList(&m_partGroupList, &m_partList);
+
+		connect(m_lpPartWindow, SIGNAL(selectionChanged(QModelIndex)), this, SLOT(partSelectionChanged(QModelIndex)));
+		connect(m_lpPartWindow, SIGNAL(partChanged(cPart*)), this, SLOT(partChanged(cPart*)));
 	}
 	ui->m_lpMainTab->setCurrentWidget(m_lpPartWindow);
 }
 
 void cMainWindow::on_m_lpMenuPartsAdd_triggered()
 {
+	if(!m_lpPartWindow)
+		return;
 
+	m_lpPartWindow->addPart();
 }
 
 void cMainWindow::on_m_lpMenuPartsEdit_triggered()
 {
+	if(!m_lpPartWindow)
+		return;
 
+	m_lpPartWindow->editPart();
 }
 
 void cMainWindow::on_m_lpMenuPartsDelete_triggered()
 {
+	if(!m_lpPartWindow)
+		return;
 
+	m_lpPartWindow->deletePart();
 }
 
 void cMainWindow::updateMenu()
@@ -267,6 +370,17 @@ void cMainWindow::updateMenu()
 		ui->m_lpMenuDistributorAdd->setEnabled(false);
 		ui->m_lpMenuDistributorEdit->setEnabled(false);
 		ui->m_lpMenuDistributorDelete->setEnabled(false);
+
+		ui->m_lpMenuPartsShow->setEnabled(true);
+		ui->m_lpMenuPartsAdd->setEnabled(false);
+		ui->m_lpMenuPartsEdit->setEnabled(false);
+		ui->m_lpMenuPartsDelete->setEnabled(false);
+
+		ui->m_lpMenuPartlistNew->setEnabled(true);
+		ui->m_lpMenuPartlistOpen->setEnabled(true);
+		ui->m_lpMenuPartlistClose->setEnabled(false);
+		ui->m_lpMenuPartlistSave->setEnabled(false);
+		ui->m_lpMenuPartlistSaveAs->setEnabled(false);
 
 		return;
 	}
@@ -289,13 +403,61 @@ void cMainWindow::updateMenu()
 			ui->m_lpMenuDistributorEdit->setEnabled(false);
 			ui->m_lpMenuDistributorDelete->setEnabled(false);
 		}
+
+		ui->m_lpMenuPartsShow->setEnabled(true);
+		ui->m_lpMenuPartsAdd->setEnabled(false);
+		ui->m_lpMenuPartsEdit->setEnabled(false);
+		ui->m_lpMenuPartsDelete->setEnabled(false);
+
+		ui->m_lpMenuPartlistNew->setEnabled(true);
+		ui->m_lpMenuPartlistOpen->setEnabled(true);
+		ui->m_lpMenuPartlistClose->setEnabled(false);
+		ui->m_lpMenuPartlistSave->setEnabled(false);
+		ui->m_lpMenuPartlistSaveAs->setEnabled(false);
 	}
-	else
+	else if(lpPartWindow)
 	{
+		ui->m_lpMenuPartsShow->setEnabled(false);
+		ui->m_lpMenuPartsAdd->setEnabled(true);
+		if(!lpPartWindow->groupSelected())
+		{
+			ui->m_lpMenuPartsEdit->setEnabled(true);
+			ui->m_lpMenuPartsDelete->setEnabled(true);
+		}
+		else
+		{
+			ui->m_lpMenuPartsEdit->setEnabled(false);
+			ui->m_lpMenuPartsDelete->setEnabled(false);
+		}
+
 		ui->m_lpMenuDistributorShow->setEnabled(true);
 		ui->m_lpMenuDistributorAdd->setEnabled(false);
 		ui->m_lpMenuDistributorEdit->setEnabled(false);
 		ui->m_lpMenuDistributorDelete->setEnabled(false);
+
+		ui->m_lpMenuPartlistNew->setEnabled(true);
+		ui->m_lpMenuPartlistOpen->setEnabled(true);
+		ui->m_lpMenuPartlistClose->setEnabled(false);
+		ui->m_lpMenuPartlistSave->setEnabled(false);
+		ui->m_lpMenuPartlistSaveAs->setEnabled(false);
+	}
+	else if(lpPartlistWindow)
+	{
+		ui->m_lpMenuPartlistNew->setEnabled(true);
+		ui->m_lpMenuPartlistOpen->setEnabled(true);
+		ui->m_lpMenuPartlistClose->setEnabled(true);
+		ui->m_lpMenuPartlistSave->setEnabled(lpPartlistWindow->somethingChanged());
+		ui->m_lpMenuPartlistSaveAs->setEnabled(true);
+
+		ui->m_lpMenuDistributorShow->setEnabled(true);
+		ui->m_lpMenuDistributorAdd->setEnabled(false);
+		ui->m_lpMenuDistributorEdit->setEnabled(false);
+		ui->m_lpMenuDistributorDelete->setEnabled(false);
+
+		ui->m_lpMenuPartsShow->setEnabled(true);
+		ui->m_lpMenuPartsAdd->setEnabled(false);
+		ui->m_lpMenuPartsEdit->setEnabled(false);
+		ui->m_lpMenuPartsDelete->setEnabled(false);
 	}
 }
 
@@ -304,12 +466,164 @@ void cMainWindow::on_m_lpMainTab_currentChanged(int /*index*/)
 	updateMenu();
 }
 
-void cMainWindow::distributorSelectionChanged(const QModelIndex& index)
+void cMainWindow::distributorSelectionChanged(const QModelIndex& /*index*/)
 {
 	updateMenu();
 }
 
-void cMainWindow::distributorChanged(cDistributor* lpDistributor)
+void cMainWindow::distributorChanged(cDistributor* /*lpDistributor*/)
 {
 	loadDistributorList();
+}
+
+void cMainWindow::partSelectionChanged(const QModelIndex& /*index*/)
+{
+	updateMenu();
+}
+
+void cMainWindow::partGroupChanged(cPartGroup* /*lpPartGroup*/)
+{
+	loadPartGroupList();
+	loadPartList();
+}
+
+void cMainWindow::partChanged(cPart* /*lpPart*/)
+{
+	loadPartList();
+}
+
+void cMainWindow::on_m_lpMenuPartlistNew_triggered()
+{
+	QList<qint16>		newList;
+
+	for(int x = 0;x < ui->m_lpMainTab->count();x++)
+	{
+		cPartlistWindow*	lpPartlistWindow	= qobject_cast<cPartlistWindow*>(ui->m_lpMainTab->widget(x));
+
+		if(!lpPartlistWindow)
+			continue;
+
+		QString				szTitle				= lpPartlistWindow->windowTitle();
+		if(!szTitle.startsWith("new"))
+			continue;
+
+		if(szTitle.length() == 3)
+		{
+			newList.append(0);
+			continue;
+		}
+
+		if(!szTitle.contains("("))
+			continue;
+
+		szTitle	= szTitle.mid(szTitle.indexOf("(")+1);
+		if(!szTitle.contains(")"))
+			continue;
+
+		szTitle	= szTitle.left(szTitle.indexOf(")"));
+		newList.append(szTitle.toInt());
+	}
+
+	std::sort(newList.begin(), newList.end());
+	QString				szNew;
+
+	if(newList.isEmpty())
+		szNew	= "new";
+	else
+		szNew	= QString("new (%1)").arg(newList.last()+1);
+
+	cPartlistWindow*	lpNew	= new cPartlistWindow(ui->m_lpMainTab);
+	lpNew->setPartlistName(szNew);
+	lpNew->setMainTab(ui->m_lpMainTab);
+	ui->m_lpMainTab->addTab(lpNew, szNew);
+	ui->m_lpMainTab->setCurrentWidget(lpNew);
+
+	connect(lpNew, SIGNAL(partlistChanged(QWidget*)), this, SLOT(partlistChanged(QWidget*)));
+}
+
+void cMainWindow::on_m_lpMenuPartlistOpen_triggered()
+{
+	QStringList		szList;
+	QSqlQuery		query;
+	QList<qint32>	idList;
+
+	if(!query.exec("SELECT id, name, description FROM partlist ORDER BY name;"))
+	{
+		qDebug() << query.lastError().text();
+		QMessageBox::critical(this, "Error", "No projects found.");
+		return;
+	}
+
+	while(query.next())
+	{
+		QString sz	= query.value("name").toString();
+		if(!query.value("description").toString().isEmpty())
+			sz.append(QString(" (%1)").arg(query.value("description").toString()));
+
+		szList.append(sz);
+		idList.append(query.value("id").toInt());
+	}
+
+	if(!szList.count())
+	{
+		QMessageBox::critical(this, "Error", "No projects found.");
+		return;
+	}
+
+	QInputDialog	inputDialog(this);
+	inputDialog.setOptions(QInputDialog::UseListViewForComboBoxItems);
+	inputDialog.setComboBoxItems(szList);
+	inputDialog.setLabelText("Project:");
+	inputDialog.setWindowTitle("Open");
+
+	if(inputDialog.exec() == QDialog::Accepted)
+	{
+		QString	szResult	= inputDialog.textValue();
+		qint16	index		= szList.indexOf(szResult);
+		qint32	id			= idList.at(index);
+
+		cPartlistWindow*	lpNew	= new cPartlistWindow(ui->m_lpMainTab);
+		lpNew->setMainTab(ui->m_lpMainTab);
+		ui->m_lpMainTab->addTab(lpNew, "INITIALIZING");
+		ui->m_lpMainTab->setCurrentWidget(lpNew);
+		lpNew->setPartlistID(id);
+
+		connect(lpNew, SIGNAL(partlistChanged(QWidget*)), this, SLOT(partlistChanged(QWidget*)));
+	}
+}
+
+void cMainWindow::on_m_lpMenuPartlistClose_triggered()
+{
+	cPartlistWindow*	lpPartlistWindow	= qobject_cast<cPartlistWindow*>(ui->m_lpMainTab->widget(ui->m_lpMainTab->currentIndex()));
+
+	if(!lpPartlistWindow)
+		return;
+
+	if(lpPartlistWindow->close())
+		ui->m_lpMainTab->removeTab(ui->m_lpMainTab->currentIndex());
+}
+
+void cMainWindow::on_m_lpMenuPartlistSave_triggered()
+{
+	cPartlistWindow*	lpPartlistWindow	= qobject_cast<cPartlistWindow*>(ui->m_lpMainTab->widget(ui->m_lpMainTab->currentIndex()));
+
+	if(!lpPartlistWindow)
+		return;
+
+	lpPartlistWindow->save();
+}
+
+void cMainWindow::on_m_lpMenuPartlistSaveAs_triggered()
+{
+	cPartlistWindow*	lpPartlistWindow	= qobject_cast<cPartlistWindow*>(ui->m_lpMainTab->widget(ui->m_lpMainTab->currentIndex()));
+
+	if(!lpPartlistWindow)
+		return;
+
+	lpPartlistWindow->saveAs();
+}
+
+void cMainWindow::partlistChanged(QWidget* /*lpWidget*/)
+{
+	updateMenu();
 }

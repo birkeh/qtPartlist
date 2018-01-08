@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>cDistributorEditDialog</class>
- <widget class="QDialog" name="cDistributorEditDialog">
+ <class>cPartEditDialog</class>
+ <widget class="QDialog" name="cPartEditDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>500</width>
-    <height>350</height>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Distributor</string>
+   <string>Part</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
+  <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
-        <widget class="QLabel" name="label">
+        <widget class="QLabel" name="label_2">
          <property name="text">
           <string>Name:</string>
          </property>
@@ -31,16 +31,23 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_2">
+      <layout class="QHBoxLayout" name="horizontalLayout_2" stretch="0,1,0">
        <item>
-        <widget class="QLabel" name="label_2">
+        <widget class="QLabel" name="label">
          <property name="text">
-          <string>Address:</string>
+          <string>Group:</string>
          </property>
         </widget>
        </item>
        <item>
-        <widget class="QLineEdit" name="m_lpAddress"/>
+        <widget class="QComboBox" name="m_lpGroup"/>
+       </item>
+       <item>
+        <widget class="QPushButton" name="m_lpGroupAdd">
+         <property name="text">
+          <string>add...</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
@@ -48,64 +55,6 @@
       <layout class="QHBoxLayout" name="horizontalLayout_3">
        <item>
         <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>Postal:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="m_lpPostalCode"/>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>City:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="m_lpCity"/>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>Country:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="m_lpCountry"/>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_4">
-       <item>
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>Phone:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="m_lpPhone"/>
-       </item>
-       <item>
-        <widget class="QLabel" name="label_7">
-         <property name="text">
-          <string>EMail:</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLineEdit" name="m_lpEMail"/>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_5">
-       <item>
-        <widget class="QLabel" name="label_8">
          <property name="text">
           <string>Web:</string>
          </property>
@@ -117,9 +66,9 @@
       </layout>
      </item>
      <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_6">
+      <layout class="QHBoxLayout" name="horizontalLayout_4">
        <item>
-        <widget class="QLabel" name="label_9">
+        <widget class="QLabel" name="label_4">
          <property name="text">
           <string>Description:</string>
          </property>
@@ -149,7 +98,7 @@
   <connection>
    <sender>m_lpButtonBox</sender>
    <signal>accepted()</signal>
-   <receiver>cDistributorEditDialog</receiver>
+   <receiver>cPartEditDialog</receiver>
    <slot>accept()</slot>
    <hints>
     <hint type="sourcelabel">
@@ -165,7 +114,7 @@
   <connection>
    <sender>m_lpButtonBox</sender>
    <signal>rejected()</signal>
-   <receiver>cDistributorEditDialog</receiver>
+   <receiver>cPartEditDialog</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

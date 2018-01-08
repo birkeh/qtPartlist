@@ -1,7 +1,13 @@
 #ifndef CPARTWINDOW_H
 #define CPARTWINDOW_H
 
+
+#include "cpart.h"
+#include "cpartgroup.h"
+
 #include <QWidget>
+#include <QStandardItemModel>
+
 
 namespace Ui {
 class cPartWindow;
@@ -15,8 +21,33 @@ public:
 	explicit cPartWindow(QWidget *parent = 0);
 	~cPartWindow();
 
+	void				setList(cPartGroupList* lpPartGroupList, cPartList* lpPartList);
+	bool				somethingSelected();
+	bool				groupSelected();
+
+	void				addPart();
+	void				editPart();
+	void				deletePart();
+private slots:
+	void				on_m_lpPartList_clicked(const QModelIndex &index);
+	void				on_m_lpPartList_customContextMenuRequested(const QPoint &pos);
+
+	void				onAdd();
+	void				onEdit();
+	void				onDelete();
+
+signals:
+	void				selectionChanged(const QModelIndex& index) const;
+	void				partGroupChanged(cPartGroup* lpPartGroup) const;
+	void				partChanged(cPart* lpPart) const;
+
 private:
-	Ui::cPartWindow *ui;
+	Ui::cPartWindow*	ui;
+	QStandardItemModel*	m_lpPartListModel;
+	cPartGroupList*		m_lpPartGroupList;
+	cPartList*			m_lpPartList;
+
+	void				showPartList();
 };
 
 #endif // CPARTWINDOW_H
