@@ -9,6 +9,7 @@ cDistributor::cDistributor() :
 	m_szCity(""),
 	m_szCountry(""),
 	m_szPhone(""),
+	m_szFax(""),
 	m_szEMail(""),
 	m_szLink(""),
 	m_szDescription("")
@@ -85,6 +86,16 @@ QString cDistributor::phone()
 	return(m_szPhone);
 }
 
+void cDistributor::setFax(const QString& szFax)
+{
+	m_szFax	= szFax;
+}
+
+QString cDistributor::fax()
+{
+	return(m_szFax);
+}
+
 void cDistributor::setEMail(const QString& szEMail)
 {
 	m_szEMail	= szEMail;
@@ -117,14 +128,22 @@ QString cDistributor::description()
 
 cDistributor* cDistributorList::add(qint32 id)
 {
+	cDistributor*	lpDistributor	= find(id);
+	if(lpDistributor)
+		return(lpDistributor);
+
+	lpDistributor	= new cDistributor;
+	lpDistributor->setID(id);
+	append(lpDistributor);
+	return(lpDistributor);
+}
+
+cDistributor* cDistributorList::find(qint32 id)
+{
 	for(int x = 0;x < count();x++)
 	{
 		if(at(x)->id() == id)
 			return(at(x));
 	}
-
-	cDistributor*	lpDistributor	= new cDistributor;
-	lpDistributor->setID(id);
-	append(lpDistributor);
-	return(lpDistributor);
+	return(0);
 }

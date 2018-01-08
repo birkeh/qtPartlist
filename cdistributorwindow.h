@@ -28,11 +28,13 @@ public:
 	void					deleteDistributor();
 private slots:
 	void					on_m_lpDistributorList_clicked(const QModelIndex &index);
+	void					on_m_lpDistributorList_doubleClicked(const QModelIndex &index);
 	void					on_m_lpDistributorList_customContextMenuRequested(const QPoint &pos);
 
 	void					onAdd();
 	void					onEdit();
 	void					onDelete();
+
 signals:
 	void					selectionChanged(const QModelIndex& index) const;
 	void					distributorChanged(cDistributor* lpDistributor) const;

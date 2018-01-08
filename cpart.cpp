@@ -63,14 +63,22 @@ cPartGroup* cPart::partGroup()
 
 cPart* cPartList::add(qint32 id)
 {
+	cPart*	lpPart	= find(id);
+	if(lpPart)
+		return(lpPart);
+
+	lpPart	= new cPart;
+	lpPart->setID(id);
+	append(lpPart);
+	return(lpPart);
+}
+
+cPart* cPartList::find(qint32 id)
+{
 	for(int x = 0;x < count();x++)
 	{
 		if(at(x)->id() == id)
 			return(at(x));
 	}
-
-	cPart*	lpPart	= new cPart;
-	lpPart->setID(id);
-	append(lpPart);
-	return(lpPart);
+	return(0);
 }

@@ -1,6 +1,7 @@
 #include "cpartlistwindow.h"
 #include "ui_cpartlistwindow.h"
 
+#include "common.h"
 
 #include <QSqlQuery>
 #include <QSqlError>
@@ -52,13 +53,13 @@ void cPartlistWindow::setPartlistID(const qint32& id)
 
 	if(!query.exec())
 	{
-		qDebug() << query.lastError().text();
+		myDebug << query.lastError().text();
 		return;
 	}
 
 	if(!query.next())
 	{
-		qDebug() << query.lastError().text();
+		myDebug << query.lastError().text();
 		return;
 	}
 
@@ -128,7 +129,7 @@ bool cPartlistWindow::saveAs()
 	query.bindValue(":name", ui->m_lpName->text());
 	if(!query.exec())
 	{
-		qDebug() << query.lastError().text();
+		myDebug << query.lastError().text();
 		return(false);
 	}
 
@@ -143,7 +144,7 @@ bool cPartlistWindow::saveAs()
 	query.bindValue(":description", ui->m_lpDescription->document()->toPlainText());
 	if(!query.exec())
 	{
-		qDebug() << query.lastError().text();
+		myDebug << query.lastError().text();
 		return(false);
 	}
 
@@ -151,7 +152,7 @@ bool cPartlistWindow::saveAs()
 	query.bindValue(":name", ui->m_lpName->text());
 	if(!query.exec())
 	{
-		qDebug() << query.lastError().text();
+		myDebug << query.lastError().text();
 		return(false);
 	}
 
@@ -171,7 +172,7 @@ bool cPartlistWindow::save(qint32 id)
 	query.bindValue(":partlistID", id);
 	if(!query.exec())
 	{
-		qDebug() << query.lastError().text();
+		myDebug << query.lastError().text();
 		return(false);
 	}
 
@@ -181,7 +182,7 @@ bool cPartlistWindow::save(qint32 id)
 	query.bindValue(":id", id);
 	if(!query.exec())
 	{
-		qDebug() << query.lastError().text();
+		myDebug << query.lastError().text();
 		return(false);
 	}
 
@@ -191,4 +192,8 @@ bool cPartlistWindow::save(qint32 id)
 bool cPartlistWindow::somethingChanged()
 {
 	return(m_bSomethingChanged);
+}
+
+void cPartlistWindow::on_m_lpPartList_doubleClicked(const QModelIndex &index)
+{
 }

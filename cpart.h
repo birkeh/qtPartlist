@@ -41,6 +41,7 @@ class cPartList : public QList<cPart*>
 {
 public:
 	cPart*				add(qint32 id);
+	cPart*				find(qint32 id);
 };
 
 #endif // CPART_H

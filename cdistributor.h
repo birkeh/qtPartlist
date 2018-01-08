@@ -32,6 +32,9 @@ public:
 	void				setPhone(const QString& szPhone);
 	QString				phone();
 
+	void				setFax(const QString& szFax);
+	QString				fax();
+
 	void				setEMail(const QString& szEMail);
 	QString				eMail();
 
@@ -48,6 +51,7 @@ private:
 	QString				m_szCity;
 	QString				m_szCountry;
 	QString				m_szPhone;
+	QString				m_szFax;
 	QString				m_szEMail;
 	QString				m_szLink;
 	QString				m_szDescription;
@@ -59,6 +63,7 @@ class cDistributorList : public QList<cDistributor*>
 {
 public:
 	cDistributor*		add(qint32 id);
+	cDistributor*		find(qint32 id);
 };
 
 #endif // CDISTRIBUTOR_H

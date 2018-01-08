@@ -42,6 +42,7 @@ cMainWindow::cMainWindow(QWidget *parent) :
 	loadDistributorList();
 	loadPartGroupList();
 	loadPartList();
+	loadPartDistributorList();
 
 	updateMenu();
 }
@@ -113,6 +114,7 @@ void cMainWindow::initDB()
 					"   city        STRING,"
 					"   country     STRING,"
 					"   phone       STRING,"
+					"   fax         STRING,"
 					"   email       STRING,"
 					"   description TEXT);");
 	}
@@ -176,11 +178,11 @@ void cMainWindow::loadDistributorList()
 	QSqlQuery	query;
 	QString		szQuery;
 
-	szQuery	= "SELECT id, name, link, address, postal_code, city, country, phone, email, link, description FROM distributor ORDER BY name;";
+	szQuery	= "SELECT id, name, link, address, postal_code, city, country, phone, fax, email, link, description FROM distributor ORDER BY name;";
 
 	if(!query.exec(szQuery))
 	{
-		qDebug() << query.lastError().text();
+		myDebug << query.lastError().text();
 		return;
 	}
 
@@ -196,6 +198,7 @@ void cMainWindow::loadDistributorList()
 		lpDistributor->setCity(query.value("city").toString());
 		lpDistributor->setCountry(query.value("country").toString());
 		lpDistributor->setPhone(query.value("phone").toString());
+		lpDistributor->setFax(query.value("fax").toString());
 		lpDistributor->setEMail(query.value("email").toString());
 		lpDistributor->setLink(query.value("link").toString());
 		lpDistributor->setDescription(query.value("description").toString());
@@ -213,7 +216,7 @@ void cMainWindow::loadPartGroupList()
 
 	if(!query.exec(szQuery))
 	{
-		qDebug() << query.lastError().text();
+		myDebug << query.lastError().text();
 		return;
 	}
 
@@ -239,24 +242,57 @@ void cMainWindow::loadPartList()
 
 	if(!query.exec(szQuery))
 	{
-		qDebug() << query.lastError().text();
+		myDebug << query.lastError().text();
 		return;
 	}
 
 	while(query.next())
 	{
-		cPartGroup*	lpPartGroup	= m_partGroupList.find(query.value("part.partgroupID").toInt());
+		cPartGroup*	lpPartGroup	= m_partGroupList.find(query.value("partgroupID").toInt());
 		if(!lpPartGroup)
 			return;
 
-		cPart*		lpPart		= m_partList.add(query.value("part.id").toInt());
+		cPart*		lpPart		= m_partList.add(query.value("id").toInt());
 		if(!lpPart)
 			return;
 
-		lpPart->setName(query.value("part.name").toString());
-		lpPart->setDescription(query.value("part.description").toString());
+		lpPart->setName(query.value("name").toString());
+		lpPart->setDescription(query.value("description").toString());
 		lpPart->setPartGroup(lpPartGroup);
-		lpPart->setLink(query.value("part.link").toString());
+		lpPart->setLink(query.value("link").toString());
+	}
+}
+
+void cMainWindow::loadPartDistributorList()
+{
+	m_partDistributorList.clear();
+
+	QSqlQuery	query;
+	QString		szQuery;
+
+	szQuery	= "SELECT id, name, description, partID, distributorID, price, link FROM part_distributor ORDER BY name;";
+
+	if(!query.exec(szQuery))
+	{
+		myDebug << query.lastError().text();
+		return;
+	}
+
+	while(query.next())
+	{
+		cPart*				lpPart				= m_partList.find(query.value("partID").toInt());
+		cDistributor*		lpDistributor		= m_distributorList.find(query.value("distributorID").toInt());
+
+		cPartDistributor*	lpPartDistributor	= m_partDistributorList.add(query.value("id").toInt());
+		if(!lpPartDistributor)
+			return;
+
+		lpPartDistributor->setName(query.value("name").toString());
+		lpPartDistributor->setDescription(query.value("description").toString());
+		lpPartDistributor->setPart(lpPart);
+		lpPartDistributor->setDistributor(lpDistributor);
+		lpPartDistributor->setPrice(query.value("price").toReal());
+		lpPartDistributor->setLink(query.value("link").toString());
 	}
 }
 
@@ -329,7 +365,7 @@ void cMainWindow::on_m_lpMenuPartsShow_triggered()
 	{
 		m_lpPartWindow	= new cPartWindow(this);
 		ui->m_lpMainTab->addTab(m_lpPartWindow, tr("Parts"));
-		m_lpPartWindow->setList(&m_partGroupList, &m_partList);
+		m_lpPartWindow->setList(&m_partGroupList, &m_partList, &m_distributorList, &m_partDistributorList);
 
 		connect(m_lpPartWindow, SIGNAL(selectionChanged(QModelIndex)), this, SLOT(partSelectionChanged(QModelIndex)));
 		connect(m_lpPartWindow, SIGNAL(partChanged(cPart*)), this, SLOT(partChanged(cPart*)));
@@ -549,7 +585,7 @@ void cMainWindow::on_m_lpMenuPartlistOpen_triggered()
 
 	if(!query.exec("SELECT id, name, description FROM partlist ORDER BY name;"))
 	{
-		qDebug() << query.lastError().text();
+		myDebug << query.lastError().text();
 		QMessageBox::critical(this, "Error", "No projects found.");
 		return;
 	}

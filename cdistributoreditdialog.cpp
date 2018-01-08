@@ -1,6 +1,7 @@
 #include "cdistributoreditdialog.h"
 #include "ui_cdistributoreditdialog.h"
 
+#include "common.h"
 
 #include <QPushButton>
 
@@ -36,6 +37,7 @@ void cDistributorEditDialog::setValues(cDistributor* lpDistributor)
 	ui->m_lpCity->setText(lpDistributor->city());
 	ui->m_lpCountry->setText(lpDistributor->country());
 	ui->m_lpPhone->setText(lpDistributor->phone());
+	ui->m_lpFax->setText(lpDistributor->fax());
 	ui->m_lpEMail->setText(lpDistributor->eMail());
 	ui->m_lpDescription->setText(lpDistributor->description());
 
@@ -72,7 +74,7 @@ bool cDistributorEditDialog::save()
 	szQuery		= QString("SELECT name FROM distributor WHERE name='%1' AND id <> %2;").arg(ui->m_lpName->text()).arg(m_id);
 	if(!query.exec(szQuery))
 	{
-		qDebug() << query.lastError().text();
+		myDebug << query.lastError().text();
 		return(false);
 	}
 
@@ -82,7 +84,7 @@ bool cDistributorEditDialog::save()
 		return(false);
 	}
 
-	szQuery		= QString("UPDATE distributor SET name=:name, link=:link, address=:address, postal_code=:postal_code, city=:city, country=:country, phone=:phone, email=:email, description=:description WHERE id=:id;");
+	szQuery		= QString("UPDATE distributor SET name=:name, link=:link, address=:address, postal_code=:postal_code, city=:city, country=:country, phone=:phone, fax=:fax, email=:email, description=:description WHERE id=:id;");
 	query.prepare(szQuery);
 	query.bindValue(":name", ui->m_lpName->text());
 	query.bindValue(":link", ui->m_lpLink->text());
@@ -91,13 +93,14 @@ bool cDistributorEditDialog::save()
 	query.bindValue(":city", ui->m_lpCity->text());
 	query.bindValue(":country", ui->m_lpCountry->text());
 	query.bindValue(":phone", ui->m_lpPhone->text());
+	query.bindValue(":fax", ui->m_lpFax->text());
 	query.bindValue(":email", ui->m_lpEMail->text());
 	query.bindValue(":description", ui->m_lpDescription->document()->toPlainText());
 	query.bindValue(":id", m_id);
 
 	if(!query.exec())
 	{
-		qDebug() << query.lastError().text();
+		myDebug << query.lastError().text();
 		return(false);
 	}
 
@@ -112,7 +115,7 @@ bool cDistributorEditDialog::add()
 	szQuery		= QString("SELECT name FROM distributor WHERE name='%1';").arg(ui->m_lpName->text());
 	if(!query.exec(szQuery))
 	{
-		qDebug() << query.lastError().text();
+		myDebug << query.lastError().text();
 		return(false);
 	}
 
@@ -122,7 +125,7 @@ bool cDistributorEditDialog::add()
 		return(false);
 	}
 
-	szQuery		= QString("INSERT INTO distributor (name, link, address, postal_code, city, country, phone, email, description) VALUES (:name, :link, :address, :postal_code, :city, :country, :phone, :email, :description);");
+	szQuery		= QString("INSERT INTO distributor (name, link, address, postal_code, city, country, phone, fax, email, description) VALUES (:name, :link, :address, :postal_code, :city, :country, :phone, :fax, :email, :description);");
 	query.prepare(szQuery);
 	query.bindValue(":name", ui->m_lpName->text());
 	query.bindValue(":link", ui->m_lpLink->text());
@@ -131,25 +134,26 @@ bool cDistributorEditDialog::add()
 	query.bindValue(":city", ui->m_lpCity->text());
 	query.bindValue(":country", ui->m_lpCountry->text());
 	query.bindValue(":phone", ui->m_lpPhone->text());
+	query.bindValue(":fax", ui->m_lpFax->text());
 	query.bindValue(":email", ui->m_lpEMail->text());
 	query.bindValue(":description", ui->m_lpDescription->document()->toPlainText());
 
 	if(!query.exec())
 	{
-		qDebug() << query.lastError().text();
+		myDebug << query.lastError().text();
 		return(false);
 	}
 
 	szQuery		= QString("SELECT id FROM distributor WHERE name='%1';").arg(ui->m_lpName->text());
 	if(!query.exec(szQuery))
 	{
-		qDebug() << query.lastError().text();
+		myDebug << query.lastError().text();
 		return(false);
 	}
 
 	if(!query.next())
 	{
-		qDebug() << query.lastError().text();
+		myDebug << query.lastError().text();
 		return(false);
 	}
 

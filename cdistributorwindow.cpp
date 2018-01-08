@@ -3,6 +3,8 @@
 
 #include "cdistributoreditdialog.h"
 
+#include "common.h"
+
 #include <QString>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -40,7 +42,7 @@ void cDistributorWindow::showDistributorList()
 	m_lpDistributorListModel->clear();
 
 	QStringList	header;
-	header << tr("Name") << tr("Phone") << tr("Email") << tr("address") << tr("postal") << tr("city") << tr("country") << tr("link") << tr("description");
+	header << tr("Name") << tr("Phone") << tr("Fax") << tr("Email") << tr("address") << tr("postal") << tr("city") << tr("country") << tr("link") << tr("description");
 	m_lpDistributorListModel->setHorizontalHeaderLabels(header);
 
 	for(int x = 0;x < m_lpDistributorList->count();x++)
@@ -53,13 +55,14 @@ void cDistributorWindow::showDistributorList()
 
 		lpItems.at(0)->setText(lpDistributor->name());
 		lpItems.at(1)->setText(lpDistributor->phone());
-		lpItems.at(2)->setText(lpDistributor->eMail());
-		lpItems.at(3)->setText(lpDistributor->address());
-		lpItems.at(4)->setText(QString("%1").arg(lpDistributor->postalCode()));
-		lpItems.at(5)->setText(lpDistributor->city());
-		lpItems.at(6)->setText(lpDistributor->country());
-		lpItems.at(7)->setText(lpDistributor->link());
-		lpItems.at(8)->setText(lpDistributor->description());
+		lpItems.at(2)->setText(lpDistributor->fax());
+		lpItems.at(3)->setText(lpDistributor->eMail());
+		lpItems.at(4)->setText(lpDistributor->address());
+		lpItems.at(5)->setText(QString("%1").arg(lpDistributor->postalCode()));
+		lpItems.at(6)->setText(lpDistributor->city());
+		lpItems.at(7)->setText(lpDistributor->country());
+		lpItems.at(8)->setText(lpDistributor->link());
+		lpItems.at(9)->setText(lpDistributor->description());
 
 		for(int z = 0;z < header.count();z++)
 			lpItems.at(z)->setData(QVariant::fromValue(lpDistributor), Qt::UserRole);
@@ -215,7 +218,7 @@ void cDistributorWindow::onDelete()
 		szQuery		= QString("SELECT * FROM partlistitem WHERE distributorID = %1;").arg(lpDistributor->id());
 		if(!query.exec(szQuery))
 		{
-			qDebug() << query.lastError().text();
+			myDebug << query.lastError().text();
 			continue;
 		}
 
@@ -231,11 +234,16 @@ void cDistributorWindow::onDelete()
 		szQuery	= QString("DELETE FROM distributor WHERE id=%1;").arg(lpDistributor->id());
 		if(!query.exec(szQuery))
 		{
-			qDebug() << query.lastError().text();
+			myDebug << query.lastError().text();
 			continue;
 		}
 	}
 
 	distributorChanged(0);
 	showDistributorList();
+}
+
+void cDistributorWindow::on_m_lpDistributorList_doubleClicked(const QModelIndex &index)
+{
+	onEdit();
 }

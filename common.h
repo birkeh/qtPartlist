@@ -2,6 +2,8 @@
 #define COMMON_H
 
 
+#define myDebug qDebug() << __FILE__ << "(" << __LINE__ << ") - " << __PRETTY_FUNCTION__ << ":"
+
 #include <QString>
 
 

@@ -34,7 +34,8 @@ SOURCES += \
     cdistributoreditdialog.cpp \
     cpartgroup.cpp \
     cpart.cpp \
-    cparteditdialog.cpp
+    cparteditdialog.cpp \
+    cpartdistributor.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -46,7 +47,8 @@ HEADERS += \
     cdistributoreditdialog.h \
     cpartgroup.h \
     cpart.h \
-    cparteditdialog.h
+    cparteditdialog.h \
+    cpartdistributor.h
 
 FORMS += \
         cmainwindow.ui \

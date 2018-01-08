@@ -3,8 +3,12 @@
 
 
 #include "cpart.h"
+#include "cdistributor.h"
+#include "cpartdistributor.h"
 
 #include <QDialog>
+
+#include <QStandardItemModel>
 
 
 namespace Ui {
@@ -20,16 +24,21 @@ public:
 	~cPartEditDialog();
 
 	qint32					id();
-	void					setValues(cPart* lpPart, cPartGroupList* lpPartGroupList);
+	void					setValues(cPart* lpPart, cPartGroupList* lpPartGroupList, cDistributorList* lpDistributorList, cPartDistributorList* lpPartDistributorList);
 private slots:
 	void					on_m_lpName_textChanged(const QString &arg1);
 	void					on_m_lpGroupAdd_clicked();
 
 private:
 	Ui::cPartEditDialog*	ui;
+	QStandardItemModel*		m_lpPartDistributorListModel;
 	qint32					m_id;
 	cPart*					m_lpPart;
 	cPartGroupList*			m_lpPartGroupList;
+	cDistributorList*		m_lpDistributorList;
+	cPartDistributorList*	m_lpPartDistributorList;
+
+	void					showPartDistributorList();
 
 	bool					save();
 	bool					add();

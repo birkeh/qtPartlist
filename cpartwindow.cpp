@@ -3,6 +3,8 @@
 
 #include "cparteditdialog.h"
 
+#include "common.h"
+
 #include <QString>
 #include <QSqlQuery>
 #include <QSqlError>
@@ -15,7 +17,11 @@
 
 cPartWindow::cPartWindow(QWidget *parent) :
 	QWidget(parent),
-	ui(new Ui::cPartWindow)
+	ui(new Ui::cPartWindow),
+	m_lpPartGroupList(0),
+	m_lpPartList(0),
+	m_lpDistributorList(0),
+	m_lpPartDistributorList(0)
 {
 	ui->setupUi(this);
 
@@ -28,10 +34,12 @@ cPartWindow::~cPartWindow()
 	delete ui;
 }
 
-void cPartWindow::setList(cPartGroupList* lpPartGroupList, cPartList* lpPartList)
+void cPartWindow::setList(cPartGroupList* lpPartGroupList, cPartList* lpPartList, cDistributorList *lpDistributorList, cPartDistributorList *lpPartDistributorList)
 {
-	m_lpPartGroupList	= lpPartGroupList;
-	m_lpPartList		= lpPartList;
+	m_lpPartGroupList		= lpPartGroupList;
+	m_lpPartList			= lpPartList;
+	m_lpDistributorList		= lpDistributorList;
+	m_lpPartDistributorList	= lpPartDistributorList;
 
 	showPartList();
 }
@@ -142,7 +150,7 @@ void cPartWindow::deletePart()
 void cPartWindow::onAdd()
 {
 	cPartEditDialog*	lpDialog	= new cPartEditDialog(this);
-	lpDialog->setValues(0, m_lpPartGroupList);
+	lpDialog->setValues(0, m_lpPartGroupList, m_lpDistributorList, m_lpPartDistributorList);
 
 	if(lpDialog->exec() == QDialog::Rejected)
 	{
@@ -190,7 +198,7 @@ void cPartWindow::onEdit()
 		return;
 
 	cPartEditDialog*	lpDialog		= new cPartEditDialog(this);
-	lpDialog->setValues(lpPart, m_lpPartGroupList);
+	lpDialog->setValues(lpPart, m_lpPartGroupList, m_lpDistributorList, m_lpPartDistributorList);
 
 	if(lpDialog->exec() == QDialog::Rejected)
 	{
@@ -245,7 +253,7 @@ void cPartWindow::onDelete()
 		szQuery		= QString("SELECT * FROM partlistitem WHERE partID = %1;").arg(lpPart->id());
 		if(!query.exec(szQuery))
 		{
-			qDebug() << query.lastError().text();
+			myDebug << query.lastError().text();
 			continue;
 		}
 
@@ -261,11 +269,16 @@ void cPartWindow::onDelete()
 		szQuery	= QString("DELETE FROM part WHERE id=%1;").arg(lpPart->id());
 		if(!query.exec(szQuery))
 		{
-			qDebug() << query.lastError().text();
+			myDebug << query.lastError().text();
 			continue;
 		}
 	}
 
 	partChanged(0);
 	showPartList();
+}
+
+void cPartWindow::on_m_lpPartList_doubleClicked(const QModelIndex &index)
+{
+	onEdit();
 }

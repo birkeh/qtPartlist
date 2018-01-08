@@ -30,6 +30,7 @@ public:
 	bool				somethingChanged();
 private slots:
 	void				on_m_lpName_textChanged(const QString &arg1);
+	void				on_m_lpPartList_doubleClicked(const QModelIndex &index);
 
 signals:
 	void				partlistChanged(QWidget* lpWidget) const;
