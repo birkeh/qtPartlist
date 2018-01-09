@@ -52,7 +52,7 @@ private:
 	cDistributorList*		m_lpDistributorList;
 	cPartDistributorList*	m_lpPartDistributorList;
 
-	void					showPartList();
+	void					showPartList(qint32 id = -1);
 };
 
 #endif // CPARTWINDOW_H

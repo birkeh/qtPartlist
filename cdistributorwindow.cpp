@@ -58,7 +58,8 @@ void cDistributorWindow::showDistributorList()
 		lpItems.at(2)->setText(lpDistributor->fax());
 		lpItems.at(3)->setText(lpDistributor->eMail());
 		lpItems.at(4)->setText(lpDistributor->address());
-		lpItems.at(5)->setText(QString("%1").arg(lpDistributor->postalCode()));
+		if(lpDistributor->postalCode())
+			lpItems.at(5)->setText(QString("%1").arg(lpDistributor->postalCode()));
 		lpItems.at(6)->setText(lpDistributor->city());
 		lpItems.at(7)->setText(lpDistributor->country());
 		lpItems.at(8)->setText(lpDistributor->link());
@@ -243,7 +244,7 @@ void cDistributorWindow::onDelete()
 	showDistributorList();
 }
 
-void cDistributorWindow::on_m_lpDistributorList_doubleClicked(const QModelIndex &index)
+void cDistributorWindow::on_m_lpDistributorList_doubleClicked(const QModelIndex &/*index*/)
 {
 	onEdit();
 }

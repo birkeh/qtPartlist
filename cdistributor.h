@@ -4,6 +4,7 @@
 
 #include <QMetaType>
 #include <QList>
+#include <QPixmap>
 
 
 class cDistributor
@@ -43,6 +44,9 @@ public:
 
 	void				setDescription(const QString& szDescription);
 	QString				description();
+
+	void				setLogo(const QPixmap& logo);
+	QPixmap				logo();
 private:
 	qint32				m_id;
 	QString				m_szName;
@@ -55,6 +59,7 @@ private:
 	QString				m_szEMail;
 	QString				m_szLink;
 	QString				m_szDescription;
+	QPixmap				m_logo;
 };
 
 Q_DECLARE_METATYPE(cDistributor*)
@@ -64,6 +69,7 @@ class cDistributorList : public QList<cDistributor*>
 public:
 	cDistributor*		add(qint32 id);
 	cDistributor*		find(qint32 id);
+	cDistributor*		find(const QString& szName);
 };
 
 #endif // CDISTRIBUTOR_H

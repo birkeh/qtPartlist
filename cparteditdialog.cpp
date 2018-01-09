@@ -1,6 +1,8 @@
 #include "cparteditdialog.h"
 #include "ui_cparteditdialog.h"
 
+#include "cpartdistributoreditdialog.h"
+
 #include "common.h"
 
 #include <QPushButton>
@@ -10,6 +12,8 @@
 
 #include <QInputDialog>
 #include <QMessageBox>
+
+#include <QMenu>
 
 #include <QDebug>
 
@@ -31,6 +35,13 @@ cPartEditDialog::cPartEditDialog(QWidget *parent) :
 cPartEditDialog::~cPartEditDialog()
 {
 	delete ui;
+}
+
+bool cPartEditDialog::somethingSelected()
+{
+	if(ui->m_lpPartDistributorList->selectionModel()->selectedRows().count())
+		return(true);
+	return(false);
 }
 
 void cPartEditDialog::setValues(cPart* lpPart, cPartGroupList* lpPartGroupList, cDistributorList *lpDistributorList, cPartDistributorList *lpPartDistributorList)
@@ -153,6 +164,54 @@ bool cPartEditDialog::save()
 		myDebug << query.lastError().text();
 		return(false);
 	}
+
+	for(int x = 0;x < m_lpPartDistributorListModel->rowCount();x++)
+	{
+		QStandardItem*		lpItemName			= m_lpPartDistributorListModel->itemFromIndex(m_lpPartDistributorListModel->index(x, 0));
+		QStandardItem*		lpItemDistributor	= m_lpPartDistributorListModel->itemFromIndex(m_lpPartDistributorListModel->index(x, 1));
+		QStandardItem*		lpItemPrice			= m_lpPartDistributorListModel->itemFromIndex(m_lpPartDistributorListModel->index(x, 2));
+		QStandardItem*		lpItemDescription	= m_lpPartDistributorListModel->itemFromIndex(m_lpPartDistributorListModel->index(x, 3));
+		QStandardItem*		lpItemLink			= m_lpPartDistributorListModel->itemFromIndex(m_lpPartDistributorListModel->index(x, 4));
+
+		cPartDistributor*	lpPartDistributor	= qvariant_cast<cPartDistributor*>(lpItemName->data(Qt::UserRole));
+
+		if(lpPartDistributor)
+		{
+			QSqlQuery	query;
+			query.prepare("UPDATE part_distributor SET name=:name, description=:description, partID=:partID, distributorID=:distributorID, price=:price, link=:link WHERE id=:id;");
+			query.bindValue(":name", lpItemName->text());
+			query.bindValue(":description", lpItemDescription->text());
+			query.bindValue(":partID", m_lpPart->id());
+			query.bindValue(":distributorID", m_lpDistributorList->find(lpItemDistributor->text())->id());
+			query.bindValue(":price", lpItemPrice->text().toDouble());
+			query.bindValue(":link", lpItemLink->text());
+			query.bindValue(":id", lpPartDistributor->id());
+
+			if(!query.exec())
+			{
+				myDebug << query.lastError().text();
+				return(false);
+			}
+		}
+		else
+		{
+			QSqlQuery	query;
+			query.prepare("INSERT INTO part_distributor (name, description, partID, distributorID, price, link) VALUES (:name, :description, :partID, :distributorID, :price, :lin);");
+			query.bindValue(":name", lpItemName->text());
+			query.bindValue(":description", lpItemDescription->text());
+			query.bindValue(":partID", m_lpPart->id());
+			query.bindValue(":distributorID", m_lpDistributorList->find(lpItemDistributor->text())->id());
+			query.bindValue(":price", lpItemPrice->text().toDouble());
+			query.bindValue(":link", lpItemLink->text());
+
+			if(!query.exec())
+			{
+				myDebug << query.lastError().text();
+				return(false);
+			}
+		}
+	}
+
 	return(true);
 }
 
@@ -261,4 +320,74 @@ void cPartEditDialog::on_m_lpGroupAdd_clicked()
 			}
 		}
 	}
+}
+
+void cPartEditDialog::on_m_lpPartDistributorList_customContextMenuRequested(const QPoint &pos)
+{
+	QMenu*	lpMenu	= new QMenu(this);
+
+	lpMenu->addAction("add", this, SLOT(onAddDistributor()));
+
+	if(somethingSelected())
+	{
+		lpMenu->addAction("edit", this, SLOT(onEditDistributor()));
+		lpMenu->addAction("delete", this, SLOT(onDeleteDistributor()));
+	}
+
+	lpMenu->popup(ui->m_lpPartDistributorList->viewport()->mapToGlobal(pos));
+}
+
+void cPartEditDialog::onAddDistributor()
+{
+	cPartDistributorEditDialog*	lpDialog			= new cPartDistributorEditDialog(this);
+	lpDialog->setValues(m_lpPart, m_lpDistributorList, 0);
+	if(lpDialog->exec() != QDialog::Accepted)
+	{
+		delete lpDialog;
+		return;
+	}
+
+	QList<QStandardItem*>	lpItems;
+	QString					szName				= lpDialog->name();
+	QString					szDescription		= lpDialog->description();
+	cDistributor*			lpDistributor		= lpDialog->distributor();
+	qreal					dPrice				= lpDialog->price();
+	QString					szLink				= lpDialog->link();
+
+	for(int z = 0;z < 5;z++)
+		lpItems.append(new QStandardItem);
+
+	lpItems.at(0)->setText(szName);
+	lpItems.at(1)->setText(lpDistributor->name());
+	lpItems.at(2)->setText(QString::number(dPrice, 'f', 2));
+	lpItems.at(3)->setText(szDescription);
+	lpItems.at(4)->setText(szLink);
+
+	m_lpPartDistributorListModel->appendRow(lpItems);
+
+	ui->m_lpPartDistributorList->sortByColumn(1, Qt::AscendingOrder);
+
+	delete lpDialog;
+}
+
+void cPartEditDialog::onEditDistributor()
+{
+	QStandardItem*				lpItem				= m_lpPartDistributorListModel->itemFromIndex(ui->m_lpPartDistributorList->selectionModel()->selectedRows().at(0));
+	if(!lpItem)
+		return;
+
+	cPartDistributor*			lpPartDistributor	= qvariant_cast<cPartDistributor*>(lpItem->data(Qt::UserRole));
+	if(!lpPartDistributor)
+		return;
+
+	cPartDistributorEditDialog*	lpDialog			= new cPartDistributorEditDialog(this);
+	lpDialog->setValues(m_lpPart, m_lpDistributorList, lpPartDistributor);
+	if(lpDialog->exec() != QDialog::Accepted)
+		return;
+
+	delete lpDialog;
+}
+
+void cPartEditDialog::onDeleteDistributor()
+{
 }

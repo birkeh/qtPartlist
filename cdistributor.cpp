@@ -126,6 +126,16 @@ QString cDistributor::description()
 	return(m_szDescription);
 }
 
+void cDistributor::setLogo(const QPixmap& logo)
+{
+	m_logo	= logo;
+}
+
+QPixmap cDistributor::logo()
+{
+	return(m_logo);
+}
+
 cDistributor* cDistributorList::add(qint32 id)
 {
 	cDistributor*	lpDistributor	= find(id);
@@ -143,6 +153,16 @@ cDistributor* cDistributorList::find(qint32 id)
 	for(int x = 0;x < count();x++)
 	{
 		if(at(x)->id() == id)
+			return(at(x));
+	}
+	return(0);
+}
+
+cDistributor* cDistributorList::find(const QString& szName)
+{
+	for(int x = 0;x < count();x++)
+	{
+		if(at(x)->name() == szName)
 			return(at(x));
 	}
 	return(0);

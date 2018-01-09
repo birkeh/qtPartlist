@@ -44,7 +44,7 @@ void cPartWindow::setList(cPartGroupList* lpPartGroupList, cPartList* lpPartList
 	showPartList();
 }
 
-void cPartWindow::showPartList()
+void cPartWindow::showPartList(qint32 id)
 {
 	m_lpPartListModel->clear();
 
@@ -55,6 +55,7 @@ void cPartWindow::showPartList()
 
 	qint32			iOldPartGroupID	= -1;
 	QStandardItem*	lpGroupItem		= 0;
+	QStandardItem*	lpSelected		= 0;
 
 	for(int x = 0;x < m_lpPartList->count();x++)
 	{
@@ -80,6 +81,9 @@ void cPartWindow::showPartList()
 			lpItems.at(z)->setData(QVariant::fromValue(lpPart), Qt::UserRole);
 
 		lpGroupItem->appendRow(lpItems);
+
+		if(id != -1 && lpPart->id() == id)
+			lpSelected	= lpItems.at(0);
 	}
 
 	for(int z = 0;z < header.count();z++)
@@ -89,7 +93,14 @@ void cPartWindow::showPartList()
 
 	for(int z = 0;z < header.count();z++)
 		ui->m_lpPartList->resizeColumnToContents(z);
+
+	if(lpSelected)
+	{
+		ui->m_lpPartList->setCurrentIndex(lpSelected->index());
+		ui->m_lpPartList->scrollTo(lpSelected->index());
+	}
 }
+
 
 bool cPartWindow::somethingSelected()
 {
@@ -206,30 +217,12 @@ void cPartWindow::onEdit()
 		return;
 	}
 
-	qint32	id	= lpDialog->id();
+	qint32	id	= lpPart->id();
 
 	delete lpDialog;
 
 	partChanged(0);
-	showPartList();
-
-	for(int x = 0;x < m_lpPartListModel->rowCount();x++)
-	{
-		QStandardItem*	lpItem			= m_lpPartListModel->item(x, 0);
-		if(!lpItem)
-			continue;
-
-		cPart*	lpPart					= qvariant_cast<cPart*>(lpItem->data(Qt::UserRole));
-		if(!lpPart)
-			continue;
-
-		if(lpPart->id() == id)
-		{
-			ui->m_lpPartList->setCurrentIndex(lpItem->index());
-			ui->m_lpPartList->scrollTo(lpItem->index());
-			return;
-		}
-	}
+	showPartList(id);
 }
 
 void cPartWindow::onDelete()
@@ -278,7 +271,7 @@ void cPartWindow::onDelete()
 	showPartList();
 }
 
-void cPartWindow::on_m_lpPartList_doubleClicked(const QModelIndex &index)
+void cPartWindow::on_m_lpPartList_doubleClicked(const QModelIndex &/*index*/)
 {
 	onEdit();
 }

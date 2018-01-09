@@ -116,7 +116,8 @@ void cMainWindow::initDB()
 					"   phone       STRING,"
 					"   fax         STRING,"
 					"   email       STRING,"
-					"   description TEXT);");
+					"   description TEXT,"
+					"   logo        BLOB);");
 	}
 
 	if(!m_db.tables().contains("part_distributor"))
@@ -178,7 +179,7 @@ void cMainWindow::loadDistributorList()
 	QSqlQuery	query;
 	QString		szQuery;
 
-	szQuery	= "SELECT id, name, link, address, postal_code, city, country, phone, fax, email, link, description FROM distributor ORDER BY name;";
+	szQuery	= "SELECT id, name, link, address, postal_code, city, country, phone, fax, email, link, description, logo FROM distributor ORDER BY name;";
 
 	if(!query.exec(szQuery))
 	{
@@ -202,6 +203,14 @@ void cMainWindow::loadDistributorList()
 		lpDistributor->setEMail(query.value("email").toString());
 		lpDistributor->setLink(query.value("link").toString());
 		lpDistributor->setDescription(query.value("description").toString());
+
+		QByteArray	baLogo	= query.value("logo").toByteArray();
+		if(!baLogo.isEmpty())
+		{
+			QPixmap	logo;
+			if(logo.loadFromData(baLogo))
+				lpDistributor->setLogo(logo);
+		}
 	}
 }
 
@@ -521,11 +530,13 @@ void cMainWindow::partGroupChanged(cPartGroup* /*lpPartGroup*/)
 {
 	loadPartGroupList();
 	loadPartList();
+	loadPartDistributorList();
 }
 
 void cMainWindow::partChanged(cPart* /*lpPart*/)
 {
 	loadPartList();
+	loadPartDistributorList();
 }
 
 void cMainWindow::on_m_lpMenuPartlistNew_triggered()
