@@ -223,10 +223,10 @@ void cPartWindow::onDelete()
 			continue;
 
 		QSqlQuery	query;
-		QString		szQuery;
 
-		szQuery		= QString("SELECT * FROM partlistitem WHERE partID = %1;").arg(lpPart->id());
-		if(!query.exec(szQuery))
+		query.prepare("SELECT * FROM partlistitem WHERE partID = :partID;");
+		query.bindValue(":partID", lpPart->id());
+		if(!query.exec())
 		{
 			myDebug << query.lastError().text();
 			continue;
@@ -241,8 +241,17 @@ void cPartWindow::onDelete()
 		if(QMessageBox::question(this, "DELETE", QString("Are you sure to delete part '%1'?").arg(lpPart->name())) == QMessageBox::No)
 			continue;
 
-		szQuery	= QString("DELETE FROM part WHERE id=%1;").arg(lpPart->id());
-		if(!query.exec(szQuery))
+		query.prepare("DELETE FROM part_distributor WHERE partID = :partID;");
+		query.bindValue(":partID", lpPart->id());
+		if(!query.exec())
+		{
+			myDebug << query.lastError().text();
+			continue;
+		}
+
+		query.prepare("DELETE FROM part WHERE id=:partID;");
+		query.bindValue(":partID", lpPart->id());
+		if(!query.exec())
 		{
 			myDebug << query.lastError().text();
 			continue;

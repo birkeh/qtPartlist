@@ -145,7 +145,8 @@ void cMainWindow::initDB()
 		query.exec("CREATE TABLE partlistitem ("
 					"   id			        INTEGER PRIMARY KEY,"
 					"   partlistID          INTEGER REFERENCES partlist (id),"
-					"   part_disttributorID INTEGER REFERENCES part_distributor (id),"
+					"   partID              INTEGER REFERENCES par (id),"
+					"   distributorID       INTEGER REFERENCES distributor (id),"
 					"   replaceID           INTEGER REFERENCES partlistitem (id),"
 					"   reference           STRING,"
 					"   description         TEXT,"
@@ -585,6 +586,8 @@ void cMainWindow::on_m_lpMenuPartlistNew_triggered()
 	ui->m_lpMainTab->addTab(lpNew, szNew);
 	ui->m_lpMainTab->setCurrentWidget(lpNew);
 
+	lpNew->setList(&m_distributorList, &m_partGroupList, &m_partList, &m_partDistributorList);
+
 	connect(lpNew, SIGNAL(partlistChanged(QWidget*)), this, SLOT(partlistChanged(QWidget*)));
 }
 
@@ -633,6 +636,8 @@ void cMainWindow::on_m_lpMenuPartlistOpen_triggered()
 		lpNew->setMainTab(ui->m_lpMainTab);
 		ui->m_lpMainTab->addTab(lpNew, "INITIALIZING");
 		ui->m_lpMainTab->setCurrentWidget(lpNew);
+
+		lpNew->setList(&m_distributorList, &m_partGroupList, &m_partList, &m_partDistributorList);
 		lpNew->setPartlistID(id);
 
 		connect(lpNew, SIGNAL(partlistChanged(QWidget*)), this, SLOT(partlistChanged(QWidget*)));

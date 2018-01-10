@@ -84,14 +84,24 @@ QString cPartDistributor::link()
 
 cPartDistributor* cPartDistributorList::add(qint32 id)
 {
+	cPartDistributor*	lpPartDistributor	= find(id);
+
+	if(lpPartDistributor)
+		return(lpPartDistributor);
+
+	lpPartDistributor	= new cPartDistributor;
+	lpPartDistributor->setID(id);
+	append(lpPartDistributor);
+	return(lpPartDistributor);
+}
+
+cPartDistributor* cPartDistributorList::find(qint32 id)
+{
 	for(int x = 0;x < count();x++)
 	{
 		if(at(x)->id() == id)
 			return(at(x));
 	}
 
-	cPartDistributor*	lpPartDistributor	= new cPartDistributor;
-	lpPartDistributor->setID(id);
-	append(lpPartDistributor);
-	return(lpPartDistributor);
+	return(0);
 }

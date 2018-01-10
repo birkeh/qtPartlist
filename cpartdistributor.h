@@ -50,6 +50,7 @@ class cPartDistributorList : public QList<cPartDistributor*>
 {
 public:
 	cPartDistributor*		add(qint32 id);
+	cPartDistributor*		find(qint32 id);
 };
 
 #endif // CPARTDISTRIBUTOR_H
