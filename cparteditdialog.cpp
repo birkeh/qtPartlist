@@ -267,6 +267,30 @@ bool cPartEditDialog::add()
 
 	m_id	= query.value("id").toInt();
 
+	for(int x = 0;x < m_lpPartDistributorListModel->rowCount();x++)
+	{
+		QStandardItem*		lpItemName			= m_lpPartDistributorListModel->itemFromIndex(m_lpPartDistributorListModel->index(x, 0));
+		QStandardItem*		lpItemDistributor	= m_lpPartDistributorListModel->itemFromIndex(m_lpPartDistributorListModel->index(x, 1));
+		QStandardItem*		lpItemPrice			= m_lpPartDistributorListModel->itemFromIndex(m_lpPartDistributorListModel->index(x, 2));
+		QStandardItem*		lpItemDescription	= m_lpPartDistributorListModel->itemFromIndex(m_lpPartDistributorListModel->index(x, 3));
+		QStandardItem*		lpItemLink			= m_lpPartDistributorListModel->itemFromIndex(m_lpPartDistributorListModel->index(x, 4));
+
+		QSqlQuery	query;
+		query.prepare("INSERT INTO part_distributor (name, description, partID, distributorID, price, link) VALUES (:name, :description, :partID, :distributorID, :price, :lin);");
+		query.bindValue(":name", lpItemName->text());
+		query.bindValue(":description", lpItemDescription->text());
+		query.bindValue(":partID", m_id);
+		query.bindValue(":distributorID", m_lpDistributorList->find(lpItemDistributor->text())->id());
+		query.bindValue(":price", lpItemPrice->text().toDouble());
+		query.bindValue(":link", lpItemLink->text());
+
+		if(!query.exec())
+		{
+			myDebug << query.lastError().text();
+			return(false);
+		}
+	}
+
 	return(true);
 }
 
@@ -390,4 +414,12 @@ void cPartEditDialog::onEditDistributor()
 
 void cPartEditDialog::onDeleteDistributor()
 {
+	QStandardItem*				lpItem				= m_lpPartDistributorListModel->itemFromIndex(ui->m_lpPartDistributorList->selectionModel()->selectedRows().at(0));
+	if(!lpItem)
+		return;
+
+	if(QMessageBox::question(this, "DELETE", QString("Are you sure to delete this entry?")) == QMessageBox::No)
+		return;
+
+	m_lpPartDistributorListModel->removeRow(lpItem->row());
 }

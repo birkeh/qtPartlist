@@ -174,25 +174,7 @@ void cPartWindow::onAdd()
 	delete lpDialog;
 
 	partChanged(0);
-	showPartList();
-
-	for(int x = 0;x < m_lpPartListModel->rowCount();x++)
-	{
-		QStandardItem*	lpItem			= m_lpPartListModel->item(x, 0);
-		if(!lpItem)
-			continue;
-
-		cPart*	lpPart	= qvariant_cast<cPart*>(lpItem->data(Qt::UserRole));
-		if(!lpPart)
-			continue;
-
-		if(lpPart->id() == id)
-		{
-			ui->m_lpPartList->setCurrentIndex(lpItem->index());
-			ui->m_lpPartList->scrollTo(lpItem->index());
-			return;
-		}
-	}
+	showPartList(id);
 }
 
 void cPartWindow::onEdit()
