@@ -1,139 +1,721 @@
 <RCC>
     <qresource prefix="/">
-        <file>icons/asciiPanel.ico</file>
-        <file>icons/chameleon.ico</file>
-        <file>icons/clipboardPanel.ico</file>
-        <file>icons/closeAll.bmp</file>
-        <file>icons/closeFile.bmp</file>
-        <file>icons/closeTabButton.bmp</file>
-        <file>icons/closeTabButton_hover.bmp</file>
-        <file>icons/closeTabButton_inact.bmp</file>
-        <file>icons/closeTabButton_push.bmp</file>
-        <file>icons/copy.bmp</file>
-        <file>icons/cut.bmp</file>
-        <file>icons/cut_dis.ico</file>
-        <file>icons/cut_off.ico</file>
-        <file>icons/cut_on.ico</file>
-        <file>icons/delete.ico</file>
-        <file>icons/docMap.bmp</file>
-        <file>icons/docMap.ico</file>
-        <file>icons/docSwitcher.ico</file>
-        <file>icons/dupli_dis.ico</file>
-        <file>icons/dupli_off.ico</file>
-        <file>icons/dupli_on.ico</file>
-        <file>icons/fb_root_close.bmp</file>
-        <file>icons/fb_root_open.bmp</file>
-        <file>icons/fileBrowser.bmp</file>
-        <file>icons/fileBrowser.ico</file>
-        <file>icons/fileMonitoring.bmp</file>
-        <file>icons/find.bmp</file>
-        <file>icons/find_off.ico</file>
-        <file>icons/find_on.ico</file>
-        <file>icons/findrep_off.ico</file>
-        <file>icons/findrep_on.ico</file>
-        <file>icons/findReplace.bmp</file>
-        <file>icons/findResult.ico</file>
-        <file>icons/funcList_leaf.bmp</file>
-        <file>icons/funcList_node.bmp</file>
-        <file>icons/funclstReload.bmp</file>
-        <file>icons/funclstSort.bmp</file>
-        <file>icons/functionList.bmp</file>
-        <file>icons/functionList.ico</file>
-        <file>icons/imprim_off.ico</file>
-        <file>icons/imprim_on.ico</file>
-        <file>icons/incrementalBg.bmp</file>
-        <file>icons/indentGuide.bmp</file>
-        <file>icons/indentGuide_off.ico</file>
-        <file>icons/indentGuide_on.ico</file>
-        <file>icons/invisibleChar.bmp</file>
-        <file>icons/monitoring.ico</file>
-        <file>icons/new_off.ico</file>
-        <file>icons/new_on.ico</file>
-        <file>icons/newFile.bmp</file>
-        <file>icons/npp.ico</file>
-        <file>icons/nppNewIcon.ico</file>
-        <file>icons/open_off.ico</file>
-        <file>icons/open_on.ico</file>
-        <file>icons/openFile.bmp</file>
-        <file>icons/paste.bmp</file>
-        <file>icons/paste_dis.ico</file>
-        <file>icons/paste_off.ico</file>
-        <file>icons/paste_on.ico</file>
-        <file>icons/playRecord.bmp</file>
-        <file>icons/playrecord_dis.ico</file>
-        <file>icons/playRecord_m.bmp</file>
-        <file>icons/playrecord_m_dis.ico</file>
-        <file>icons/playrecord_m_off.ico</file>
-        <file>icons/playrecord_m_on.ico</file>
-        <file>icons/playrecord_off.ico</file>
-        <file>icons/playrecord_on.ico</file>
-        <file>icons/print.bmp</file>
-        <file>icons/project_file.bmp</file>
-        <file>icons/project_file_invalid.bmp</file>
-        <file>icons/project_folder_close.bmp</file>
-        <file>icons/project_folder_open.bmp</file>
-        <file>icons/project_root.bmp</file>
-        <file>icons/project_work_space.bmp</file>
-        <file>icons/project_work_space_dirty.bmp</file>
-        <file>icons/projectPanel.ico</file>
-        <file>icons/readonly.ico</file>
-        <file>icons/readonly.ico.old</file>
-        <file>icons/redo.bmp</file>
-        <file>icons/redo_dis.ico</file>
-        <file>icons/redo_off.ico</file>
-        <file>icons/redo_on.ico</file>
-        <file>icons/save_dis.ico</file>
-        <file>icons/save_off.ico</file>
-        <file>icons/save_on.ico</file>
-        <file>icons/saveAll.bmp</file>
-        <file>icons/saveall_dis.ico</file>
-        <file>icons/saveall_off.ico</file>
-        <file>icons/saveall_on.ico</file>
-        <file>icons/saved.ico</file>
-        <file>icons/saved.ico.old</file>
-        <file>icons/saveFile.bmp</file>
-        <file>icons/saveRecord.bmp</file>
-        <file>icons/saverecord_dis.ico</file>
-        <file>icons/saverecord_off.ico</file>
-        <file>icons/saverecord_on.ico</file>
-        <file>icons/showPannel.bmp</file>
-        <file>icons/startRecord.bmp</file>
-        <file>icons/startrecord_dis.ico</file>
-        <file>icons/startrecord_off.ico</file>
-        <file>icons/startrecord_on.ico</file>
-        <file>icons/stopRecord.bmp</file>
-        <file>icons/stoprecord_dis.ico</file>
-        <file>icons/stoprecord_off.ico</file>
-        <file>icons/stoprecord_on.ico</file>
-        <file>icons/supp_off.ico</file>
-        <file>icons/supp_on.ico</file>
-        <file>icons/suppall_off.ico</file>
-        <file>icons/suppall_on.ico</file>
-        <file>icons/syncH.bmp</file>
-        <file>icons/syncH_dis.ico</file>
-        <file>icons/syncH_off.ico</file>
-        <file>icons/syncH_on.ico</file>
-        <file>icons/syncV.bmp</file>
-        <file>icons/syncV_dis.ico</file>
-        <file>icons/syncV_off.ico</file>
-        <file>icons/syncV_on.ico</file>
-        <file>icons/undo.bmp</file>
-        <file>icons/undo_dis.ico</file>
-        <file>icons/undo_off.ico</file>
-        <file>icons/undo_on.ico</file>
-        <file>icons/unsaved.ico</file>
-        <file>icons/unsaved.ico.old</file>
-        <file>icons/userDefineDlg_off.ico</file>
-        <file>icons/userDefineDlg_on.ico</file>
-        <file>icons/wrap.bmp</file>
-        <file>icons/wrap_dis.ico</file>
-        <file>icons/wrap_off.ico</file>
-        <file>icons/wrap_on.ico</file>
-        <file>icons/zoomIn.bmp</file>
-        <file>icons/zoomIn_off.ico</file>
-        <file>icons/zoomIn_on.ico</file>
-        <file>icons/zoomOut.bmp</file>
-        <file>icons/zoomOut_off.ico</file>
-        <file>icons/zoomOut_on.ico</file>
+        <file>icons/disabled/3d bar chart.png</file>
+        <file>icons/disabled/3d graph.png</file>
+        <file>icons/disabled/ABC.png</file>
+        <file>icons/disabled/About.png</file>
+        <file>icons/disabled/Access.png</file>
+        <file>icons/disabled/Add.png</file>
+        <file>icons/disabled/Anchor.png</file>
+        <file>icons/disabled/Attach.png</file>
+        <file>icons/disabled/Auto zoom.png</file>
+        <file>icons/disabled/Back.png</file>
+        <file>icons/disabled/Bad mark.png</file>
+        <file>icons/disabled/Bar graph.png</file>
+        <file>icons/disabled/Blanks.png</file>
+        <file>icons/disabled/Blue magnifier.png</file>
+        <file>icons/disabled/Bluetooth.png</file>
+        <file>icons/disabled/Book library.png</file>
+        <file>icons/disabled/Book.png</file>
+        <file>icons/disabled/Books.png</file>
+        <file>icons/disabled/Boss.png</file>
+        <file>icons/disabled/Brief case.png</file>
+        <file>icons/disabled/Brush.png</file>
+        <file>icons/disabled/Bug.png</file>
+        <file>icons/disabled/Burning trash can.png</file>
+        <file>icons/disabled/Cable.png</file>
+        <file>icons/disabled/Calculator.png</file>
+        <file>icons/disabled/Calendar.png</file>
+        <file>icons/disabled/Camera.png</file>
+        <file>icons/disabled/Cancel.png</file>
+        <file>icons/disabled/Card file.png</file>
+        <file>icons/disabled/Certificate.png</file>
+        <file>icons/disabled/Chart.png</file>
+        <file>icons/disabled/Check boxes.png</file>
+        <file>icons/disabled/Check options.png</file>
+        <file>icons/disabled/Clear.png</file>
+        <file>icons/disabled/Clients.png</file>
+        <file>icons/disabled/Clock.png</file>
+        <file>icons/disabled/Clockwise.png</file>
+        <file>icons/disabled/Close.png</file>
+        <file>icons/disabled/Closed door.png</file>
+        <file>icons/disabled/Coffee.png</file>
+        <file>icons/disabled/Compact disk.png</file>
+        <file>icons/disabled/Component.png</file>
+        <file>icons/disabled/Computer.png</file>
+        <file>icons/disabled/Construction.png</file>
+        <file>icons/disabled/Copy.png</file>
+        <file>icons/disabled/Counter clockwise.png</file>
+        <file>icons/disabled/Create.png</file>
+        <file>icons/disabled/Credit cards.png</file>
+        <file>icons/disabled/Cut.png</file>
+        <file>icons/disabled/Database.png</file>
+        <file>icons/disabled/Datasheet.png</file>
+        <file>icons/disabled/Delete.png</file>
+        <file>icons/disabled/Detasheets.png</file>
+        <file>icons/disabled/Dice.png</file>
+        <file>icons/disabled/Dollar.png</file>
+        <file>icons/disabled/Down.png</file>
+        <file>icons/disabled/Download.png</file>
+        <file>icons/disabled/Dumb-bells.png</file>
+        <file>icons/disabled/Earth.png</file>
+        <file>icons/disabled/Edit.png</file>
+        <file>icons/disabled/E-mail.png</file>
+        <file>icons/disabled/Empty dustbin.png</file>
+        <file>icons/disabled/Empty trash can.png</file>
+        <file>icons/disabled/Engineer.png</file>
+        <file>icons/disabled/Erase.png</file>
+        <file>icons/disabled/Eraser.png</file>
+        <file>icons/disabled/Error.png</file>
+        <file>icons/disabled/Exit.png</file>
+        <file>icons/disabled/Eye.png</file>
+        <file>icons/disabled/Film.png</file>
+        <file>icons/disabled/Filter.png</file>
+        <file>icons/disabled/Find in folder.png</file>
+        <file>icons/disabled/Find on computer.png</file>
+        <file>icons/disabled/Find.png</file>
+        <file>icons/disabled/Firewall.png</file>
+        <file>icons/disabled/Flash drive.png</file>
+        <file>icons/disabled/Flow block.png</file>
+        <file>icons/disabled/Folder.png</file>
+        <file>icons/disabled/Forward.png</file>
+        <file>icons/disabled/Full dustbin.png</file>
+        <file>icons/disabled/Full trash can.png</file>
+        <file>icons/disabled/Gear.png</file>
+        <file>icons/disabled/Genealogy.png</file>
+        <file>icons/disabled/Good mark.png</file>
+        <file>icons/disabled/Graph.png</file>
+        <file>icons/disabled/Graphic file.png</file>
+        <file>icons/disabled/Graphic tools.png</file>
+        <file>icons/disabled/Green set square.png</file>
+        <file>icons/disabled/Green user.png</file>
+        <file>icons/disabled/Grid.png</file>
+        <file>icons/disabled/Hand.png</file>
+        <file>icons/disabled/Heart.png</file>
+        <file>icons/disabled/Help.png</file>
+        <file>icons/disabled/Hierarchy.png</file>
+        <file>icons/disabled/History.png</file>
+        <file>icons/disabled/Home.png</file>
+        <file>icons/disabled/Horizontal ruler.png</file>
+        <file>icons/disabled/Hourglass.png</file>
+        <file>icons/disabled/How to.png</file>
+        <file>icons/disabled/Info.png</file>
+        <file>icons/disabled/Install.png</file>
+        <file>icons/disabled/Internet access.png</file>
+        <file>icons/disabled/Keyboard.png</file>
+        <file>icons/disabled/Keys.png</file>
+        <file>icons/disabled/Knowledge.png</file>
+        <file>icons/disabled/Landscape.png</file>
+        <file>icons/disabled/Left.png</file>
+        <file>icons/disabled/List.png</file>
+        <file>icons/disabled/Lists.png</file>
+        <file>icons/disabled/Lock.png</file>
+        <file>icons/disabled/Login.png</file>
+        <file>icons/disabled/Lookup.png</file>
+        <file>icons/disabled/Maestro card.png</file>
+        <file>icons/disabled/Mail.png</file>
+        <file>icons/disabled/Manager.png</file>
+        <file>icons/disabled/Measure.png</file>
+        <file>icons/disabled/Microsoft flag.png</file>
+        <file>icons/disabled/Midi document.png</file>
+        <file>icons/disabled/Money.png</file>
+        <file>icons/disabled/Monitor.png</file>
+        <file>icons/disabled/Monitors.png</file>
+        <file>icons/disabled/Mouse.png</file>
+        <file>icons/disabled/Multimedia file.png</file>
+        <file>icons/disabled/Music notes.png</file>
+        <file>icons/disabled/Music.png</file>
+        <file>icons/disabled/New file.png</file>
+        <file>icons/disabled/Newspaper.png</file>
+        <file>icons/disabled/No entry.png</file>
+        <file>icons/disabled/No.png</file>
+        <file>icons/disabled/Notepad.png</file>
+        <file>icons/disabled/Notes.png</file>
+        <file>icons/disabled/Object manager.png</file>
+        <file>icons/disabled/Objects.png</file>
+        <file>icons/disabled/OK.png</file>
+        <file>icons/disabled/Open door.png</file>
+        <file>icons/disabled/Open file.png</file>
+        <file>icons/disabled/Open.png</file>
+        <file>icons/disabled/Options.png</file>
+        <file>icons/disabled/Paste.png</file>
+        <file>icons/disabled/Percent.png</file>
+        <file>icons/disabled/Pie chart.png</file>
+        <file>icons/disabled/Pin.png</file>
+        <file>icons/disabled/Portrait.png</file>
+        <file>icons/disabled/Preview.png</file>
+        <file>icons/disabled/Print preview.png</file>
+        <file>icons/disabled/Print.png</file>
+        <file>icons/disabled/Printer.png</file>
+        <file>icons/disabled/Problem.png</file>
+        <file>icons/disabled/Properties.png</file>
+        <file>icons/disabled/Question.png</file>
+        <file>icons/disabled/Red house.png</file>
+        <file>icons/disabled/Red pencil.png</file>
+        <file>icons/disabled/Red star.png</file>
+        <file>icons/disabled/Redo.png</file>
+        <file>icons/disabled/Refresh document.png</file>
+        <file>icons/disabled/Refresh.png</file>
+        <file>icons/disabled/Registration.png</file>
+        <file>icons/disabled/Remove.png</file>
+        <file>icons/disabled/Repair computer.png</file>
+        <file>icons/disabled/Repair.png</file>
+        <file>icons/disabled/Report.png</file>
+        <file>icons/disabled/Reports.png</file>
+        <file>icons/disabled/Right.png</file>
+        <file>icons/disabled/Ring-buoy.png</file>
+        <file>icons/disabled/Roll.png</file>
+        <file>icons/disabled/RSS.png</file>
+        <file>icons/disabled/Ruler.png</file>
+        <file>icons/disabled/Rulers.png</file>
+        <file>icons/disabled/Save all.png</file>
+        <file>icons/disabled/Save as.png</file>
+        <file>icons/disabled/Save file.png</file>
+        <file>icons/disabled/Save picture.png</file>
+        <file>icons/disabled/Save.png</file>
+        <file>icons/disabled/Scan.png</file>
+        <file>icons/disabled/Scanner.png</file>
+        <file>icons/disabled/Schedule.png</file>
+        <file>icons/disabled/Screen settings.png</file>
+        <file>icons/disabled/Search next.png</file>
+        <file>icons/disabled/Search previous.png</file>
+        <file>icons/disabled/Search text.png</file>
+        <file>icons/disabled/Search.png</file>
+        <file>icons/disabled/Secrecy.png</file>
+        <file>icons/disabled/Set square.png</file>
+        <file>icons/disabled/Settings.png</file>
+        <file>icons/disabled/Shield.png</file>
+        <file>icons/disabled/Signature.png</file>
+        <file>icons/disabled/Sorting 1-9.png</file>
+        <file>icons/disabled/Sorting 9-1.png</file>
+        <file>icons/disabled/Sorting A-Z.png</file>
+        <file>icons/disabled/Sorting Z-A.png</file>
+        <file>icons/disabled/Sound document.png</file>
+        <file>icons/disabled/Spell checking.png</file>
+        <file>icons/disabled/Stamp.png</file>
+        <file>icons/disabled/Star.png</file>
+        <file>icons/disabled/Steering wheel.png</file>
+        <file>icons/disabled/Stop.png</file>
+        <file>icons/disabled/Sum.png</file>
+        <file>icons/disabled/Table.png</file>
+        <file>icons/disabled/Tables.png</file>
+        <file>icons/disabled/Telephone.png</file>
+        <file>icons/disabled/Text file.png</file>
+        <file>icons/disabled/Text replace.png</file>
+        <file>icons/disabled/Text.png</file>
+        <file>icons/disabled/Tick.png</file>
+        <file>icons/disabled/Time.png</file>
+        <file>icons/disabled/Timer.png</file>
+        <file>icons/disabled/Tools.png</file>
+        <file>icons/disabled/Tree.png</file>
+        <file>icons/disabled/Trinket.png</file>
+        <file>icons/disabled/Turn off.png</file>
+        <file>icons/disabled/Umbrella.png</file>
+        <file>icons/disabled/Undo.png</file>
+        <file>icons/disabled/Uninstall.png</file>
+        <file>icons/disabled/Units.png</file>
+        <file>icons/disabled/Unlock.png</file>
+        <file>icons/disabled/Up.png</file>
+        <file>icons/disabled/Update.png</file>
+        <file>icons/disabled/Upload.png</file>
+        <file>icons/disabled/USB drive.png</file>
+        <file>icons/disabled/User group.png</file>
+        <file>icons/disabled/User profile.png</file>
+        <file>icons/disabled/User.png</file>
+        <file>icons/disabled/Users folder.png</file>
+        <file>icons/disabled/Vertical ruler.png</file>
+        <file>icons/disabled/Video file.png</file>
+        <file>icons/disabled/View.png</file>
+        <file>icons/disabled/Visa card.png</file>
+        <file>icons/disabled/Voice identification.png</file>
+        <file>icons/disabled/Warning.png</file>
+        <file>icons/disabled/Weather.png</file>
+        <file>icons/disabled/Wireless.png</file>
+        <file>icons/disabled/Wizard.png</file>
+        <file>icons/disabled/Work area.png</file>
+        <file>icons/disabled/Wrench.png</file>
+        <file>icons/disabled/Yellow submarine.png</file>
+        <file>icons/disabled/Yes.png</file>
+        <file>icons/disabled/Zoom in.png</file>
+        <file>icons/disabled/Zoom out.png</file>
+        <file>icons/disabled/Zoom.png</file>
+        <file>icons/hot/3d bar chart.png</file>
+        <file>icons/hot/3d graph.png</file>
+        <file>icons/hot/ABC.png</file>
+        <file>icons/hot/About.png</file>
+        <file>icons/hot/Access.png</file>
+        <file>icons/hot/Add.png</file>
+        <file>icons/hot/Anchor.png</file>
+        <file>icons/hot/Attach.png</file>
+        <file>icons/hot/Auto zoom.png</file>
+        <file>icons/hot/Back.png</file>
+        <file>icons/hot/Bad mark.png</file>
+        <file>icons/hot/Bar graph.png</file>
+        <file>icons/hot/Blanks.png</file>
+        <file>icons/hot/Blue magnifier.png</file>
+        <file>icons/hot/Bluetooth.png</file>
+        <file>icons/hot/Book library.png</file>
+        <file>icons/hot/Book.png</file>
+        <file>icons/hot/Books.png</file>
+        <file>icons/hot/Boss.png</file>
+        <file>icons/hot/Brief case.png</file>
+        <file>icons/hot/Brush.png</file>
+        <file>icons/hot/Bug.png</file>
+        <file>icons/hot/Burning trash can.png</file>
+        <file>icons/hot/Cable.png</file>
+        <file>icons/hot/Calculator.png</file>
+        <file>icons/hot/Calendar.png</file>
+        <file>icons/hot/Camera.png</file>
+        <file>icons/hot/Cancel.png</file>
+        <file>icons/hot/Card file.png</file>
+        <file>icons/hot/Certificate.png</file>
+        <file>icons/hot/Chart.png</file>
+        <file>icons/hot/Check boxes.png</file>
+        <file>icons/hot/Check options.png</file>
+        <file>icons/hot/Clear.png</file>
+        <file>icons/hot/Clients.png</file>
+        <file>icons/hot/Clock.png</file>
+        <file>icons/hot/Clockwise.png</file>
+        <file>icons/hot/Close.png</file>
+        <file>icons/hot/Closed door.png</file>
+        <file>icons/hot/Coffee.png</file>
+        <file>icons/hot/Compact disk.png</file>
+        <file>icons/hot/Component.png</file>
+        <file>icons/hot/Computer.png</file>
+        <file>icons/hot/Construction.png</file>
+        <file>icons/hot/Copy.png</file>
+        <file>icons/hot/Counter clockwise.png</file>
+        <file>icons/hot/Create.png</file>
+        <file>icons/hot/Credit cards.png</file>
+        <file>icons/hot/Cut.png</file>
+        <file>icons/hot/Database.png</file>
+        <file>icons/hot/Datasheet.png</file>
+        <file>icons/hot/Delete.png</file>
+        <file>icons/hot/Detasheets.png</file>
+        <file>icons/hot/Dice.png</file>
+        <file>icons/hot/Dollar.png</file>
+        <file>icons/hot/Down.png</file>
+        <file>icons/hot/Download.png</file>
+        <file>icons/hot/Dumb-bells.png</file>
+        <file>icons/hot/Earth.png</file>
+        <file>icons/hot/Edit.png</file>
+        <file>icons/hot/E-mail.png</file>
+        <file>icons/hot/Empty dustbin.png</file>
+        <file>icons/hot/Empty trash can.png</file>
+        <file>icons/hot/Engineer.png</file>
+        <file>icons/hot/Erase.png</file>
+        <file>icons/hot/Eraser.png</file>
+        <file>icons/hot/Error.png</file>
+        <file>icons/hot/Exit.png</file>
+        <file>icons/hot/Eye.png</file>
+        <file>icons/hot/Film.png</file>
+        <file>icons/hot/Filter.png</file>
+        <file>icons/hot/Find in folder.png</file>
+        <file>icons/hot/Find on computer.png</file>
+        <file>icons/hot/Find.png</file>
+        <file>icons/hot/Firewall.png</file>
+        <file>icons/hot/Flash drive.png</file>
+        <file>icons/hot/Flow block.png</file>
+        <file>icons/hot/Folder.png</file>
+        <file>icons/hot/Forward.png</file>
+        <file>icons/hot/Full dustbin.png</file>
+        <file>icons/hot/Full trash can.png</file>
+        <file>icons/hot/Gear.png</file>
+        <file>icons/hot/Genealogy.png</file>
+        <file>icons/hot/Good mark.png</file>
+        <file>icons/hot/Graph.png</file>
+        <file>icons/hot/Graphic file.png</file>
+        <file>icons/hot/Graphic tools.png</file>
+        <file>icons/hot/Green set square.png</file>
+        <file>icons/hot/Green user.png</file>
+        <file>icons/hot/Grid.png</file>
+        <file>icons/hot/Hand.png</file>
+        <file>icons/hot/Heart.png</file>
+        <file>icons/hot/Help.png</file>
+        <file>icons/hot/Hierarchy.png</file>
+        <file>icons/hot/History.png</file>
+        <file>icons/hot/Home.png</file>
+        <file>icons/hot/Horizontal ruler.png</file>
+        <file>icons/hot/Hourglass.png</file>
+        <file>icons/hot/How to.png</file>
+        <file>icons/hot/Info.png</file>
+        <file>icons/hot/Install.png</file>
+        <file>icons/hot/Internet access.png</file>
+        <file>icons/hot/Keyboard.png</file>
+        <file>icons/hot/Keys.png</file>
+        <file>icons/hot/Knowledge.png</file>
+        <file>icons/hot/Landscape.png</file>
+        <file>icons/hot/Left.png</file>
+        <file>icons/hot/List.png</file>
+        <file>icons/hot/Lists.png</file>
+        <file>icons/hot/Lock.png</file>
+        <file>icons/hot/Login.png</file>
+        <file>icons/hot/Lookup.png</file>
+        <file>icons/hot/Maestro card.png</file>
+        <file>icons/hot/Mail.png</file>
+        <file>icons/hot/Manager.png</file>
+        <file>icons/hot/Measure.png</file>
+        <file>icons/hot/Microsoft flag.png</file>
+        <file>icons/hot/Midi document.png</file>
+        <file>icons/hot/Money.png</file>
+        <file>icons/hot/Monitor.png</file>
+        <file>icons/hot/Monitors.png</file>
+        <file>icons/hot/Mouse.png</file>
+        <file>icons/hot/Multimedia file.png</file>
+        <file>icons/hot/Music notes.png</file>
+        <file>icons/hot/Music.png</file>
+        <file>icons/hot/New file.png</file>
+        <file>icons/hot/Newspaper.png</file>
+        <file>icons/hot/No entry.png</file>
+        <file>icons/hot/No.png</file>
+        <file>icons/hot/Notepad.png</file>
+        <file>icons/hot/Notes.png</file>
+        <file>icons/hot/Object manager.png</file>
+        <file>icons/hot/Objects.png</file>
+        <file>icons/hot/OK.png</file>
+        <file>icons/hot/Open door.png</file>
+        <file>icons/hot/Open file.png</file>
+        <file>icons/hot/Open.png</file>
+        <file>icons/hot/Options.png</file>
+        <file>icons/hot/Paste.png</file>
+        <file>icons/hot/Percent.png</file>
+        <file>icons/hot/Pie chart.png</file>
+        <file>icons/hot/Pin.png</file>
+        <file>icons/hot/Portrait.png</file>
+        <file>icons/hot/Preview.png</file>
+        <file>icons/hot/Print preview.png</file>
+        <file>icons/hot/Print.png</file>
+        <file>icons/hot/Printer.png</file>
+        <file>icons/hot/Problem.png</file>
+        <file>icons/hot/Properties.png</file>
+        <file>icons/hot/Question.png</file>
+        <file>icons/hot/Red house.png</file>
+        <file>icons/hot/Red pencil.png</file>
+        <file>icons/hot/Red star.png</file>
+        <file>icons/hot/Redo.png</file>
+        <file>icons/hot/Refresh document.png</file>
+        <file>icons/hot/Refresh.png</file>
+        <file>icons/hot/Registration.png</file>
+        <file>icons/hot/Remove.png</file>
+        <file>icons/hot/Repair computer.png</file>
+        <file>icons/hot/Repair.png</file>
+        <file>icons/hot/Report.png</file>
+        <file>icons/hot/Reports.png</file>
+        <file>icons/hot/Right.png</file>
+        <file>icons/hot/Ring-buoy.png</file>
+        <file>icons/hot/Roll.png</file>
+        <file>icons/hot/RSS.png</file>
+        <file>icons/hot/Ruler.png</file>
+        <file>icons/hot/Rulers.png</file>
+        <file>icons/hot/Save all.png</file>
+        <file>icons/hot/Save as.png</file>
+        <file>icons/hot/Save file.png</file>
+        <file>icons/hot/Save picture.png</file>
+        <file>icons/hot/Save.png</file>
+        <file>icons/hot/Scan.png</file>
+        <file>icons/hot/Scanner.png</file>
+        <file>icons/hot/Schedule.png</file>
+        <file>icons/hot/Screen settings.png</file>
+        <file>icons/hot/Search next.png</file>
+        <file>icons/hot/Search previous.png</file>
+        <file>icons/hot/Search text.png</file>
+        <file>icons/hot/Search.png</file>
+        <file>icons/hot/Secrecy.png</file>
+        <file>icons/hot/Set square.png</file>
+        <file>icons/hot/Settings.png</file>
+        <file>icons/hot/Shield.png</file>
+        <file>icons/hot/Signature.png</file>
+        <file>icons/hot/Sorting 1-9.png</file>
+        <file>icons/hot/Sorting 9-1.png</file>
+        <file>icons/hot/Sorting A-Z.png</file>
+        <file>icons/hot/Sorting Z-A.png</file>
+        <file>icons/hot/Sound document.png</file>
+        <file>icons/hot/Spell checking.png</file>
+        <file>icons/hot/Stamp.png</file>
+        <file>icons/hot/Star.png</file>
+        <file>icons/hot/Steering wheel.png</file>
+        <file>icons/hot/Stop.png</file>
+        <file>icons/hot/Sum.png</file>
+        <file>icons/hot/Table.png</file>
+        <file>icons/hot/Tables.png</file>
+        <file>icons/hot/Telephone.png</file>
+        <file>icons/hot/Text file.png</file>
+        <file>icons/hot/Text replace.png</file>
+        <file>icons/hot/Text.png</file>
+        <file>icons/hot/Tick.png</file>
+        <file>icons/hot/Time.png</file>
+        <file>icons/hot/Timer.png</file>
+        <file>icons/hot/Tools.png</file>
+        <file>icons/hot/Tree.png</file>
+        <file>icons/hot/Trinket.png</file>
+        <file>icons/hot/Turn off.png</file>
+        <file>icons/hot/Umbrella.png</file>
+        <file>icons/hot/Undo.png</file>
+        <file>icons/hot/Uninstall.png</file>
+        <file>icons/hot/Units.png</file>
+        <file>icons/hot/Unlock.png</file>
+        <file>icons/hot/Up.png</file>
+        <file>icons/hot/Update.png</file>
+        <file>icons/hot/Upload.png</file>
+        <file>icons/hot/USB drive.png</file>
+        <file>icons/hot/User group.png</file>
+        <file>icons/hot/User profile.png</file>
+        <file>icons/hot/User.png</file>
+        <file>icons/hot/Users folder.png</file>
+        <file>icons/hot/Vertical ruler.png</file>
+        <file>icons/hot/Video file.png</file>
+        <file>icons/hot/View.png</file>
+        <file>icons/hot/Visa card.png</file>
+        <file>icons/hot/Voice identification.png</file>
+        <file>icons/hot/Warning.png</file>
+        <file>icons/hot/Weather.png</file>
+        <file>icons/hot/Wireless.png</file>
+        <file>icons/hot/Wizard.png</file>
+        <file>icons/hot/Work area.png</file>
+        <file>icons/hot/Wrench.png</file>
+        <file>icons/hot/Yellow submarine.png</file>
+        <file>icons/hot/Yes.png</file>
+        <file>icons/hot/Zoom in.png</file>
+        <file>icons/hot/Zoom out.png</file>
+        <file>icons/hot/Zoom.png</file>
+        <file>icons/normal/3d bar chart.png</file>
+        <file>icons/normal/3d graph.png</file>
+        <file>icons/normal/ABC.png</file>
+        <file>icons/normal/About.png</file>
+        <file>icons/normal/Access.png</file>
+        <file>icons/normal/Add.png</file>
+        <file>icons/normal/Anchor.png</file>
+        <file>icons/normal/Attach.png</file>
+        <file>icons/normal/Auto zoom.png</file>
+        <file>icons/normal/Back.png</file>
+        <file>icons/normal/Bad mark.png</file>
+        <file>icons/normal/Bar graph.png</file>
+        <file>icons/normal/Blanks.png</file>
+        <file>icons/normal/Blue magnifier.png</file>
+        <file>icons/normal/Bluetooth.png</file>
+        <file>icons/normal/Book library.png</file>
+        <file>icons/normal/Book.png</file>
+        <file>icons/normal/Books.png</file>
+        <file>icons/normal/Boss.png</file>
+        <file>icons/normal/Brief case.png</file>
+        <file>icons/normal/Brush.png</file>
+        <file>icons/normal/Bug.png</file>
+        <file>icons/normal/Burning trash can.png</file>
+        <file>icons/normal/Cable.png</file>
+        <file>icons/normal/Calculator.png</file>
+        <file>icons/normal/Calendar.png</file>
+        <file>icons/normal/Camera.png</file>
+        <file>icons/normal/Cancel.png</file>
+        <file>icons/normal/Card file.png</file>
+        <file>icons/normal/Certificate.png</file>
+        <file>icons/normal/Chart.png</file>
+        <file>icons/normal/Check boxes.png</file>
+        <file>icons/normal/Check options.png</file>
+        <file>icons/normal/Clear.png</file>
+        <file>icons/normal/Clients.png</file>
+        <file>icons/normal/Clock.png</file>
+        <file>icons/normal/Clockwise.png</file>
+        <file>icons/normal/Close.png</file>
+        <file>icons/normal/Closed door.png</file>
+        <file>icons/normal/Coffee.png</file>
+        <file>icons/normal/Compact disk.png</file>
+        <file>icons/normal/Component.png</file>
+        <file>icons/normal/Computer.png</file>
+        <file>icons/normal/Construction.png</file>
+        <file>icons/normal/Copy.png</file>
+        <file>icons/normal/Counter clockwise.png</file>
+        <file>icons/normal/Create.png</file>
+        <file>icons/normal/Credit cards.png</file>
+        <file>icons/normal/Cut.png</file>
+        <file>icons/normal/Database.png</file>
+        <file>icons/normal/Datasheet.png</file>
+        <file>icons/normal/Delete.png</file>
+        <file>icons/normal/Detasheets.png</file>
+        <file>icons/normal/Dice.png</file>
+        <file>icons/normal/Dollar.png</file>
+        <file>icons/normal/Down.png</file>
+        <file>icons/normal/Download.png</file>
+        <file>icons/normal/Dumb-bells.png</file>
+        <file>icons/normal/Earth.png</file>
+        <file>icons/normal/Edit.png</file>
+        <file>icons/normal/E-mail.png</file>
+        <file>icons/normal/Empty dustbin.png</file>
+        <file>icons/normal/Empty trash can.png</file>
+        <file>icons/normal/Engineer.png</file>
+        <file>icons/normal/Erase.png</file>
+        <file>icons/normal/Eraser.png</file>
+        <file>icons/normal/Error.png</file>
+        <file>icons/normal/Exit.png</file>
+        <file>icons/normal/Eye.png</file>
+        <file>icons/normal/Film.png</file>
+        <file>icons/normal/Filter.png</file>
+        <file>icons/normal/Find in folder.png</file>
+        <file>icons/normal/Find on computer.png</file>
+        <file>icons/normal/Find.png</file>
+        <file>icons/normal/Firewall.png</file>
+        <file>icons/normal/Flash drive.png</file>
+        <file>icons/normal/Flow block.png</file>
+        <file>icons/normal/Folder.png</file>
+        <file>icons/normal/Forward.png</file>
+        <file>icons/normal/Full dustbin.png</file>
+        <file>icons/normal/Full trash can.png</file>
+        <file>icons/normal/Gear.png</file>
+        <file>icons/normal/Genealogy.png</file>
+        <file>icons/normal/Good mark.png</file>
+        <file>icons/normal/Graph.png</file>
+        <file>icons/normal/Graphic file.png</file>
+        <file>icons/normal/Graphic tools.png</file>
+        <file>icons/normal/Green set square.png</file>
+        <file>icons/normal/Green user.png</file>
+        <file>icons/normal/Grid.png</file>
+        <file>icons/normal/Hand.png</file>
+        <file>icons/normal/Heart.png</file>
+        <file>icons/normal/Help.png</file>
+        <file>icons/normal/Hierarchy.png</file>
+        <file>icons/normal/History.png</file>
+        <file>icons/normal/Home.png</file>
+        <file>icons/normal/Horizontal ruler.png</file>
+        <file>icons/normal/Hourglass.png</file>
+        <file>icons/normal/How to.png</file>
+        <file>icons/normal/Info.png</file>
+        <file>icons/normal/Install.png</file>
+        <file>icons/normal/Internet access.png</file>
+        <file>icons/normal/Keyboard.png</file>
+        <file>icons/normal/Keys.png</file>
+        <file>icons/normal/Knowledge.png</file>
+        <file>icons/normal/Landscape.png</file>
+        <file>icons/normal/Left.png</file>
+        <file>icons/normal/List.png</file>
+        <file>icons/normal/Lists.png</file>
+        <file>icons/normal/Lock.png</file>
+        <file>icons/normal/Login.png</file>
+        <file>icons/normal/Lookup.png</file>
+        <file>icons/normal/Maestro card.png</file>
+        <file>icons/normal/Mail.png</file>
+        <file>icons/normal/Manager.png</file>
+        <file>icons/normal/Measure.png</file>
+        <file>icons/normal/Microsoft flag.png</file>
+        <file>icons/normal/Midi document.png</file>
+        <file>icons/normal/Money.png</file>
+        <file>icons/normal/Monitor.png</file>
+        <file>icons/normal/Monitors.png</file>
+        <file>icons/normal/Mouse.png</file>
+        <file>icons/normal/Multimedia file.png</file>
+        <file>icons/normal/Music notes.png</file>
+        <file>icons/normal/Music.png</file>
+        <file>icons/normal/New file.png</file>
+        <file>icons/normal/Newspaper.png</file>
+        <file>icons/normal/No entry.png</file>
+        <file>icons/normal/No.png</file>
+        <file>icons/normal/Notepad.png</file>
+        <file>icons/normal/Notes.png</file>
+        <file>icons/normal/Object manager.png</file>
+        <file>icons/normal/Objects.png</file>
+        <file>icons/normal/OK.png</file>
+        <file>icons/normal/Open door.png</file>
+        <file>icons/normal/Open file.png</file>
+        <file>icons/normal/Open.png</file>
+        <file>icons/normal/Options.png</file>
+        <file>icons/normal/Paste.png</file>
+        <file>icons/normal/Percent.png</file>
+        <file>icons/normal/Pie chart.png</file>
+        <file>icons/normal/Pin.png</file>
+        <file>icons/normal/Portrait.png</file>
+        <file>icons/normal/Preview.png</file>
+        <file>icons/normal/Print preview.png</file>
+        <file>icons/normal/Print.png</file>
+        <file>icons/normal/Printer.png</file>
+        <file>icons/normal/Problem.png</file>
+        <file>icons/normal/Properties.png</file>
+        <file>icons/normal/Question.png</file>
+        <file>icons/normal/Red house.png</file>
+        <file>icons/normal/Red pencil.png</file>
+        <file>icons/normal/Red star.png</file>
+        <file>icons/normal/Redo.png</file>
+        <file>icons/normal/Refresh document.png</file>
+        <file>icons/normal/Refresh.png</file>
+        <file>icons/normal/Registration.png</file>
+        <file>icons/normal/Remove.png</file>
+        <file>icons/normal/Repair computer.png</file>
+        <file>icons/normal/Repair.png</file>
+        <file>icons/normal/Report.png</file>
+        <file>icons/normal/Reports.png</file>
+        <file>icons/normal/Right.png</file>
+        <file>icons/normal/Ring-buoy.png</file>
+        <file>icons/normal/Roll.png</file>
+        <file>icons/normal/RSS.png</file>
+        <file>icons/normal/Ruler.png</file>
+        <file>icons/normal/Rulers.png</file>
+        <file>icons/normal/Save all.png</file>
+        <file>icons/normal/Save as.png</file>
+        <file>icons/normal/Save file.png</file>
+        <file>icons/normal/Save picture.png</file>
+        <file>icons/normal/Save.png</file>
+        <file>icons/normal/Scan.png</file>
+        <file>icons/normal/Scanner.png</file>
+        <file>icons/normal/Schedule.png</file>
+        <file>icons/normal/Screen settings.png</file>
+        <file>icons/normal/Search next.png</file>
+        <file>icons/normal/Search previous.png</file>
+        <file>icons/normal/Search text.png</file>
+        <file>icons/normal/Search.png</file>
+        <file>icons/normal/Secrecy.png</file>
+        <file>icons/normal/Set square.png</file>
+        <file>icons/normal/Settings.png</file>
+        <file>icons/normal/Shield.png</file>
+        <file>icons/normal/Signature.png</file>
+        <file>icons/normal/Sorting 1-9.png</file>
+        <file>icons/normal/Sorting 9-1.png</file>
+        <file>icons/normal/Sorting A-Z.png</file>
+        <file>icons/normal/Sorting Z-A.png</file>
+        <file>icons/normal/Sound document.png</file>
+        <file>icons/normal/Spell checking.png</file>
+        <file>icons/normal/Stamp.png</file>
+        <file>icons/normal/Star.png</file>
+        <file>icons/normal/Steering wheel.png</file>
+        <file>icons/normal/Stop.png</file>
+        <file>icons/normal/Sum.png</file>
+        <file>icons/normal/Table.png</file>
+        <file>icons/normal/Tables.png</file>
+        <file>icons/normal/Telephone.png</file>
+        <file>icons/normal/Text file.png</file>
+        <file>icons/normal/Text replace.png</file>
+        <file>icons/normal/Text.png</file>
+        <file>icons/normal/Tick.png</file>
+        <file>icons/normal/Time.png</file>
+        <file>icons/normal/Timer.png</file>
+        <file>icons/normal/Tools.png</file>
+        <file>icons/normal/Tree.png</file>
+        <file>icons/normal/Trinket.png</file>
+        <file>icons/normal/Turn off.png</file>
+        <file>icons/normal/Umbrella.png</file>
+        <file>icons/normal/Undo.png</file>
+        <file>icons/normal/Uninstall.png</file>
+        <file>icons/normal/Units.png</file>
+        <file>icons/normal/Unlock.png</file>
+        <file>icons/normal/Up.png</file>
+        <file>icons/normal/Update.png</file>
+        <file>icons/normal/Upload.png</file>
+        <file>icons/normal/USB drive.png</file>
+        <file>icons/normal/User group.png</file>
+        <file>icons/normal/User profile.png</file>
+        <file>icons/normal/User.png</file>
+        <file>icons/normal/Users folder.png</file>
+        <file>icons/normal/Vertical ruler.png</file>
+        <file>icons/normal/Video file.png</file>
+        <file>icons/normal/View.png</file>
+        <file>icons/normal/Visa card.png</file>
+        <file>icons/normal/Voice identification.png</file>
+        <file>icons/normal/Warning.png</file>
+        <file>icons/normal/Weather.png</file>
+        <file>icons/normal/Wireless.png</file>
+        <file>icons/normal/Wizard.png</file>
+        <file>icons/normal/Work area.png</file>
+        <file>icons/normal/Wrench.png</file>
+        <file>icons/normal/Yellow submarine.png</file>
+        <file>icons/normal/Yes.png</file>
+        <file>icons/normal/Zoom in.png</file>
+        <file>icons/normal/Zoom out.png</file>
+        <file>icons/normal/Zoom.png</file>
     </qresource>
 </RCC>

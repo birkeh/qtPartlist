@@ -21,6 +21,8 @@
 #include <QAction>
 #include <QMetaObject>
 
+#include <QPixmap>
+
 
 namespace Ui {
 class cMainWindow;
@@ -62,11 +64,11 @@ private:
 
 	QMenu*					m_lpMenuPartlist;
 	QToolBar*				m_lpToolBarPartlist;
-	QAction*				m_lpPartlistNew;
-	QAction*				m_lpPartlistOpen;
-	QAction*				m_lpPartlistClose;
-	QAction*				m_lpPartlistSave;
-	QAction*				m_lpPartlistSaveAs;
+	QAction*				m_lpActionPartlistNew;
+	QAction*				m_lpActionPartlistOpen;
+	QAction*				m_lpActionPartlistClose;
+	QAction*				m_lpActionPartlistSave;
+	QAction*				m_lpActionPartlistSaveAs;
 
 	QSqlDatabase			m_db;
 	cDistributorList		m_distributorList;
@@ -79,19 +81,27 @@ private:
 
 	void					createActions();
 	template <typename Func2>
-	void					createAction(QMenu* lpMenu, QToolBar* lpToolbar, QAction** lplpAction, const QString& szIcon, const QString& szIconFallback, const QString& szAction, QKeySequence::StandardKey sequence, const QString& szStatusTip, Func2 method)
+	void					createAction(QMenu* lpMenu, QToolBar* lpToolbar, QAction** lplpAction, const QString& szIcon, const QString& szIconHot, const QString& szIconDisabled, const QString& szAction, QKeySequence::StandardKey sequence, const QString& szStatusTip, Func2 method)
 	{
-		if(szIcon.isEmpty() && szIconFallback.isEmpty())
+		if(!lpToolbar)
 		{
-			(*lplpAction)				= new QAction(szAction, this);
+			(*lplpAction)		= new QAction(szAction, this);
 			(*lplpAction)->setShortcuts(sequence);
 			(*lplpAction)->setStatusTip(szStatusTip);
 			lpMenu->addAction((*lplpAction));
 		}
 		else
 		{
-			const QIcon	newIcon			= QIcon::fromTheme(szIcon, QIcon(szIconFallback));
-			(*lplpAction)				= new QAction(newIcon, szAction, this);
+			QPixmap		hot(szIconHot);
+			QPixmap		disabled(szIconDisabled);
+
+			QIcon	newIcon	= QIcon(szIcon);
+			if(!szIconHot.isEmpty())
+				newIcon.addPixmap(hot, QIcon::Selected);
+			if(!szIconDisabled.isEmpty())
+				newIcon.addPixmap(disabled, QIcon::Disabled);
+
+			(*lplpAction)		= new QAction(newIcon, szAction, this);
 			(*lplpAction)->setShortcuts(sequence);
 			(*lplpAction)->setStatusTip(szStatusTip);
 			lpMenu->addAction((*lplpAction));
@@ -99,6 +109,7 @@ private:
 		}
 		connect((*lplpAction), &QAction::triggered, this, method);
 	}
+
 	void					createSeparator(QMenu* lpMenu, QToolBar* lpToolbar)
 	{
 		lpMenu->addSeparator();

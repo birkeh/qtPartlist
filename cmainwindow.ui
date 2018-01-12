@@ -53,7 +53,7 @@
   </action>
   <action name="m_lpMenuFileNewProject">
    <property name="icon">
-    <iconset resource="qtpartlist.qrc">
+    <iconset>
      <normaloff>:/icons/indentGuide_off.ico</normaloff>:/icons/indentGuide_off.ico</iconset>
    </property>
    <property name="text">
@@ -145,8 +145,6 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources>
-  <include location="qtpartlist.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

@@ -57,73 +57,46 @@ cMainWindow::cMainWindow(QWidget *parent) :
 	updateMenu();
 }
 
-//https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html#names
 void cMainWindow::createActions()
 {
 	m_lpMenuFile				= menuBar()->addMenu(tr("&File"));
 	m_lpToolBarFile				= addToolBar(tr("File"));
 
-	createAction(m_lpMenuFile, m_lpToolBarFile, &m_lpActionFileNewProject, "document-new", ":/icons/newFile.bmp", tr("&New Project..."), QKeySequence::New, tr("Create a new project"), &cMainWindow::onMenuFileNewProject);
-	createAction(m_lpMenuFile, m_lpToolBarFile, &m_lpActionFileOpenProject, "document-open", ":/icons/openFile.bmp", tr("&Open Project..."), QKeySequence::Open, tr("Open a project"), &cMainWindow::onMenuFileOpenProject);
-	createAction(m_lpMenuFile, m_lpToolBarFile, &m_lpActionFileCloseProject, "document-close", ":/icons/closeFile.bmp", tr("&Close Project..."), QKeySequence::Close, tr("Close project"), &cMainWindow::onMenuFileCloseProject);
+	createAction(m_lpMenuFile, m_lpToolBarFile, &m_lpActionFileNewProject, ":/icons/normal/New file.png", ":/icons/hot/New File.png", ":/icons/disabled/New File", tr("&New Project..."), QKeySequence::New, tr("Create a new project"), &cMainWindow::onMenuFileNewProject);
+	createAction(m_lpMenuFile, m_lpToolBarFile, &m_lpActionFileOpenProject, ":/icons/normal/Open file.png", ":/icons/hot/Open file.png", ":/icons/disabled/Open file.png", tr("&Open Project..."), QKeySequence::Open, tr("Open a project"), &cMainWindow::onMenuFileOpenProject);
+	createAction(m_lpMenuFile, 0, &m_lpActionFileCloseProject, "", "", "", tr("&Close Project..."), QKeySequence::Close, tr("Close project"), &cMainWindow::onMenuFileCloseProject);
 	createSeparator(m_lpMenuFile, m_lpToolBarFile);
-	createAction(m_lpMenuFile, m_lpToolBarFile, &m_lpActionFileExport, "document-export", ":/icons/saveRecord.bmp", tr("&Export..."), QKeySequence::UnknownKey, tr("Export project"), &cMainWindow::onMenuFileExport);
+	createAction(m_lpMenuFile, m_lpToolBarFile, &m_lpActionFileExport, ":/icons/normal/Save file.png",":/icons/hot/Save file.png", ":/icons/disabled/Save file", tr("&Export..."), QKeySequence::UnknownKey, tr("Export project"), &cMainWindow::onMenuFileExport);
 	createSeparator(m_lpMenuFile, m_lpToolBarFile);
-	createAction(m_lpMenuFile, m_lpToolBarFile, &m_lpActionFileClose, "", "", tr("&Close"), QKeySequence::Quit, tr("Close application"), &cMainWindow::onMenuFileClose);
+	createAction(m_lpMenuFile, 0, &m_lpActionFileClose, "", "", "", tr("&Close"), QKeySequence::Quit, tr("Close application"), &cMainWindow::onMenuFileClose);
 
 	m_lpMenuDistributor			= menuBar()->addMenu(tr("&Distributor"));
 	m_lpToolBarDistributor		= addToolBar(tr("Distributor"));
 
-	createAction(m_lpMenuDistributor, m_lpToolBarDistributor, &m_lpActionDistributorShow, "", "", tr("&show..."), QKeySequence::UnknownKey, tr("Show distributor list"), &cMainWindow::onMenuDistributorShow);
-	createAction(m_lpMenuDistributor, m_lpToolBarDistributor, &m_lpActionDistributorAdd, "", "", tr("&add..."), QKeySequence::UnknownKey, tr("Add a new distributor"), &cMainWindow::onMenuDistributorAdd);
-	createAction(m_lpMenuDistributor, m_lpToolBarDistributor, &m_lpActionDistributorEdit, "", "", tr("&edit..."), QKeySequence::UnknownKey, tr("Edit a distributor"), &cMainWindow::onMenuDistributorEdit);
-	createAction(m_lpMenuDistributor, m_lpToolBarDistributor, &m_lpActionDistributorDelete, "", "", tr("&delete..."), QKeySequence::UnknownKey, tr("Delete a distributor"), &cMainWindow::onMenuDistributorDelete);
+	createAction(m_lpMenuDistributor, m_lpToolBarDistributor, &m_lpActionDistributorShow, ":/icons/normal/Open.png", ":/icons/hot/Open.png", ":/icons/disabled/Open.png", tr("&show distributor list..."), QKeySequence::UnknownKey, tr("Show distributor list"), &cMainWindow::onMenuDistributorShow);
+	createAction(m_lpMenuDistributor, m_lpToolBarDistributor, &m_lpActionDistributorAdd, ":/icons/normal/Add.png", ":/icons/hot/Add.png", ":/icons/disabled/Add.png", tr("&add distributor..."), QKeySequence::UnknownKey, tr("Add distributor"), &cMainWindow::onMenuDistributorAdd);
+	createAction(m_lpMenuDistributor, m_lpToolBarDistributor, &m_lpActionDistributorEdit, ":/icons/normal/Edit.png", ":/icons/hot/Edit.png", ":/icons/disabled/Edit.png", tr("&edit distributor..."), QKeySequence::UnknownKey, tr("Edit distributor"), &cMainWindow::onMenuDistributorEdit);
+	createAction(m_lpMenuDistributor, m_lpToolBarDistributor, &m_lpActionDistributorDelete, ":/icons/normal/Delete.png", ":/icons/hot/Delete.png", ":/icons/disabled/Delete.png", tr("&delete distributor..."), QKeySequence::UnknownKey, tr("Delete distributor"), &cMainWindow::onMenuDistributorDelete);
 
+	m_lpMenuParts				= menuBar()->addMenu(tr("&Part"));
+	m_lpToolBarParts			= addToolBar(tr("Part"));
 
+	createAction(m_lpMenuParts, m_lpToolBarParts, &m_lpActionPartsShow, ":/icons/normal/Open.png", ":/icons/hot/Open.png", ":/icons/disabled/Open.png", tr("&show part list..."), QKeySequence::UnknownKey, tr("Show part list"), &cMainWindow::onMenuPartsShow);
+	createAction(m_lpMenuParts, m_lpToolBarParts, &m_lpActionPartsAdd, ":/icons/normal/Add.png", ":/icons/hot/Add.png", ":/icons/disabled/Add.png", tr("&add part..."), QKeySequence::UnknownKey, tr("Add part"), &cMainWindow::onMenuPartsAdd);
+	createAction(m_lpMenuParts, m_lpToolBarParts, &m_lpActionPartsEdit, ":/icons/normal/Edit.png", ":/icons/hot/Edit.png", ":/icons/disabled/Edit.png", tr("&edit part..."), QKeySequence::UnknownKey, tr("Edit part"), &cMainWindow::onMenuPartsEdit);
+	createAction(m_lpMenuParts, m_lpToolBarParts, &m_lpActionPartsDelete, ":/icons/normal/Delete.png", ":/icons/hot/Delete.png", ":/icons/disabled/Delete.png", tr("&delete part..."), QKeySequence::UnknownKey, tr("Delete part"), &cMainWindow::onMenuPartsDelete);
+
+	m_lpMenuPartlist			= menuBar()->addMenu(tr("Part&list"));
+	m_lpToolBarPartlist			= addToolBar(tr("Partlist"));
+
+	createAction(m_lpMenuPartlist, m_lpToolBarPartlist, &m_lpActionPartlistNew, ":/icons/normal/New file.png", ":/icons/hot/New file.png", ":/icons/disabled/New file.png", tr("&new partlist..."), QKeySequence::UnknownKey, tr("New partlist"), &cMainWindow::onMenuPartlistNew);
+	createAction(m_lpMenuPartlist, m_lpToolBarPartlist, &m_lpActionPartlistOpen, ":/icons/normal/Open file.png", ":/icons/hot/Open file.png", ":/icons/disabled/Open file.png", tr("&open partlist..."), QKeySequence::UnknownKey, tr("Show partlist"), &cMainWindow::onMenuPartlistOpen);
+	createSeparator(m_lpMenuPartlist, m_lpToolBarPartlist);
+	createAction(m_lpMenuPartlist, 0, &m_lpActionPartlistClose, "", "", "", tr("&close"), QKeySequence::UnknownKey, tr("Add a new distributor"), &cMainWindow::onMenuPartlistClose);
+	createSeparator(m_lpMenuPartlist, m_lpToolBarPartlist);
+	createAction(m_lpMenuPartlist, m_lpToolBarPartlist, &m_lpActionPartlistSave, ":/icons/normal/Save file.png", ":/icons/hot/Save file.png", ":/icons/disabled/Save file.png", tr("&save partlist"), QKeySequence::UnknownKey, tr("Save partlist"), &cMainWindow::onMenuPartlistSave);
+	createAction(m_lpMenuPartlist, m_lpToolBarPartlist, &m_lpActionPartlistSaveAs, ":/icons/normal/Save as.png", ":/icons/hot/Save as.png", ":/icons/disabled/Save as.png", tr("save partlist &as..."), QKeySequence::UnknownKey, tr("Save partlist as"), &cMainWindow::onMenuPartlistSaveAs);
 }
-
-/*
-Parts
-	show...
-	add...
-	edit...
-	delete
-
-	QMenu*					m_lpMenuParts;
-	QToolBar*				m_lpToolBarParts;
-	QAction*				m_lpActionPartsShow;
-	QAction*				m_lpActionPartsAdd;
-	QAction*				m_lpActionPartsEdit;
-	QAction*				m_lpActionPartsDelete;
-
-	void					onMenuPartsShow();
-	void					onMenuPartsAdd();
-	void					onMenuPartsEdit();
-	void					onMenuPartsDelete();
-	void					onMainTab_currentChanged(int);
-Partlist
-	new...
-	open...
-	-
-	close
-	-
-	save
-	save as...
-
-	QMenu*					m_lpMenuPartlist;
-	QToolBar*				m_lpToolBarPartlist;
-	QAction*				m_lpPartlistNew;
-	QAction*				m_lpPartlistOpen;
-	QAction*				m_lpPartlistClose;
-	QAction*				m_lpPartlistSave;
-	QAction*				m_lpPartlistSaveAs;
-
-	void					onMenuPartlistNew();
-	void					onMenuPartlistOpen();
-	void					onMenuPartlistClose();
-	void					onMenuPartlistSave();
-	void					onMenuPartlistSaveAs();
-*/
 
 cMainWindow::~cMainWindow()
 {
@@ -490,21 +463,21 @@ void cMainWindow::updateMenu()
 	QWidget*			lpWidget			= ui->m_lpMainTab->currentWidget();
 	if(!lpWidget)
 	{
-		ui->m_lpMenuDistributorShow->setEnabled(true);
-		ui->m_lpMenuDistributorAdd->setEnabled(false);
-		ui->m_lpMenuDistributorEdit->setEnabled(false);
-		ui->m_lpMenuDistributorDelete->setEnabled(false);
+		m_lpActionDistributorShow->setEnabled(true);
+		m_lpActionDistributorAdd->setEnabled(false);
+		m_lpActionDistributorEdit->setEnabled(false);
+		m_lpActionDistributorDelete->setEnabled(false);
 
-		ui->m_lpMenuPartsShow->setEnabled(true);
-		ui->m_lpMenuPartsAdd->setEnabled(false);
-		ui->m_lpMenuPartsEdit->setEnabled(false);
-		ui->m_lpMenuPartsDelete->setEnabled(false);
+		m_lpActionPartsShow->setEnabled(true);
+		m_lpActionPartsAdd->setEnabled(false);
+		m_lpActionPartsEdit->setEnabled(false);
+		m_lpActionPartsDelete->setEnabled(false);
 
-		ui->m_lpMenuPartlistNew->setEnabled(true);
-		ui->m_lpMenuPartlistOpen->setEnabled(true);
-		ui->m_lpMenuPartlistClose->setEnabled(false);
-		ui->m_lpMenuPartlistSave->setEnabled(false);
-		ui->m_lpMenuPartlistSaveAs->setEnabled(false);
+		m_lpActionPartlistNew->setEnabled(true);
+		m_lpActionPartlistOpen->setEnabled(true);
+		m_lpActionPartlistClose->setEnabled(false);
+		m_lpActionPartlistSave->setEnabled(false);
+		m_lpActionPartlistSaveAs->setEnabled(false);
 
 		return;
 	}
@@ -515,73 +488,73 @@ void cMainWindow::updateMenu()
 
 	if(lpDistributorWindow)
 	{
-		ui->m_lpMenuDistributorShow->setEnabled(false);
-		ui->m_lpMenuDistributorAdd->setEnabled(true);
+		m_lpActionDistributorShow->setEnabled(false);
+		m_lpActionDistributorAdd->setEnabled(true);
 		if(lpDistributorWindow->somethingSelected())
 		{
-			ui->m_lpMenuDistributorEdit->setEnabled(true);
-			ui->m_lpMenuDistributorDelete->setEnabled(true);
+			m_lpActionDistributorEdit->setEnabled(true);
+			m_lpActionDistributorDelete->setEnabled(true);
 		}
 		else
 		{
-			ui->m_lpMenuDistributorEdit->setEnabled(false);
-			ui->m_lpMenuDistributorDelete->setEnabled(false);
+			m_lpActionDistributorEdit->setEnabled(false);
+			m_lpActionDistributorDelete->setEnabled(false);
 		}
 
-		ui->m_lpMenuPartsShow->setEnabled(true);
-		ui->m_lpMenuPartsAdd->setEnabled(false);
-		ui->m_lpMenuPartsEdit->setEnabled(false);
-		ui->m_lpMenuPartsDelete->setEnabled(false);
+		m_lpActionPartsShow->setEnabled(true);
+		m_lpActionPartsAdd->setEnabled(false);
+		m_lpActionPartsEdit->setEnabled(false);
+		m_lpActionPartsDelete->setEnabled(false);
 
-		ui->m_lpMenuPartlistNew->setEnabled(true);
-		ui->m_lpMenuPartlistOpen->setEnabled(true);
-		ui->m_lpMenuPartlistClose->setEnabled(false);
-		ui->m_lpMenuPartlistSave->setEnabled(false);
-		ui->m_lpMenuPartlistSaveAs->setEnabled(false);
+		m_lpActionPartlistNew->setEnabled(true);
+		m_lpActionPartlistOpen->setEnabled(true);
+		m_lpActionPartlistClose->setEnabled(false);
+		m_lpActionPartlistSave->setEnabled(false);
+		m_lpActionPartlistSaveAs->setEnabled(false);
 	}
 	else if(lpPartWindow)
 	{
-		ui->m_lpMenuPartsShow->setEnabled(false);
-		ui->m_lpMenuPartsAdd->setEnabled(true);
+		m_lpActionPartsShow->setEnabled(false);
+		m_lpActionPartsAdd->setEnabled(true);
 		if(!lpPartWindow->groupSelected())
 		{
-			ui->m_lpMenuPartsEdit->setEnabled(true);
-			ui->m_lpMenuPartsDelete->setEnabled(true);
+			m_lpActionPartsEdit->setEnabled(true);
+			m_lpActionPartsDelete->setEnabled(true);
 		}
 		else
 		{
-			ui->m_lpMenuPartsEdit->setEnabled(false);
-			ui->m_lpMenuPartsDelete->setEnabled(false);
+			m_lpActionPartsEdit->setEnabled(false);
+			m_lpActionPartsDelete->setEnabled(false);
 		}
 
-		ui->m_lpMenuDistributorShow->setEnabled(true);
-		ui->m_lpMenuDistributorAdd->setEnabled(false);
-		ui->m_lpMenuDistributorEdit->setEnabled(false);
-		ui->m_lpMenuDistributorDelete->setEnabled(false);
+		m_lpActionDistributorShow->setEnabled(true);
+		m_lpActionDistributorAdd->setEnabled(false);
+		m_lpActionDistributorEdit->setEnabled(false);
+		m_lpActionDistributorDelete->setEnabled(false);
 
-		ui->m_lpMenuPartlistNew->setEnabled(true);
-		ui->m_lpMenuPartlistOpen->setEnabled(true);
-		ui->m_lpMenuPartlistClose->setEnabled(false);
-		ui->m_lpMenuPartlistSave->setEnabled(false);
-		ui->m_lpMenuPartlistSaveAs->setEnabled(false);
+		m_lpActionPartlistNew->setEnabled(true);
+		m_lpActionPartlistOpen->setEnabled(true);
+		m_lpActionPartlistClose->setEnabled(false);
+		m_lpActionPartlistSave->setEnabled(false);
+		m_lpActionPartlistSaveAs->setEnabled(false);
 	}
 	else if(lpPartlistWindow)
 	{
-		ui->m_lpMenuPartlistNew->setEnabled(true);
-		ui->m_lpMenuPartlistOpen->setEnabled(true);
-		ui->m_lpMenuPartlistClose->setEnabled(true);
-		ui->m_lpMenuPartlistSave->setEnabled(lpPartlistWindow->somethingChanged());
-		ui->m_lpMenuPartlistSaveAs->setEnabled(true);
+		m_lpActionPartlistNew->setEnabled(true);
+		m_lpActionPartlistOpen->setEnabled(true);
+		m_lpActionPartlistClose->setEnabled(true);
+		m_lpActionPartlistSave->setEnabled(lpPartlistWindow->somethingChanged());
+		m_lpActionPartlistSaveAs->setEnabled(true);
 
-		ui->m_lpMenuDistributorShow->setEnabled(true);
-		ui->m_lpMenuDistributorAdd->setEnabled(false);
-		ui->m_lpMenuDistributorEdit->setEnabled(false);
-		ui->m_lpMenuDistributorDelete->setEnabled(false);
+		m_lpActionDistributorShow->setEnabled(true);
+		m_lpActionDistributorAdd->setEnabled(false);
+		m_lpActionDistributorEdit->setEnabled(false);
+		m_lpActionDistributorDelete->setEnabled(false);
 
-		ui->m_lpMenuPartsShow->setEnabled(true);
-		ui->m_lpMenuPartsAdd->setEnabled(false);
-		ui->m_lpMenuPartsEdit->setEnabled(false);
-		ui->m_lpMenuPartsDelete->setEnabled(false);
+		m_lpActionPartsShow->setEnabled(true);
+		m_lpActionPartsAdd->setEnabled(false);
+		m_lpActionPartsEdit->setEnabled(false);
+		m_lpActionPartsDelete->setEnabled(false);
 	}
 }
 
