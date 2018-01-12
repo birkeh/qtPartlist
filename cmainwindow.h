@@ -16,6 +16,11 @@
 
 #include <QSqlDatabase>
 
+#include <QMenu>
+#include <QToolBar>
+#include <QAction>
+#include <QMetaObject>
+
 
 namespace Ui {
 class cMainWindow;
@@ -31,6 +36,38 @@ public:
 
 private:
 	Ui::cMainWindow*		ui;
+
+	QMenu*					m_lpMenuFile;
+	QToolBar*				m_lpToolBarFile;
+	QAction*				m_lpActionFileNew;
+	QAction*				m_lpActionFileNewProject;
+	QAction*				m_lpActionFileOpenProject;
+	QAction*				m_lpActionFileCloseProject;
+	QAction*				m_lpActionFileExport;
+	QAction*				m_lpActionFileClose;
+
+	QMenu*					m_lpMenuDistributor;
+	QToolBar*				m_lpToolBarDistributor;
+	QAction*				m_lpActionDistributorShow;
+	QAction*				m_lpActionDistributorAdd;
+	QAction*				m_lpActionDistributorEdit;
+	QAction*				m_lpActionDistributorDelete;
+
+	QMenu*					m_lpMenuParts;
+	QToolBar*				m_lpToolBarParts;
+	QAction*				m_lpActionPartsShow;
+	QAction*				m_lpActionPartsAdd;
+	QAction*				m_lpActionPartsEdit;
+	QAction*				m_lpActionPartsDelete;
+
+	QMenu*					m_lpMenuPartlist;
+	QToolBar*				m_lpToolBarPartlist;
+	QAction*				m_lpPartlistNew;
+	QAction*				m_lpPartlistOpen;
+	QAction*				m_lpPartlistClose;
+	QAction*				m_lpPartlistSave;
+	QAction*				m_lpPartlistSaveAs;
+
 	QSqlDatabase			m_db;
 	cDistributorList		m_distributorList;
 	cPartGroupList			m_partGroupList;
@@ -39,6 +76,34 @@ private:
 
 	cDistributorWindow*		m_lpDistributorWindow;
 	cPartWindow*			m_lpPartWindow;
+
+	void					createActions();
+	template <typename Func2>
+	void					createAction(QMenu* lpMenu, QToolBar* lpToolbar, QAction** lplpAction, const QString& szIcon, const QString& szIconFallback, const QString& szAction, QKeySequence::StandardKey sequence, const QString& szStatusTip, Func2 method)
+	{
+		if(szIcon.isEmpty() && szIconFallback.isEmpty())
+		{
+			(*lplpAction)				= new QAction(szAction, this);
+			(*lplpAction)->setShortcuts(sequence);
+			(*lplpAction)->setStatusTip(szStatusTip);
+			lpMenu->addAction((*lplpAction));
+		}
+		else
+		{
+			const QIcon	newIcon			= QIcon::fromTheme(szIcon, QIcon(szIconFallback));
+			(*lplpAction)				= new QAction(newIcon, szAction, this);
+			(*lplpAction)->setShortcuts(sequence);
+			(*lplpAction)->setStatusTip(szStatusTip);
+			lpMenu->addAction((*lplpAction));
+			lpToolbar->addAction((*lplpAction));
+		}
+		connect((*lplpAction), &QAction::triggered, this, method);
+	}
+	void					createSeparator(QMenu* lpMenu, QToolBar* lpToolbar)
+	{
+		lpMenu->addSeparator();
+		lpToolbar->addSeparator();
+	}
 
 	void					initDB();
 	void					loadDistributorList();
@@ -50,21 +115,28 @@ private:
 protected:
 	void					closeEvent(QCloseEvent *event);
 private slots:
-	void					on_m_lpMenuFileNewProject_triggered();
-	void					on_m_lpMenuFileOpenProject_triggered();
-	void					on_m_lpMenuFileCloseProject_triggered();
-	void					on_m_lpMenuFileExport_triggered();
-	void					on_m_lpMenuFileClose_triggered();
+	void					onMenuFileNewProject();
+	void					onMenuFileOpenProject();
+	void					onMenuFileCloseProject();
+	void					onMenuFileExport();
+	void					onMenuFileClose();
 
-	void					on_m_lpMenuDistributorShow_triggered();
-	void					on_m_lpMenuDistributorAdd_triggered();
-	void					on_m_lpMenuDistributorEdit_triggered();
-	void					on_m_lpMenuDistributorDelete_triggered();
+	void					onMenuDistributorShow();
+	void					onMenuDistributorAdd();
+	void					onMenuDistributorEdit();
+	void					onMenuDistributorDelete();
 
-	void					on_m_lpMenuPartsShow_triggered();
-	void					on_m_lpMenuPartsAdd_triggered();
-	void					on_m_lpMenuPartsEdit_triggered();
-	void					on_m_lpMenuPartsDelete_triggered();
+	void					onMenuPartsShow();
+	void					onMenuPartsAdd();
+	void					onMenuPartsEdit();
+	void					onMenuPartsDelete();
+
+	void					onMenuPartlistNew();
+	void					onMenuPartlistOpen();
+	void					onMenuPartlistClose();
+	void					onMenuPartlistSave();
+	void					onMenuPartlistSaveAs();
+
 	void					on_m_lpMainTab_currentChanged(int);
 
 	void					distributorSelectionChanged(const QModelIndex& index);
@@ -75,12 +147,6 @@ private slots:
 	void					partChanged(cPart* lpPart);
 
 	void					partlistChanged(QWidget* lpWidget);
-
-	void					on_m_lpMenuPartlistNew_triggered();
-	void					on_m_lpMenuPartlistOpen_triggered();
-	void					on_m_lpMenuPartlistClose_triggered();
-	void					on_m_lpMenuPartlistSave_triggered();
-	void					on_m_lpMenuPartlistSaveAs_triggered();
 };
 
 #endif // CMAINWINDOW_H

@@ -64,3 +64,6 @@ FORMS += \
     cdistributoreditdialog.ui \
     cparteditdialog.ui \
     cpartdistributoreditdialog.ui
+
+RESOURCES += \
+    qtpartlist.qrc

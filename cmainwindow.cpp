@@ -21,10 +21,20 @@
 cMainWindow::cMainWindow(QWidget *parent) :
 	QMainWindow(parent),
 	ui(new Ui::cMainWindow),
+	m_lpMenuFile(0),
+	m_lpToolBarFile(0),
+	m_lpActionFileNew(0),
+	m_lpActionFileNewProject(0),
+	m_lpActionFileOpenProject(0),
+	m_lpActionFileCloseProject(0),
+	m_lpActionFileExport(0),
+	m_lpActionFileClose(0),
 	m_lpDistributorWindow(0),
 	m_lpPartWindow(0)
 {
 	ui->setupUi(this);
+
+	createActions();
 
 	QSettings	settings;
 	qint16		iX		= settings.value("main/x", QVariant::fromValue(-1)).toInt();
@@ -45,17 +55,75 @@ cMainWindow::cMainWindow(QWidget *parent) :
 	loadPartDistributorList();
 
 	updateMenu();
-
-	QMenu*		fileMenu		= menuBar()->addMenu(tr("&Test"));
-	QToolBar*	fileToolBar		= addToolBar(tr("Test"));
-	const QIcon	newIcon			= QIcon::fromTheme("document-new", QIcon(":/images/new.png"));
-	QAction*	newAct			= new QAction(newIcon, tr("&New"), this);
-	newAct->setShortcuts(QKeySequence::New);
-	newAct->setStatusTip(tr("Create a new file"));
-	connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
-	fileMenu->addAction(newAct);
-	fileToolBar->addAction(newAct);
 }
+
+//https://specifications.freedesktop.org/icon-naming-spec/icon-naming-spec-latest.html#names
+void cMainWindow::createActions()
+{
+	m_lpMenuFile				= menuBar()->addMenu(tr("&File"));
+	m_lpToolBarFile				= addToolBar(tr("File"));
+
+	createAction(m_lpMenuFile, m_lpToolBarFile, &m_lpActionFileNewProject, "document-new", ":/icons/newFile.bmp", tr("&New Project..."), QKeySequence::New, tr("Create a new project"), &cMainWindow::onMenuFileNewProject);
+	createAction(m_lpMenuFile, m_lpToolBarFile, &m_lpActionFileOpenProject, "document-open", ":/icons/openFile.bmp", tr("&Open Project..."), QKeySequence::Open, tr("Open a project"), &cMainWindow::onMenuFileOpenProject);
+	createAction(m_lpMenuFile, m_lpToolBarFile, &m_lpActionFileCloseProject, "document-close", ":/icons/closeFile.bmp", tr("&Close Project..."), QKeySequence::Close, tr("Close project"), &cMainWindow::onMenuFileCloseProject);
+	createSeparator(m_lpMenuFile, m_lpToolBarFile);
+	createAction(m_lpMenuFile, m_lpToolBarFile, &m_lpActionFileExport, "document-export", ":/icons/saveRecord.bmp", tr("&Export..."), QKeySequence::UnknownKey, tr("Export project"), &cMainWindow::onMenuFileExport);
+	createSeparator(m_lpMenuFile, m_lpToolBarFile);
+	createAction(m_lpMenuFile, m_lpToolBarFile, &m_lpActionFileClose, "", "", tr("&Close"), QKeySequence::Quit, tr("Close application"), &cMainWindow::onMenuFileClose);
+
+	m_lpMenuDistributor			= menuBar()->addMenu(tr("&Distributor"));
+	m_lpToolBarDistributor		= addToolBar(tr("Distributor"));
+
+	createAction(m_lpMenuDistributor, m_lpToolBarDistributor, &m_lpActionDistributorShow, "", "", tr("&show..."), QKeySequence::UnknownKey, tr("Show distributor list"), &cMainWindow::onMenuDistributorShow);
+	createAction(m_lpMenuDistributor, m_lpToolBarDistributor, &m_lpActionDistributorAdd, "", "", tr("&add..."), QKeySequence::UnknownKey, tr("Add a new distributor"), &cMainWindow::onMenuDistributorAdd);
+	createAction(m_lpMenuDistributor, m_lpToolBarDistributor, &m_lpActionDistributorEdit, "", "", tr("&edit..."), QKeySequence::UnknownKey, tr("Edit a distributor"), &cMainWindow::onMenuDistributorEdit);
+	createAction(m_lpMenuDistributor, m_lpToolBarDistributor, &m_lpActionDistributorDelete, "", "", tr("&delete..."), QKeySequence::UnknownKey, tr("Delete a distributor"), &cMainWindow::onMenuDistributorDelete);
+
+
+}
+
+/*
+Parts
+	show...
+	add...
+	edit...
+	delete
+
+	QMenu*					m_lpMenuParts;
+	QToolBar*				m_lpToolBarParts;
+	QAction*				m_lpActionPartsShow;
+	QAction*				m_lpActionPartsAdd;
+	QAction*				m_lpActionPartsEdit;
+	QAction*				m_lpActionPartsDelete;
+
+	void					onMenuPartsShow();
+	void					onMenuPartsAdd();
+	void					onMenuPartsEdit();
+	void					onMenuPartsDelete();
+	void					onMainTab_currentChanged(int);
+Partlist
+	new...
+	open...
+	-
+	close
+	-
+	save
+	save as...
+
+	QMenu*					m_lpMenuPartlist;
+	QToolBar*				m_lpToolBarPartlist;
+	QAction*				m_lpPartlistNew;
+	QAction*				m_lpPartlistOpen;
+	QAction*				m_lpPartlistClose;
+	QAction*				m_lpPartlistSave;
+	QAction*				m_lpPartlistSaveAs;
+
+	void					onMenuPartlistNew();
+	void					onMenuPartlistOpen();
+	void					onMenuPartlistClose();
+	void					onMenuPartlistSave();
+	void					onMenuPartlistSaveAs();
+*/
 
 cMainWindow::~cMainWindow()
 {
@@ -316,32 +384,32 @@ void cMainWindow::loadPartDistributorList()
 	}
 }
 
-void cMainWindow::on_m_lpMenuFileNewProject_triggered()
+void cMainWindow::onMenuFileNewProject()
 {
-
+	QMessageBox::information(this, "bla", "New Project");
 }
 
-void cMainWindow::on_m_lpMenuFileOpenProject_triggered()
+void cMainWindow::onMenuFileOpenProject()
 {
-
+	QMessageBox::information(this, "bla", "Open Project");
 }
 
-void cMainWindow::on_m_lpMenuFileCloseProject_triggered()
+void cMainWindow::onMenuFileCloseProject()
 {
-
+	QMessageBox::information(this, "bla", "Close Project");
 }
 
-void cMainWindow::on_m_lpMenuFileExport_triggered()
+void cMainWindow::onMenuFileExport()
 {
-
+	QMessageBox::information(this, "bla", "Export Project");
 }
 
-void cMainWindow::on_m_lpMenuFileClose_triggered()
+void cMainWindow::onMenuFileClose()
 {
-
+	QMessageBox::information(this, "bla", "Close");
 }
 
-void cMainWindow::on_m_lpMenuDistributorShow_triggered()
+void cMainWindow::onMenuDistributorShow()
 {
 	if(!m_lpDistributorWindow)
 	{
@@ -355,7 +423,7 @@ void cMainWindow::on_m_lpMenuDistributorShow_triggered()
 	ui->m_lpMainTab->setCurrentWidget(m_lpDistributorWindow);
 }
 
-void cMainWindow::on_m_lpMenuDistributorAdd_triggered()
+void cMainWindow::onMenuDistributorAdd()
 {
 	if(!m_lpDistributorWindow)
 		return;
@@ -363,7 +431,7 @@ void cMainWindow::on_m_lpMenuDistributorAdd_triggered()
 	m_lpDistributorWindow->addDistributor();
 }
 
-void cMainWindow::on_m_lpMenuDistributorEdit_triggered()
+void cMainWindow::onMenuDistributorEdit()
 {
 	if(!m_lpDistributorWindow)
 		return;
@@ -371,7 +439,7 @@ void cMainWindow::on_m_lpMenuDistributorEdit_triggered()
 	m_lpDistributorWindow->editDistributor();
 }
 
-void cMainWindow::on_m_lpMenuDistributorDelete_triggered()
+void cMainWindow::onMenuDistributorDelete()
 {
 	if(!m_lpDistributorWindow)
 		return;
@@ -379,7 +447,7 @@ void cMainWindow::on_m_lpMenuDistributorDelete_triggered()
 	m_lpDistributorWindow->deleteDistributor();
 }
 
-void cMainWindow::on_m_lpMenuPartsShow_triggered()
+void cMainWindow::onMenuPartsShow()
 {
 	if(!m_lpPartWindow)
 	{
@@ -393,7 +461,7 @@ void cMainWindow::on_m_lpMenuPartsShow_triggered()
 	ui->m_lpMainTab->setCurrentWidget(m_lpPartWindow);
 }
 
-void cMainWindow::on_m_lpMenuPartsAdd_triggered()
+void cMainWindow::onMenuPartsAdd()
 {
 	if(!m_lpPartWindow)
 		return;
@@ -401,7 +469,7 @@ void cMainWindow::on_m_lpMenuPartsAdd_triggered()
 	m_lpPartWindow->addPart();
 }
 
-void cMainWindow::on_m_lpMenuPartsEdit_triggered()
+void cMainWindow::onMenuPartsEdit()
 {
 	if(!m_lpPartWindow)
 		return;
@@ -409,7 +477,7 @@ void cMainWindow::on_m_lpMenuPartsEdit_triggered()
 	m_lpPartWindow->editPart();
 }
 
-void cMainWindow::on_m_lpMenuPartsDelete_triggered()
+void cMainWindow::onMenuPartsDelete()
 {
 	if(!m_lpPartWindow)
 		return;
@@ -550,7 +618,7 @@ void cMainWindow::partChanged(cPart* /*lpPart*/)
 	loadPartDistributorList();
 }
 
-void cMainWindow::on_m_lpMenuPartlistNew_triggered()
+void cMainWindow::onMenuPartlistNew()
 {
 	QList<qint16>		newList;
 
@@ -601,7 +669,7 @@ void cMainWindow::on_m_lpMenuPartlistNew_triggered()
 	connect(lpNew, SIGNAL(partlistChanged(QWidget*)), this, SLOT(partlistChanged(QWidget*)));
 }
 
-void cMainWindow::on_m_lpMenuPartlistOpen_triggered()
+void cMainWindow::onMenuPartlistOpen()
 {
 	QStringList		szList;
 	QSqlQuery		query;
@@ -654,7 +722,7 @@ void cMainWindow::on_m_lpMenuPartlistOpen_triggered()
 	}
 }
 
-void cMainWindow::on_m_lpMenuPartlistClose_triggered()
+void cMainWindow::onMenuPartlistClose()
 {
 	cPartlistWindow*	lpPartlistWindow	= qobject_cast<cPartlistWindow*>(ui->m_lpMainTab->widget(ui->m_lpMainTab->currentIndex()));
 
@@ -665,7 +733,7 @@ void cMainWindow::on_m_lpMenuPartlistClose_triggered()
 		ui->m_lpMainTab->removeTab(ui->m_lpMainTab->currentIndex());
 }
 
-void cMainWindow::on_m_lpMenuPartlistSave_triggered()
+void cMainWindow::onMenuPartlistSave()
 {
 	cPartlistWindow*	lpPartlistWindow	= qobject_cast<cPartlistWindow*>(ui->m_lpMainTab->widget(ui->m_lpMainTab->currentIndex()));
 
@@ -675,7 +743,7 @@ void cMainWindow::on_m_lpMenuPartlistSave_triggered()
 	lpPartlistWindow->save();
 }
 
-void cMainWindow::on_m_lpMenuPartlistSaveAs_triggered()
+void cMainWindow::onMenuPartlistSaveAs()
 {
 	cPartlistWindow*	lpPartlistWindow	= qobject_cast<cPartlistWindow*>(ui->m_lpMainTab->widget(ui->m_lpMainTab->currentIndex()));
 
