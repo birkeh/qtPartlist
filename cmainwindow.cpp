@@ -45,6 +45,16 @@ cMainWindow::cMainWindow(QWidget *parent) :
 	loadPartDistributorList();
 
 	updateMenu();
+
+	QMenu*		fileMenu		= menuBar()->addMenu(tr("&Test"));
+	QToolBar*	fileToolBar		= addToolBar(tr("Test"));
+	const QIcon	newIcon			= QIcon::fromTheme("document-new", QIcon(":/images/new.png"));
+	QAction*	newAct			= new QAction(newIcon, tr("&New"), this);
+	newAct->setShortcuts(QKeySequence::New);
+	newAct->setStatusTip(tr("Create a new file"));
+	connect(newAct, &QAction::triggered, this, &MainWindow::newFile);
+	fileMenu->addAction(newAct);
+	fileToolBar->addAction(newAct);
 }
 
 cMainWindow::~cMainWindow()

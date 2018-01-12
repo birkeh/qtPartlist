@@ -84,7 +84,7 @@
    <addaction name="m_lpMenuParts"/>
    <addaction name="m_lpMenuPartlist"/>
   </widget>
-  <widget class="QToolBar" name="mainToolBar">
+  <widget class="QToolBar" name="m_lpToolBar">
    <attribute name="toolBarArea">
     <enum>TopToolBarArea</enum>
    </attribute>
@@ -92,7 +92,7 @@
     <bool>false</bool>
    </attribute>
   </widget>
-  <widget class="QStatusBar" name="statusBar"/>
+  <widget class="QStatusBar" name="m_lpStatusBar"/>
   <action name="m_lpMenuFileOpenProject">
    <property name="text">
     <string>&amp;Open Project...</string>
@@ -109,6 +109,9 @@
   <action name="m_lpMenuFileNewProject">
    <property name="text">
     <string>&amp;New Project...</string>
+   </property>
+   <property name="statusTip">
+    <string extracomment="Creates a new project"/>
    </property>
   </action>
   <action name="m_lpMenuFileExport">

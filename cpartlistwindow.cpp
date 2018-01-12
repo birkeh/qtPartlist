@@ -132,7 +132,7 @@ bool cPartlistWindow::close()
 		return(save());
 		break;
 	case QMessageBox::No:
-		return(false);
+		return(true);
 		break;
 	case QMessageBox::Abort:
 		return(false);
