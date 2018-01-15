@@ -2,6 +2,7 @@
 #include "ui_cpartlistwindow.h"
 
 #include "cpartlistitemdelegate.h"
+#include "cpartlistitemeditdialog.h"
 
 #include "common.h"
 
@@ -213,7 +214,7 @@ void cPartlistWindow::showPartList()
 	m_lpPartListModel->clear();
 
 	QStringList	header;
-	header << tr("reference") << tr("part") << tr("distributor") << tr("state") << tr("price") << tr("description");
+	header << tr("reference") << ("group") << tr("part") << tr("distributor") << tr("state") << tr("price") << tr("description");
 	m_lpPartListModel->setHorizontalHeaderLabels(header);
 	ui->m_lpPartList->header()->setMinimumSectionSize(50);
 
@@ -226,12 +227,13 @@ void cPartlistWindow::showPartList()
 			lpItems.append(new QStandardItem);
 
 		lpItems.at(0)->setText(lpPartlistItem->reference());
-		lpItems.at(1)->setText(m_lpPartList->find(lpPartlistItem->partID())->name());
+		lpItems.at(1)->setText(m_lpPartList->find(lpPartlistItem->partID())->partGroup()->name());
+		lpItems.at(2)->setText(m_lpPartList->find(lpPartlistItem->partID())->name());
 		if(lpPartlistItem->distributorID())
-			lpItems.at(2)->setText(m_lpDistributorList->find(lpPartlistItem->distributorID())->name());
-		//lpItems.at(3)->setText(lpPartlistItem->state());
-		lpItems.at(4)->setText(QString::number(lpPartlistItem->price(), 'f', 2));
-		lpItems.at(5)->setText(lpPartlistItem->description());
+			lpItems.at(3)->setText(m_lpDistributorList->find(lpPartlistItem->distributorID())->name());
+		//lpItems.at(4)->setText(lpPartlistItem->state());
+		lpItems.at(5)->setText(QString::number(lpPartlistItem->price(), 'f', 2));
+		lpItems.at(6)->setText(lpPartlistItem->description());
 
 		lpItems.at(4)->setTextAlignment(Qt::AlignRight);
 
@@ -315,6 +317,22 @@ void cPartlistWindow::onPartAdd()
 
 void cPartlistWindow::onPartEdit()
 {
+	cPartlistItemEditDialog*	lpDialog	= new cPartlistItemEditDialog(this);
+	lpDialog->setList(m_lpDistributorList, m_lpPartGroupList, m_lpPartList, m_lpPartDistributorList);
+
+	QModelIndex					index				= ui->m_lpPartList->currentIndex();
+	QStandardItem*				lpReferenceItem		= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(index.row(), 0));
+	QStandardItem*				lpPartGroupItem		= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(index.row(), 1));
+	QStandardItem*				lpPartItem			= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(index.row(), 2));
+	QStandardItem*				lpDistributorItem	= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(index.row(), 3));
+	QStandardItem*				lpStateItem			= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(index.row(), 4));
+	QStandardItem*				lpPriceItem			= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(index.row(), 5));
+	QStandardItem*				lpDescriptionItem	= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(index.row(), 6));
+
+	lpDialog->setValues(lpReferenceItem->text(), lpPartGroupItem->text(), lpPartItem->text(), lpDistributorItem->text(), lpStateItem->text(), lpPriceItem->text().toDouble(), lpDescriptionItem);
+	lpDialog->exec();
+
+	delete lpDialog;
 }
 
 void cPartlistWindow::onPartDelete()

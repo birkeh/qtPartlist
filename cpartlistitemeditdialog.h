@@ -1,7 +1,15 @@
 #ifndef CPARTLISTITEMEDITDIALOG_H
 #define CPARTLISTITEMEDITDIALOG_H
 
+
+#include "cdistributor.h"
+#include "cpartgroup.h"
+#include "cpart.h"
+#include "cpartdistributor.h"
+#include "cpartlistitem.h"
+
 #include <QDialog>
+
 
 namespace Ui {
 class cPartlistItemEditDialog;
@@ -15,8 +23,19 @@ public:
 	explicit cPartlistItemEditDialog(QWidget *parent = 0);
 	~cPartlistItemEditDialog();
 
+	void							setList(cDistributorList* lpDistributorList, cPartGroupList* lpPartGroupList, cPartList* lpPartList, cPartDistributorList* lpPartDistributorList);
+	void							setValues(const QString& szReference, const QString& szGroup, const QString& szPart, const QString& szDistributor, const QString& szState, const qreal& dPrice, const QString& szDescription);
+private slots:
+	void on_m_lpPartList_currentIndexChanged(int index);
+
 private:
-	Ui::cPartlistItemEditDialog *ui;
+	Ui::cPartlistItemEditDialog*	ui;
+	cDistributorList*				m_lpDistributorList;
+	cPartGroupList*					m_lpPartGroupList;
+	cPartList*						m_lpPartList;
+	cPartDistributorList*			m_lpPartDistributorList;
+
+	void							fillDistributorList();
 };
 
 #endif // CPARTLISTITEMEDITDIALOG_H
