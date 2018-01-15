@@ -1,10 +1,14 @@
 #include "cpartlistwindow.h"
 #include "ui_cpartlistwindow.h"
 
+#include "cpartlistitemdelegate.h"
+
 #include "common.h"
 
 #include <QSqlQuery>
 #include <QSqlError>
+
+#include <QMenu>
 
 #include <QMessageBox>
 #include <QDebug>
@@ -25,6 +29,7 @@ cPartlistWindow::cPartlistWindow(QWidget *parent) :
 
 	m_lpPartListModel	= new QStandardItemModel(0, 3);
 	ui->m_lpPartList->setModel(m_lpPartListModel);
+	ui->m_lpPartList->setItemDelegate(new cPartListItemDelegate());
 }
 
 cPartlistWindow::~cPartlistWindow()
@@ -210,6 +215,7 @@ void cPartlistWindow::showPartList()
 	QStringList	header;
 	header << tr("reference") << tr("part") << tr("distributor") << tr("state") << tr("price") << tr("description");
 	m_lpPartListModel->setHorizontalHeaderLabels(header);
+	ui->m_lpPartList->header()->setMinimumSectionSize(50);
 
 	for(int x = 0;x < m_partlistItemList.count();x++)
 	{
@@ -227,8 +233,13 @@ void cPartlistWindow::showPartList()
 		lpItems.at(4)->setText(QString::number(lpPartlistItem->price(), 'f', 2));
 		lpItems.at(5)->setText(lpPartlistItem->description());
 
+		lpItems.at(4)->setTextAlignment(Qt::AlignRight);
+
 		for(int z = 0;z < header.count();z++)
+		{
 			lpItems.at(z)->setData(QVariant::fromValue(lpPartlistItem), Qt::UserRole);
+			lpItems.at(z)->setData(QVariant::fromValue(m_lpPartDistributorList), Qt::UserRole+1);
+		}
 
 		m_lpPartListModel->appendRow(lpItems);
 	}
@@ -267,6 +278,45 @@ bool cPartlistWindow::somethingChanged()
 	return(m_bSomethingChanged);
 }
 
+bool cPartlistWindow::somethingSelected()
+{
+	if(ui->m_lpPartList->selectionModel()->selectedRows().count())
+		return(true);
+	return(false);
+}
+
 void cPartlistWindow::on_m_lpPartList_doubleClicked(const QModelIndex &/*index*/)
+{
+}
+
+void cPartlistWindow::on_m_lpPartList_clicked(const QModelIndex &index)
+{
+	selectionChanged(index);
+}
+
+void cPartlistWindow::on_m_lpPartList_customContextMenuRequested(const QPoint &pos)
+{
+	QMenu*	lpMenu	= new QMenu(this);
+
+	lpMenu->addAction("add", this, SLOT(onPartAdd()));
+
+	if(somethingSelected())
+	{
+		lpMenu->addAction("edit", this, SLOT(onPartEdit()));
+		lpMenu->addAction("delete", this, SLOT(onPartDelete()));
+	}
+
+	lpMenu->popup(ui->m_lpPartList->viewport()->mapToGlobal(pos));
+}
+
+void cPartlistWindow::onPartAdd()
+{
+}
+
+void cPartlistWindow::onPartEdit()
+{
+}
+
+void cPartlistWindow::onPartDelete()
 {
 }

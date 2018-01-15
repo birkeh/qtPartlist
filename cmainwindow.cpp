@@ -96,6 +96,10 @@ void cMainWindow::createActions()
 	createSeparator(m_lpMenuPartlist, m_lpToolBarPartlist);
 	createAction(m_lpMenuPartlist, m_lpToolBarPartlist, &m_lpActionPartlistSave, ":/icons/normal/Save file.png", ":/icons/hot/Save file.png", ":/icons/disabled/Save file.png", tr("&save partlist"), QKeySequence::UnknownKey, tr("Save partlist"), &cMainWindow::onMenuPartlistSave);
 	createAction(m_lpMenuPartlist, m_lpToolBarPartlist, &m_lpActionPartlistSaveAs, ":/icons/normal/Save as.png", ":/icons/hot/Save as.png", ":/icons/disabled/Save as.png", tr("save partlist &as..."), QKeySequence::UnknownKey, tr("Save partlist as"), &cMainWindow::onMenuPartlistSaveAs);
+	createSeparator(m_lpMenuPartlist, m_lpToolBarPartlist);
+	createAction(m_lpMenuPartlist, m_lpToolBarPartlist, &m_lpActionPartlistPartAdd, ":/icons/normal/Add.png", ":/icons/hot/Add.png", ":/icons/disabled/Add.png", tr("&add part..."), QKeySequence::UnknownKey, tr("Add part"), &cMainWindow::onMenuPartlistPartAdd);
+	createAction(m_lpMenuPartlist, m_lpToolBarPartlist, &m_lpActionPartlistPartEdit, ":/icons/normal/Edit.png", ":/icons/hot/Edit.png", ":/icons/disabled/Edit.png", tr("&edit part..."), QKeySequence::UnknownKey, tr("Edit part"), &cMainWindow::onMenuPartlistPartEdit);
+	createAction(m_lpMenuPartlist, m_lpToolBarPartlist, &m_lpActionPartlistPartDelete, ":/icons/normal/Delete.png", ":/icons/hot/Delete.png", ":/icons/disabled/Delete.png", tr("&delete part..."), QKeySequence::UnknownKey, tr("Delete part"), &cMainWindow::onMenuPartlistPartDelete);
 }
 
 cMainWindow::~cMainWindow()
@@ -478,6 +482,9 @@ void cMainWindow::updateMenu()
 		m_lpActionPartlistClose->setEnabled(false);
 		m_lpActionPartlistSave->setEnabled(false);
 		m_lpActionPartlistSaveAs->setEnabled(false);
+		m_lpActionPartlistPartAdd->setEnabled(false);
+		m_lpActionPartlistPartEdit->setEnabled(false);
+		m_lpActionPartlistPartDelete->setEnabled(false);
 
 		return;
 	}
@@ -511,6 +518,9 @@ void cMainWindow::updateMenu()
 		m_lpActionPartlistClose->setEnabled(false);
 		m_lpActionPartlistSave->setEnabled(false);
 		m_lpActionPartlistSaveAs->setEnabled(false);
+		m_lpActionPartlistPartAdd->setEnabled(false);
+		m_lpActionPartlistPartEdit->setEnabled(false);
+		m_lpActionPartlistPartDelete->setEnabled(false);
 	}
 	else if(lpPartWindow)
 	{
@@ -537,6 +547,9 @@ void cMainWindow::updateMenu()
 		m_lpActionPartlistClose->setEnabled(false);
 		m_lpActionPartlistSave->setEnabled(false);
 		m_lpActionPartlistSaveAs->setEnabled(false);
+		m_lpActionPartlistPartAdd->setEnabled(false);
+		m_lpActionPartlistPartEdit->setEnabled(false);
+		m_lpActionPartlistPartDelete->setEnabled(false);
 	}
 	else if(lpPartlistWindow)
 	{
@@ -555,6 +568,18 @@ void cMainWindow::updateMenu()
 		m_lpActionPartsAdd->setEnabled(false);
 		m_lpActionPartsEdit->setEnabled(false);
 		m_lpActionPartsDelete->setEnabled(false);
+
+		m_lpActionPartlistPartAdd->setEnabled(true);
+		if(lpPartlistWindow->somethingSelected())
+		{
+			m_lpActionPartlistPartEdit->setEnabled(true);
+			m_lpActionPartlistPartDelete->setEnabled(true);
+		}
+		else
+		{
+			m_lpActionPartlistPartEdit->setEnabled(false);
+			m_lpActionPartlistPartDelete->setEnabled(false);
+		}
 	}
 }
 
@@ -589,6 +614,11 @@ void cMainWindow::partChanged(cPart* /*lpPart*/)
 {
 	loadPartList();
 	loadPartDistributorList();
+}
+
+void cMainWindow::partlistSelectionChanged(const QModelIndex& index)
+{
+	updateMenu();
 }
 
 void cMainWindow::onMenuPartlistNew()
@@ -640,6 +670,7 @@ void cMainWindow::onMenuPartlistNew()
 	lpNew->setList(&m_distributorList, &m_partGroupList, &m_partList, &m_partDistributorList);
 
 	connect(lpNew, SIGNAL(partlistChanged(QWidget*)), this, SLOT(partlistChanged(QWidget*)));
+	connect(lpNew, SIGNAL(selectionChanged(QModelIndex)), this, SLOT(partlistSelectionChanged(QModelIndex)));
 }
 
 void cMainWindow::onMenuPartlistOpen()
@@ -692,6 +723,7 @@ void cMainWindow::onMenuPartlistOpen()
 		lpNew->setPartlistID(id);
 
 		connect(lpNew, SIGNAL(partlistChanged(QWidget*)), this, SLOT(partlistChanged(QWidget*)));
+		connect(lpNew, SIGNAL(selectionChanged(QModelIndex)), this, SLOT(partlistSelectionChanged(QModelIndex)));
 	}
 }
 
@@ -724,6 +756,21 @@ void cMainWindow::onMenuPartlistSaveAs()
 		return;
 
 	lpPartlistWindow->saveAs();
+}
+
+void cMainWindow::onMenuPartlistPartAdd()
+{
+
+}
+
+void cMainWindow::onMenuPartlistPartEdit()
+{
+
+}
+
+void cMainWindow::onMenuPartlistPartDelete()
+{
+
 }
 
 void cMainWindow::partlistChanged(QWidget* /*lpWidget*/)

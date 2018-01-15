@@ -69,6 +69,9 @@ private:
 	QAction*				m_lpActionPartlistClose;
 	QAction*				m_lpActionPartlistSave;
 	QAction*				m_lpActionPartlistSaveAs;
+	QAction*				m_lpActionPartlistPartAdd;
+	QAction*				m_lpActionPartlistPartEdit;
+	QAction*				m_lpActionPartlistPartDelete;
 
 	QSqlDatabase			m_db;
 	cDistributorList		m_distributorList;
@@ -147,6 +150,9 @@ private slots:
 	void					onMenuPartlistClose();
 	void					onMenuPartlistSave();
 	void					onMenuPartlistSaveAs();
+	void					onMenuPartlistPartAdd();
+	void					onMenuPartlistPartEdit();
+	void					onMenuPartlistPartDelete();
 
 	void					on_m_lpMainTab_currentChanged(int);
 
@@ -158,6 +164,7 @@ private slots:
 	void					partChanged(cPart* lpPart);
 
 	void					partlistChanged(QWidget* lpWidget);
+	void					partlistSelectionChanged(const QModelIndex& index);
 };
 
 #endif // CMAINWINDOW_H

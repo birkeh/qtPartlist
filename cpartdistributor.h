@@ -53,4 +53,6 @@ public:
 	cPartDistributor*		find(qint32 id);
 };
 
+Q_DECLARE_METATYPE(cPartDistributorList*)
+
 #endif // CPARTDISTRIBUTOR_H

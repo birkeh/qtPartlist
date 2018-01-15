@@ -39,12 +39,20 @@ public:
 	bool					saveAs();
 
 	bool					somethingChanged();
+	bool					somethingSelected();
 private slots:
 	void					on_m_lpName_textChanged(const QString &arg1);
 	void					on_m_lpPartList_doubleClicked(const QModelIndex &index);
+	void					on_m_lpPartList_clicked(const QModelIndex &index);
+	void					on_m_lpPartList_customContextMenuRequested(const QPoint &pos);
+
+	void					onPartAdd();
+	void					onPartEdit();
+	void					onPartDelete();
 
 signals:
 	void					partlistChanged(QWidget* lpWidget) const;
+	void					selectionChanged(const QModelIndex& index) const;
 
 private:
 	Ui::cPartlistWindow*	ui;
