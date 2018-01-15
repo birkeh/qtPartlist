@@ -39,7 +39,8 @@ SOURCES += \
     clabel.cpp \
     cpartdistributoreditdialog.cpp \
     cpartlistitem.cpp \
-    cpartlistitemdelegate.cpp
+    cpartlistitemdelegate.cpp \
+    cpartlistitemeditdialog.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -56,7 +57,8 @@ HEADERS += \
     clabel.h \
     cpartdistributoreditdialog.h \
     cpartlistitem.h \
-    cpartlistitemdelegate.h
+    cpartlistitemdelegate.h \
+    cpartlistitemeditdialog.h
 
 FORMS += \
         cmainwindow.ui \
@@ -65,7 +67,8 @@ FORMS += \
     cpartwindow.ui \
     cdistributoreditdialog.ui \
     cparteditdialog.ui \
-    cpartdistributoreditdialog.ui
+    cpartdistributoreditdialog.ui \
+    cpartlistitemeditdialog.ui
 
 RESOURCES += \
     qtpartlist.qrc
