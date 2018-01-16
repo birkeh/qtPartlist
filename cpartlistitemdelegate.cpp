@@ -137,7 +137,7 @@ void cPartListItemDelegate::setModelData ( QWidget *editor, QAbstractItemModel *
 		model->setData(index, lpComboBox->currentText(), Qt::EditRole);
 		model->setData(index, QVariant::fromValue(lpPartDistributor), Qt::UserRole);
 		QStandardItemModel*	lpModel		= (QStandardItemModel*)index.model();
-		QStandardItem*		lpItem		= lpModel->itemFromIndex(lpModel->index(index.row(), 4));
+		QStandardItem*		lpItem		= lpModel->itemFromIndex(lpModel->index(index.row(), 5));
 		lpItem->setText(QString::number(lpPartDistributor->price(), 'f', 2));
 	}
 		break;

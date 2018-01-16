@@ -2,6 +2,7 @@
 #include "ui_cmainwindow.h"
 
 #include "cpartlistwindow.h"
+#include "cinputlistdialog.h"
 
 #include "common.h"
 
@@ -13,7 +14,7 @@
 #include <QSettings>
 #include <QDir>
 
-#include <QInputDialog>
+//#include <QInputDialog>
 
 #include <QDebug>
 
@@ -676,6 +677,7 @@ void cMainWindow::onMenuPartlistNew()
 void cMainWindow::onMenuPartlistOpen()
 {
 	QStringList		szList;
+	QStringList		szDescription;
 	QSqlQuery		query;
 	QList<qint32>	idList;
 
@@ -688,11 +690,8 @@ void cMainWindow::onMenuPartlistOpen()
 
 	while(query.next())
 	{
-		QString sz	= query.value("name").toString();
-		if(!query.value("description").toString().isEmpty())
-			sz.append(QString(" (%1)").arg(query.value("description").toString()));
-
-		szList.append(sz);
+		szList.append(query.value("name").toString());
+		szDescription.append(query.value("description").toString());
 		idList.append(query.value("id").toInt());
 	}
 
@@ -702,15 +701,14 @@ void cMainWindow::onMenuPartlistOpen()
 		return;
 	}
 
-	QInputDialog	inputDialog(this);
-	inputDialog.setOptions(QInputDialog::UseListViewForComboBoxItems);
-	inputDialog.setComboBoxItems(szList);
-	inputDialog.setLabelText("Project:");
-	inputDialog.setWindowTitle("Open");
+	cInputListDialog*	lpDialog	= new cInputListDialog(this);
+	lpDialog->setListItems(QStringList(), {szList, szDescription});
+	lpDialog->setLabelText("Project:");
+	lpDialog->setWindowTitle("Open");
 
-	if(inputDialog.exec() == QDialog::Accepted)
+	if(lpDialog->exec() == QDialog::Accepted)
 	{
-		QString	szResult	= inputDialog.textValue();
+		QString	szResult	= lpDialog->textValue();
 		qint16	index		= szList.indexOf(szResult);
 		qint32	id			= idList.at(index);
 
@@ -725,6 +723,8 @@ void cMainWindow::onMenuPartlistOpen()
 		connect(lpNew, SIGNAL(partlistChanged(QWidget*)), this, SLOT(partlistChanged(QWidget*)));
 		connect(lpNew, SIGNAL(selectionChanged(QModelIndex)), this, SLOT(partlistSelectionChanged(QModelIndex)));
 	}
+
+	delete lpDialog;
 }
 
 void cMainWindow::onMenuPartlistClose()

@@ -313,6 +313,16 @@ void cPartlistWindow::on_m_lpPartList_customContextMenuRequested(const QPoint &p
 
 void cPartlistWindow::onPartAdd()
 {
+	cPartlistItemEditDialog*	lpDialog	= new cPartlistItemEditDialog(this);
+	lpDialog->setList(m_lpDistributorList, m_lpPartGroupList, m_lpPartList, m_lpPartDistributorList);
+
+	if(lpDialog->exec() == QDialog::Rejected)
+	{
+		delete lpDialog;
+		return;
+	}
+
+	delete lpDialog;
 }
 
 void cPartlistWindow::onPartEdit()
@@ -329,8 +339,12 @@ void cPartlistWindow::onPartEdit()
 	QStandardItem*				lpPriceItem			= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(index.row(), 5));
 	QStandardItem*				lpDescriptionItem	= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(index.row(), 6));
 
-	lpDialog->setValues(lpReferenceItem->text(), lpPartGroupItem->text(), lpPartItem->text(), lpDistributorItem->text(), lpStateItem->text(), lpPriceItem->text().toDouble(), lpDescriptionItem);
-	lpDialog->exec();
+	lpDialog->setValues(lpReferenceItem->text(), lpPartGroupItem->text(), lpPartItem->text(), lpDistributorItem->text(), lpStateItem->text(), lpPriceItem->text().toDouble(), lpDescriptionItem->text());
+	if(lpDialog->exec() == QDialog::Rejected)
+	{
+		delete lpDialog;
+		return;
+	}
 
 	delete lpDialog;
 }

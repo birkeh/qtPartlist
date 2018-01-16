@@ -165,6 +165,22 @@ bool cPartEditDialog::save()
 		return(false);
 	}
 
+	if(!m_lpPartDistributorListModel->rowCount())
+	{
+		query.prepare("DELETE FROM part_distributor WHERE partID=:partID;");
+		query.bindValue(":partID", m_id);
+
+		if(!query.exec())
+		{
+			myDebug << query.lastError().text();
+			return(false);
+		}
+
+		return(true);
+	}
+
+	QStringList	idList;
+
 	for(int x = 0;x < m_lpPartDistributorListModel->rowCount();x++)
 	{
 		QStandardItem*		lpItemName			= m_lpPartDistributorListModel->itemFromIndex(m_lpPartDistributorListModel->index(x, 0));
@@ -177,7 +193,6 @@ bool cPartEditDialog::save()
 
 		if(lpPartDistributor)
 		{
-			QSqlQuery	query;
 			query.prepare("UPDATE part_distributor SET name=:name, description=:description, partID=:partID, distributorID=:distributorID, price=:price, link=:link WHERE id=:id;");
 			query.bindValue(":name", lpItemName->text());
 			query.bindValue(":description", lpItemDescription->text());
@@ -192,10 +207,11 @@ bool cPartEditDialog::save()
 				myDebug << query.lastError().text();
 				return(false);
 			}
+
+			idList << QString("%1").arg(lpPartDistributor->id());
 		}
 		else
 		{
-			QSqlQuery	query;
 			query.prepare("INSERT INTO part_distributor (name, description, partID, distributorID, price, link) VALUES (:name, :description, :partID, :distributorID, :price, :lin);");
 			query.bindValue(":name", lpItemName->text());
 			query.bindValue(":description", lpItemDescription->text());
@@ -209,6 +225,32 @@ bool cPartEditDialog::save()
 				myDebug << query.lastError().text();
 				return(false);
 			}
+
+			query.prepare("SELECT id FROM part_distributor WHERE name=:name AND description=:description AND partID=:partID AND distributorID=:distributorID AND price=:price AND link=:link;");
+			query.bindValue(":name", lpItemName->text());
+			query.bindValue(":description", lpItemDescription->text());
+			query.bindValue(":partID", m_lpPart->id());
+			query.bindValue(":distributorID", m_lpDistributorList->find(lpItemDistributor->text())->id());
+			query.bindValue(":price", lpItemPrice->text().toDouble());
+			query.bindValue(":link", lpItemLink->text());
+
+			if(!query.exec())
+			{
+				myDebug << query.lastError().text();
+				return(false);
+			}
+
+			idList << QString("%1").arg(query.value("id").toInt());
+		}
+	}
+
+	if(idList.count())
+	{
+		query.prepare(QString("DELETE FROM part_distributor WHERE id NOT IN (%1);").arg(idList.join(", ")));
+		if(!query.exec())
+		{
+			myDebug << query.lastError().text();
+			return(false);
 		}
 	}
 

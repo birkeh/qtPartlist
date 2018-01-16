@@ -35,19 +35,15 @@ void cPartlistItemEditDialog::setList(cDistributorList* lpDistributorList, cPart
 
 void cPartlistItemEditDialog::setValues(const QString &szReference, const QString &szGroup, const QString &szPart, const QString &szDistributor, const QString &szState, const qreal &dPrice, const QString &szDescription)
 {
-	cDistributor*	lpDistributor	= m_lpDistributorList->find(szDistributor);
-	cPart*			lpPart			= m_lpPartList->find();
-
-	if(lpPart)
-	{
-		ui->m_lpPartList->setCurrentText(QString("%1 - %2").arg(szGroup).arg(szPart));
-		ui->m_lpPartList->setEnabled(false);
-	}
+	ui->m_lpPartList->setCurrentText(QString("%1 - %2").arg(szGroup).arg(szPart));
+	ui->m_lpPartList->setEnabled(false);
 
 	fillDistributorList();
 
-//	if(lpDistributor)
-//		ui->m_lpDistributorList->setCurrentText(lpDistributor->name());
+	ui->m_lpReference->setText(szReference);
+	ui->m_lpDistributorList->setCurrentText(szDistributor);
+	ui->m_lpPrice->setValue(dPrice);
+	ui->m_lpDescription->setText(szDescription);
 }
 
 void cPartlistItemEditDialog::on_m_lpPartList_currentIndexChanged(int /*index*/)
