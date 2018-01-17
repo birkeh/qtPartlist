@@ -226,15 +226,17 @@ bool cPartEditDialog::save()
 				return(false);
 			}
 
-			query.prepare("SELECT id FROM part_distributor WHERE name=:name AND description=:description AND partID=:partID AND distributorID=:distributorID AND price=:price AND link=:link;");
-			query.bindValue(":name", lpItemName->text());
-			query.bindValue(":description", lpItemDescription->text());
+			query.prepare("SELECT id FROM part_distributor WHERE partID=:partID AND distributorID=:distributorID;");
 			query.bindValue(":partID", m_lpPart->id());
 			query.bindValue(":distributorID", m_lpDistributorList->find(lpItemDistributor->text())->id());
-			query.bindValue(":price", lpItemPrice->text().toDouble());
-			query.bindValue(":link", lpItemLink->text());
 
 			if(!query.exec())
+			{
+				myDebug << query.lastError().text();
+				return(false);
+			}
+
+			if(!query.next())
 			{
 				myDebug << query.lastError().text();
 				return(false);
@@ -246,7 +248,7 @@ bool cPartEditDialog::save()
 
 	if(idList.count())
 	{
-		query.prepare(QString("DELETE FROM part_distributor WHERE id NOT IN (%1);").arg(idList.join(", ")));
+		query.prepare(QString("DELETE FROM part_distributor WHERE id NOT IN (%1) AND partID=%2;").arg(idList.join(", ")).arg(m_lpPart->id()));
 		if(!query.exec())
 		{
 			myDebug << query.lastError().text();

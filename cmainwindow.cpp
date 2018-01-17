@@ -617,7 +617,7 @@ void cMainWindow::partChanged(cPart* /*lpPart*/)
 	loadPartDistributorList();
 }
 
-void cMainWindow::partlistSelectionChanged(const QModelIndex& index)
+void cMainWindow::partlistSelectionChanged(const QModelIndex& /*index*/)
 {
 	updateMenu();
 }

@@ -231,11 +231,10 @@ void cPartlistWindow::showPartList()
 		lpItems.at(2)->setText(m_lpPartList->find(lpPartlistItem->partID())->name());
 		if(lpPartlistItem->distributorID())
 			lpItems.at(3)->setText(m_lpDistributorList->find(lpPartlistItem->distributorID())->name());
-		//lpItems.at(4)->setText(lpPartlistItem->state());
+		lpItems.at(4)->setText(lpPartlistItem->stateString());
 		lpItems.at(5)->setText(QString::number(lpPartlistItem->price(), 'f', 2));
+		lpItems.at(5)->setTextAlignment(Qt::AlignRight);
 		lpItems.at(6)->setText(lpPartlistItem->description());
-
-		lpItems.at(4)->setTextAlignment(Qt::AlignRight);
 
 		for(int z = 0;z < header.count();z++)
 		{

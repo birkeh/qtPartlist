@@ -13,7 +13,9 @@ public:
 	{
 		STATE_init		= 0,
 		STATE_ordered	= 1,
-		STATE_received	= 2,
+		STATE_shipping	= 2,
+		STATE_received	= 3,
+		STATE_missing	= 4,
 	};
 
 	cPartlistItem();
@@ -41,6 +43,8 @@ public:
 
 	void				setState(const STATE& state);
 	STATE				state();
+	QString				stateString();
+	static QString		stateString(const STATE& state);
 
 	void				setPrice(const qreal& price);
 	qreal				price();

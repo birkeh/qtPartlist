@@ -94,6 +94,30 @@ cPartlistItem::STATE cPartlistItem::state()
 	return(m_state);
 }
 
+QString cPartlistItem::stateString()
+{
+	return(stateString(m_state));
+}
+
+QString cPartlistItem::stateString(const cPartlistItem::STATE& state)
+{
+	switch(state)
+	{
+	case STATE_init:
+		return(QObject::tr("init"));
+	case STATE_ordered:
+		return(QObject::tr("ordered"));
+	case STATE_shipping:
+		return(QObject::tr("shipping"));
+	case STATE_received:
+		return(QObject::tr("received"));
+	case STATE_missing:
+		return(QObject::tr("missing"));
+	}
+
+	return("UNKNOWN");
+}
+
 void cPartlistItem::setPrice(const qreal& price)
 {
 	m_dPrice	= price;

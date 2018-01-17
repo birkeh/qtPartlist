@@ -10,6 +10,12 @@ cPartlistItemEditDialog::cPartlistItemEditDialog(QWidget *parent) :
 	m_lpPartDistributorList(0)
 {
 	ui->setupUi(this);
+
+	ui->m_lpOrderState->addItem(cPartlistItem::stateString(cPartlistItem::STATE_init), QVariant::fromValue((qint8)cPartlistItem::STATE_init));
+	ui->m_lpOrderState->addItem(cPartlistItem::stateString(cPartlistItem::STATE_ordered), QVariant::fromValue((qint8)cPartlistItem::STATE_ordered));
+	ui->m_lpOrderState->addItem(cPartlistItem::stateString(cPartlistItem::STATE_shipping), QVariant::fromValue((qint8)cPartlistItem::STATE_shipping));
+	ui->m_lpOrderState->addItem(cPartlistItem::stateString(cPartlistItem::STATE_received), QVariant::fromValue((qint8)cPartlistItem::STATE_received));
+	ui->m_lpOrderState->addItem(cPartlistItem::stateString(cPartlistItem::STATE_missing), QVariant::fromValue((qint8)cPartlistItem::STATE_missing));
 }
 
 cPartlistItemEditDialog::~cPartlistItemEditDialog()
@@ -42,6 +48,7 @@ void cPartlistItemEditDialog::setValues(const QString &szReference, const QStrin
 
 	ui->m_lpReference->setText(szReference);
 	ui->m_lpDistributorList->setCurrentText(szDistributor);
+	ui->m_lpOrderState->setCurrentText(szState);
 	ui->m_lpPrice->setValue(dPrice);
 	ui->m_lpDescription->setText(szDescription);
 }
