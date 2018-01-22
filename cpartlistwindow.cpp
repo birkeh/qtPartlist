@@ -297,7 +297,7 @@ bool cPartlistWindow::save(qint32 id)
 			query.bindValue(":distributorID", lpDistributor->id());
 		query.bindValue(":replaceID", QVariant::Int);
 		query.bindValue(":reference", lpReferenceItem->text());
-		query.bindValue(":state", lpStateItem->text());
+		query.bindValue(":state", cPartlistItem::state(lpStateItem->text()));
 		query.bindValue(":description", lpDescriptionItem->text());
 		query.bindValue(":price", lpPriceItem->text().toDouble());
 

@@ -30,18 +30,24 @@ void cPartlistItemEditDialog::setList(cDistributorList* lpDistributorList, cPart
 	m_lpPartList			= lpPartList;
 	m_lpPartDistributorList	= lpPartDistributorList;
 
-	if(m_lpPartList)
+	if(m_lpPartGroupList)
 	{
-		for(int x = 0;x < m_lpPartList->count();x++)
-			ui->m_lpPartList->addItem(QString("%1 - %2").arg(m_lpPartList->at(x)->partGroup()->name()).arg(m_lpPartList->at(x)->name()), QVariant::fromValue(m_lpPartList->at(x)));
+		for(int x = 0;x < m_lpPartGroupList->count();x++)
+			ui->m_lpGroupList->addItem(m_lpPartGroupList->at(x)->name(), QVariant::fromValue(m_lpPartGroupList->at(x)));
 	}
 
+	fillPartList();
 	fillDistributorList();
 }
 
 void cPartlistItemEditDialog::setValues(const QString &szReference, const QString &szGroup, const QString &szPart, const QString &szDistributor, const QString &szState, const qreal &dPrice, const QString &szDescription)
 {
-	ui->m_lpPartList->setCurrentText(QString("%1 - %2").arg(szGroup).arg(szPart));
+	ui->m_lpGroupList->setCurrentText(szGroup);
+	ui->m_lpGroupList->setEnabled(false);
+
+	fillPartList();
+
+	ui->m_lpPartList->setCurrentText(szPart);
 	ui->m_lpPartList->setEnabled(false);
 
 	fillDistributorList();
@@ -53,6 +59,11 @@ void cPartlistItemEditDialog::setValues(const QString &szReference, const QStrin
 	ui->m_lpDescription->setText(szDescription);
 }
 
+void cPartlistItemEditDialog::on_m_lpGroupList_currentIndexChanged(int /*index*/)
+{
+	fillPartList();
+}
+
 void cPartlistItemEditDialog::on_m_lpPartList_currentIndexChanged(int /*index*/)
 {
 	fillDistributorList();
@@ -60,14 +71,33 @@ void cPartlistItemEditDialog::on_m_lpPartList_currentIndexChanged(int /*index*/)
 
 void cPartlistItemEditDialog::on_m_lpDistributorList_currentIndexChanged(int /*index*/)
 {
-	cPart*				lpPart			= qvariant_cast<cPart*>(ui->m_lpPartList->currentData(Qt::UserRole));
-	cDistributor*		lpDistributor	= qvariant_cast<cDistributor*>(ui->m_lpDistributorList->currentData(Qt::UserRole));
+	cPart*				lpPart				= qvariant_cast<cPart*>(ui->m_lpPartList->currentData(Qt::UserRole));
+	cDistributor*		lpDistributor		= qvariant_cast<cDistributor*>(ui->m_lpDistributorList->currentData(Qt::UserRole));
 	cPartDistributor*	lpPartDistributor	= m_lpPartDistributorList->find(lpPart, lpDistributor);
 
 	if(!lpPartDistributor)
 		ui->m_lpPrice->setValue(0.0);
 	else
 		ui->m_lpPrice->setValue(lpPartDistributor->price());
+}
+
+void cPartlistItemEditDialog::fillPartList()
+{
+	ui->m_lpPartList->clear();
+
+	cPartGroup*			lpPartGroup			= qvariant_cast<cPartGroup*>(ui->m_lpGroupList->currentData(Qt::UserRole));
+	if(!lpPartGroup)
+		return;
+
+	if(m_lpPartList)
+	{
+		for(int x = 0;x < m_lpPartList->count();x++)
+		{
+			if(lpPartGroup == m_lpPartList->at(x)->partGroup())
+				ui->m_lpPartList->addItem(m_lpPartList->at(x)->name(), QVariant::fromValue(m_lpPartList->at(x)));
+		}
+	}
+	fillDistributorList();
 }
 
 void cPartlistItemEditDialog::fillDistributorList()

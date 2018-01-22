@@ -84,6 +84,22 @@ QString cPartlistItem::description()
 	return(m_szDescription);
 }
 
+cPartlistItem::STATE cPartlistItem::state(const QString& szState)
+{
+	if(szState == stateString(cPartlistItem::STATE_init))
+		return(cPartlistItem::STATE_init);
+	if(szState == stateString(cPartlistItem::STATE_ordered))
+		return(cPartlistItem::STATE_ordered);
+	if(szState == stateString(cPartlistItem::STATE_shipping))
+		return(cPartlistItem::STATE_shipping);
+	if(szState == stateString(cPartlistItem::STATE_received))
+		return(cPartlistItem::STATE_received);
+	if(szState == stateString(cPartlistItem::STATE_missing))
+		return(cPartlistItem::STATE_missing);
+
+	return(cPartlistItem::STATE_init);
+}
+
 void cPartlistItem::setState(const cPartlistItem::STATE& state)
 {
 	m_state	= state;

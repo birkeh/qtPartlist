@@ -43,6 +43,7 @@ public:
 
 	void				setState(const STATE& state);
 	STATE				state();
+	static STATE		state(const QString& szState);
 	QString				stateString();
 	static QString		stateString(const STATE& state);
 

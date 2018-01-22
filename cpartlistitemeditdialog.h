@@ -33,6 +33,7 @@ public:
 	qreal							price();
 	QString							description();
 private slots:
+	void							on_m_lpGroupList_currentIndexChanged(int index);
 	void							on_m_lpPartList_currentIndexChanged(int index);
 	void							on_m_lpDistributorList_currentIndexChanged(int index);
 
@@ -43,6 +44,7 @@ private:
 	cPartList*						m_lpPartList;
 	cPartDistributorList*			m_lpPartDistributorList;
 
+	void							fillPartList();
 	void							fillDistributorList();
 };
 
