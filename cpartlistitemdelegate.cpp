@@ -32,18 +32,18 @@ QWidget* cPartListItemDelegate::createEditor( QWidget *parent, const QStyleOptio
 	}
 	case 3:	// distributor
 	{
-		cPartDistributorList*	lpList		= qvariant_cast<cPartDistributorList*>(index.data(Qt::UserRole+1));
+		cPartDistributorList*	lpList		= qvariant_cast<cPartDistributorList*>(index.data(Qt::UserRole+2));
 		QComboBox*				lpComboBox	= new QComboBox(parent);
-		cPartlistItem*			lpItem		= qvariant_cast<cPartlistItem*>(index.data(Qt::UserRole));
+		qint32					partID		= qvariant_cast<qint32>(index.data(Qt::UserRole+1));
 
-		if(!lpItem || !lpList)
+		if(!lpList)
 			return(0);
 
 		for(int x = 0;x < lpList->count();x++)
 		{
 			cPartDistributor*	lpPartDistributor	= lpList->at(x);
 
-			if(lpPartDistributor->part()->id() == lpItem->partID())
+			if(lpPartDistributor->part()->id() == partID)
 				lpComboBox->addItem(lpPartDistributor->distributor()->name(), QVariant::fromValue(lpPartDistributor));
 		}
 		return(lpComboBox);
@@ -145,7 +145,7 @@ void cPartListItemDelegate::setModelData ( QWidget *editor, QAbstractItemModel *
 		cPartDistributor*		lpPartDistributor	= qvariant_cast<cPartDistributor*>(lpComboBox->currentData());
 
 		model->setData(index, lpComboBox->currentText(), Qt::EditRole);
-		model->setData(index, QVariant::fromValue(lpPartDistributor), Qt::UserRole);
+		model->setData(index, QVariant::fromValue(lpPartDistributor), Qt::UserRole+1);
 		QStandardItemModel*	lpModel		= (QStandardItemModel*)index.model();
 		QStandardItem*		lpItem		= lpModel->itemFromIndex(lpModel->index(index.row(), 5));
 		lpItem->setText(QString::number(lpPartDistributor->price(), 'f', 2));

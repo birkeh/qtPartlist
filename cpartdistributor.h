@@ -51,6 +51,8 @@ class cPartDistributorList : public QList<cPartDistributor*>
 public:
 	cPartDistributor*		add(qint32 id);
 	cPartDistributor*		find(qint32 id);
+	cPartDistributor*		find(qint32 partID, qint32 distributorID);
+	cPartDistributor*		find(cPart* lpPart, cDistributor* lpDistributor);
 };
 
 Q_DECLARE_METATYPE(cPartDistributorList*)

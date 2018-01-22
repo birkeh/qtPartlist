@@ -58,6 +58,18 @@ void cPartlistItemEditDialog::on_m_lpPartList_currentIndexChanged(int /*index*/)
 	fillDistributorList();
 }
 
+void cPartlistItemEditDialog::on_m_lpDistributorList_currentIndexChanged(int /*index*/)
+{
+	cPart*				lpPart			= qvariant_cast<cPart*>(ui->m_lpPartList->currentData(Qt::UserRole));
+	cDistributor*		lpDistributor	= qvariant_cast<cDistributor*>(ui->m_lpDistributorList->currentData(Qt::UserRole));
+	cPartDistributor*	lpPartDistributor	= m_lpPartDistributorList->find(lpPart, lpDistributor);
+
+	if(!lpPartDistributor)
+		ui->m_lpPrice->setValue(0.0);
+	else
+		ui->m_lpPrice->setValue(lpPartDistributor->price());
+}
+
 void cPartlistItemEditDialog::fillDistributorList()
 {
 	ui->m_lpDistributorList->clear();
@@ -72,8 +84,38 @@ void cPartlistItemEditDialog::fillDistributorList()
 			for(int x = 0;x < m_lpPartDistributorList->count();x++)
 			{
 				if(lpPart->id() == m_lpPartDistributorList->at(x)->part()->id())
-					ui->m_lpDistributorList->addItem(m_lpPartDistributorList->at(x)->distributor()->name(), QVariant::fromValue(m_lpPartDistributorList->at(x)));
+					ui->m_lpDistributorList->addItem(m_lpPartDistributorList->at(x)->distributor()->name(), QVariant::fromValue(m_lpPartDistributorList->at(x)->distributor()));
 			}
 		}
 	}
+}
+
+QString cPartlistItemEditDialog::reference()
+{
+	return(ui->m_lpReference->toPlainText());
+}
+
+cPart* cPartlistItemEditDialog::part()
+{
+	return(qvariant_cast<cPart*>(ui->m_lpPartList->currentData(Qt::UserRole)));
+}
+
+cDistributor* cPartlistItemEditDialog::distributor()
+{
+	return(qvariant_cast<cDistributor*>(ui->m_lpDistributorList->currentData(Qt::UserRole)));
+}
+
+QString cPartlistItemEditDialog::state()
+{
+	return(ui->m_lpOrderState->currentText());
+}
+
+qreal cPartlistItemEditDialog::price()
+{
+	return(ui->m_lpPrice->value());
+}
+
+QString cPartlistItemEditDialog::description()
+{
+	return(ui->m_lpDescription->toPlainText());
 }

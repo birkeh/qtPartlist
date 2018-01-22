@@ -105,3 +105,28 @@ cPartDistributor* cPartDistributorList::find(qint32 id)
 
 	return(0);
 }
+
+cPartDistributor* cPartDistributorList::find(qint32 partID, qint32 distributorID)
+{
+	for(int x = 0;x < count();x++)
+	{
+		if(at(x)->part()->id() == partID && at(x)->distributor()->id() == distributorID)
+			return(at(x));
+	}
+
+	return(0);
+}
+
+cPartDistributor* cPartDistributorList::find(cPart* lpPart, cDistributor* lpDistributor)
+{
+	if(!lpPart || !lpDistributor)
+		return(0);
+
+	for(int x = 0;x < count();x++)
+	{
+		if(at(x)->part() == lpPart && at(x)->distributor() == lpDistributor)
+			return(at(x));
+	}
+
+	return(0);
+}

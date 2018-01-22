@@ -25,8 +25,16 @@ public:
 
 	void							setList(cDistributorList* lpDistributorList, cPartGroupList* lpPartGroupList, cPartList* lpPartList, cPartDistributorList* lpPartDistributorList);
 	void							setValues(const QString& szReference, const QString& szGroup, const QString& szPart, const QString& szDistributor, const QString& szState, const qreal& dPrice, const QString& szDescription);
+
+	QString							reference();
+	cPart*							part();
+	cDistributor*					distributor();
+	QString							state();
+	qreal							price();
+	QString							description();
 private slots:
-	void on_m_lpPartList_currentIndexChanged(int index);
+	void							on_m_lpPartList_currentIndexChanged(int index);
+	void							on_m_lpDistributorList_currentIndexChanged(int index);
 
 private:
 	Ui::cPartlistItemEditDialog*	ui;

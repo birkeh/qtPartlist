@@ -26,7 +26,11 @@
         </widget>
        </item>
        <item row="2" column="1">
-        <widget class="QDoubleSpinBox" name="m_lpPrice"/>
+        <widget class="QDoubleSpinBox" name="m_lpPrice">
+         <property name="maximum">
+          <double>9999999.000000000000000</double>
+         </property>
+        </widget>
        </item>
        <item row="0" column="0">
         <widget class="QLabel" name="label">
@@ -120,6 +124,15 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>m_lpPartList</tabstop>
+  <tabstop>m_lpDistributorList</tabstop>
+  <tabstop>m_lpPrice</tabstop>
+  <tabstop>m_lpOrderState</tabstop>
+  <tabstop>m_lpReplacement</tabstop>
+  <tabstop>m_lpReference</tabstop>
+  <tabstop>m_lpDescription</tabstop>
+ </tabstops>
  <resources/>
  <connections>
   <connection>
