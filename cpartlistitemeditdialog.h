@@ -9,6 +9,7 @@
 #include "cpartlistitem.h"
 
 #include <QDialog>
+#include <QStandardItemModel>
 
 
 namespace Ui {
@@ -25,6 +26,7 @@ public:
 
 	void							setList(cDistributorList* lpDistributorList, cPartGroupList* lpPartGroupList, cPartList* lpPartList, cPartDistributorList* lpPartDistributorList);
 	void							setValues(const QString& szReference, const QString& szGroup, const QString& szPart, const QString& szDistributor, const QString& szState, const qreal& dPrice, const QString& szDescription);
+	void							addReplace(const QString& szReference, const QString& szGroup, const QString& szPart, const QString& szDistributor, const QString& szState, const qreal& dPrice, const QString& szDescription);
 
 	QString							reference();
 	cPart*							part();
@@ -39,6 +41,7 @@ private slots:
 
 private:
 	Ui::cPartlistItemEditDialog*	ui;
+	QStandardItemModel*				m_lpReplacementModel;
 	cDistributorList*				m_lpDistributorList;
 	cPartGroupList*					m_lpPartGroupList;
 	cPartList*						m_lpPartList;

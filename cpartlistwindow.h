@@ -42,7 +42,7 @@ public:
 	bool					somethingSelected();
 private slots:
 	void					on_m_lpName_textChanged(const QString &arg1);
-	void					on_m_lpPartList_doubleClicked(const QModelIndex &index);
+//	void					on_m_lpPartList_doubleClicked(const QModelIndex &index);
 	void					on_m_lpPartList_clicked(const QModelIndex &index);
 	void					on_m_lpPartList_customContextMenuRequested(const QPoint &pos);
 
@@ -69,6 +69,8 @@ private:
 	cPartlistItemList		m_partlistItemList;
 
 	void					showPartList();
+	void					addItem(cPartlistItem* lpPartlistItem, QStandardItem* lpRoot = 0);
+	QStandardItem*			findItem(qint32 itemID);
 
 	bool					save(qint32 id);
 };

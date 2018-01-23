@@ -46,18 +46,6 @@
          </property>
         </widget>
        </item>
-       <item row="4" column="1" colspan="3">
-        <widget class="QTreeWidget" name="m_lpReplacement">
-         <attribute name="headerVisible">
-          <bool>false</bool>
-         </attribute>
-         <column>
-          <property name="text">
-           <string notr="true">1</string>
-          </property>
-         </column>
-        </widget>
-       </item>
        <item row="3" column="3">
         <widget class="QComboBox" name="m_lpOrderState"/>
        </item>
@@ -117,6 +105,13 @@
        </item>
        <item row="0" column="1" colspan="3">
         <widget class="QComboBox" name="m_lpGroupList"/>
+       </item>
+       <item row="4" column="1" colspan="3">
+        <widget class="QTreeView" name="m_lpReplacement">
+         <attribute name="headerDefaultSectionSize">
+          <number>0</number>
+         </attribute>
+        </widget>
        </item>
       </layout>
      </item>

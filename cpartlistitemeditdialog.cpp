@@ -11,6 +11,15 @@ cPartlistItemEditDialog::cPartlistItemEditDialog(QWidget *parent) :
 {
 	ui->setupUi(this);
 
+	m_lpReplacementModel	= new QStandardItemModel(0, 3);
+	ui->m_lpReplacement->setModel(m_lpReplacementModel);
+//	ui->m_lpReplacement->setItemDelegate(new cPartListItemDelegate());
+
+	QStringList	header;
+	header << tr("reference") << ("group") << tr("part") << tr("distributor") << tr("state") << tr("price") << tr("description");
+	m_lpReplacementModel->setHorizontalHeaderLabels(header);
+	ui->m_lpReplacement->header()->setMinimumSectionSize(50);
+
 	ui->m_lpOrderState->addItem(cPartlistItem::stateString(cPartlistItem::STATE_init), QVariant::fromValue((qint8)cPartlistItem::STATE_init));
 	ui->m_lpOrderState->addItem(cPartlistItem::stateString(cPartlistItem::STATE_ordered), QVariant::fromValue((qint8)cPartlistItem::STATE_ordered));
 	ui->m_lpOrderState->addItem(cPartlistItem::stateString(cPartlistItem::STATE_shipping), QVariant::fromValue((qint8)cPartlistItem::STATE_shipping));
@@ -57,6 +66,37 @@ void cPartlistItemEditDialog::setValues(const QString &szReference, const QStrin
 	ui->m_lpOrderState->setCurrentText(szState);
 	ui->m_lpPrice->setValue(dPrice);
 	ui->m_lpDescription->setText(szDescription);
+}
+
+void cPartlistItemEditDialog::addReplace(const QString& szReference, const QString& szGroup, const QString& szPart, const QString& szDistributor, const QString& szState, const qreal& dPrice, const QString& szDescription)
+{
+	QList<QStandardItem*>	lpItems;
+
+	for(int z = 0;z < m_lpReplacementModel->columnCount();z++)
+		lpItems.append(new QStandardItem);
+
+	lpItems.at(0)->setText(szReference);
+	lpItems.at(1)->setText(szGroup);
+	lpItems.at(2)->setText(szPart);
+	//lpItems.at(2)->setData(lpPartlistItem->partID(), Qt::UserRole);
+	if(!szDistributor.isEmpty())
+	{
+		lpItems.at(3)->setText(szDistributor);
+		//lpItems.at(3)->setData(QVariant::fromValue(lpPartlistItem->distributorID()), Qt::UserRole);
+	}
+	lpItems.at(4)->setText(szState);
+	lpItems.at(5)->setText(QString::number(dPrice, 'f', 2));
+	lpItems.at(5)->setTextAlignment(Qt::AlignRight);
+	lpItems.at(6)->setText(szDescription);
+
+//	for(int z = 0;z < m_lpPartListModel->columnCount();z++)
+//	{
+//		lpItems.at(z)->setData(QVariant::fromValue(lpPartlistItem), Qt::UserRole);
+//		lpItems.at(z)->setData(QVariant::fromValue(lpPartlistItem->partID()), Qt::UserRole+1);
+//		lpItems.at(z)->setData(QVariant::fromValue(m_lpPartDistributorList), Qt::UserRole+2);
+//	}
+
+	m_lpReplacementModel->appendRow(lpItems);
 }
 
 void cPartlistItemEditDialog::on_m_lpGroupList_currentIndexChanged(int /*index*/)
