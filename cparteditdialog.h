@@ -24,7 +24,7 @@ public:
 	~cPartEditDialog();
 
 	qint32					id();
-	void					setValues(cPart* lpPart, cPartGroupList* lpPartGroupList, cDistributorList* lpDistributorList, cPartDistributorList* lpPartDistributorList);
+	void					setValues(cPart* lpPart, cPartGroupList* lpPartGroupList, cDistributorList* lpDistributorList, cPartDistributorList* lpPartDistributorList, QString szGroup = "");
 
 	bool					somethingSelected();
 private slots:

@@ -160,8 +160,22 @@ void cPartWindow::deletePart()
 
 void cPartWindow::onAdd()
 {
+	QStandardItem*		lpItem			= m_lpPartListModel->itemFromIndex(ui->m_lpPartList->selectionModel()->selectedIndexes().at(0));
+	QString				szGroup;
+
+	if(lpItem)
+	{
+		QStandardItem*	lpRoot;
+
+		lpRoot	= lpItem->parent();
+		if(!lpRoot)
+			szGroup	= lpItem->text();
+		else
+			szGroup	= lpRoot->text();
+	}
+
 	cPartEditDialog*	lpDialog	= new cPartEditDialog(this);
-	lpDialog->setValues(0, m_lpPartGroupList, m_lpDistributorList, m_lpPartDistributorList);
+	lpDialog->setValues(0, m_lpPartGroupList, m_lpDistributorList, m_lpPartDistributorList, szGroup);
 
 	if(lpDialog->exec() == QDialog::Rejected)
 	{

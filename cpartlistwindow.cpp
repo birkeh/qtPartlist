@@ -508,8 +508,6 @@ void cPartlistWindow::onPartEdit()
 	qreal			dPrice			= lpDialog->price();
 	QString			szDescription	= lpDialog->description();
 
-	QList<QStandardItem*>	lpItems;
-
 	lpReferenceItem->setText(szReference.split("\n").join(", "));
 	if(lpPart)
 	{

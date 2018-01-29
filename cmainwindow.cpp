@@ -236,7 +236,7 @@ void cMainWindow::loadDistributorList()
 	QSqlQuery	query;
 	QString		szQuery;
 
-	szQuery	= "SELECT id, name, link, address, postal_code, city, country, phone, fax, email, link, description, logo FROM distributor ORDER BY name;";
+	szQuery	= "SELECT id, name, link, address, postal_code, city, country, phone, fax, email, link, description, logo FROM distributor ORDER BY LOWER(name);";
 
 	if(!query.exec(szQuery))
 	{
@@ -278,7 +278,7 @@ void cMainWindow::loadPartGroupList()
 	QSqlQuery	query;
 	QString		szQuery;
 
-	szQuery	= "SELECT id, name, description FROM partgroup ORDER BY name;";
+	szQuery	= "SELECT id, name, description FROM partgroup ORDER BY LOWER(name);";
 
 	if(!query.exec(szQuery))
 	{
@@ -304,7 +304,7 @@ void cMainWindow::loadPartList()
 	QSqlQuery	query;
 	QString		szQuery;
 
-	szQuery	= "SELECT part.id id, part.name name, part.description description, part.partgroupID partgroupID, part.link FROM part JOIN partgroup ON (part.partgroupID = partgroup.id) ORDER BY partgroup.name, part.name;";
+	szQuery	= "SELECT part.id id, part.name name, part.description description, part.partgroupID partgroupID, part.link FROM part JOIN partgroup ON (part.partgroupID = partgroup.id) ORDER BY LOWER(partgroup.name), LOWER(part.name);";
 
 	if(!query.exec(szQuery))
 	{
@@ -336,7 +336,7 @@ void cMainWindow::loadPartDistributorList()
 	QSqlQuery	query;
 	QString		szQuery;
 
-	szQuery	= "SELECT id, name, description, partID, distributorID, price, link FROM part_distributor ORDER BY name;";
+	szQuery	= "SELECT id, name, description, partID, distributorID, price, link FROM part_distributor ORDER BY LOWER(name);";
 
 	if(!query.exec(szQuery))
 	{

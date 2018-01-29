@@ -44,7 +44,7 @@ bool cPartEditDialog::somethingSelected()
 	return(false);
 }
 
-void cPartEditDialog::setValues(cPart* lpPart, cPartGroupList* lpPartGroupList, cDistributorList *lpDistributorList, cPartDistributorList *lpPartDistributorList)
+void cPartEditDialog::setValues(cPart* lpPart, cPartGroupList* lpPartGroupList, cDistributorList *lpDistributorList, cPartDistributorList *lpPartDistributorList, QString szGroup)
 {
 	m_lpPart				= lpPart;
 	m_lpPartGroupList		= lpPartGroupList;
@@ -66,6 +66,9 @@ void cPartEditDialog::setValues(cPart* lpPart, cPartGroupList* lpPartGroupList, 
 
 		showPartDistributorList();
 	}
+
+	if(!szGroup.isEmpty())
+		ui->m_lpGroup->setCurrentText(szGroup);
 }
 
 void cPartEditDialog::showPartDistributorList()
