@@ -30,6 +30,8 @@ public:
 	void					addPart();
 	void					editPart();
 	void					deletePart();
+
+	bool					canClose();
 private slots:
 	void					on_m_lpPartList_clicked(const QModelIndex &index);
 	void					on_m_lpPartList_customContextMenuRequested(const QPoint &pos);

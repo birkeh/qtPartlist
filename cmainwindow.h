@@ -54,6 +54,7 @@ private:
 	QAction*				m_lpActionDistributorAdd;
 	QAction*				m_lpActionDistributorEdit;
 	QAction*				m_lpActionDistributorDelete;
+	QAction*				m_lpActionDistributorExport;
 
 	QMenu*					m_lpMenuParts;
 	QToolBar*				m_lpToolBarParts;
@@ -61,6 +62,7 @@ private:
 	QAction*				m_lpActionPartsAdd;
 	QAction*				m_lpActionPartsEdit;
 	QAction*				m_lpActionPartsDelete;
+	QAction*				m_lpActionPartsExport;
 
 	QMenu*					m_lpMenuPartlist;
 	QToolBar*				m_lpToolBarPartlist;
@@ -72,6 +74,7 @@ private:
 	QAction*				m_lpActionPartlistPartAdd;
 	QAction*				m_lpActionPartlistPartEdit;
 	QAction*				m_lpActionPartlistPartDelete;
+	QAction*				m_lpActionPartlistExport;
 
 	QSqlDatabase			m_db;
 	cDistributorList		m_distributorList;
@@ -139,11 +142,13 @@ private slots:
 	void					onMenuDistributorAdd();
 	void					onMenuDistributorEdit();
 	void					onMenuDistributorDelete();
+	void					onMenuDistributorExport();
 
 	void					onMenuPartsShow();
 	void					onMenuPartsAdd();
 	void					onMenuPartsEdit();
 	void					onMenuPartsDelete();
+	void					onMenuPartsExport();
 
 	void					onMenuPartlistNew();
 	void					onMenuPartlistOpen();
@@ -153,6 +158,7 @@ private slots:
 	void					onMenuPartlistPartAdd();
 	void					onMenuPartlistPartEdit();
 	void					onMenuPartlistPartDelete();
+	void					onMenuPartlistExport();
 
 	void					on_m_lpMainTab_currentChanged(int);
 
@@ -165,6 +171,7 @@ private slots:
 
 	void					partlistChanged(QWidget* lpWidget);
 	void					partlistSelectionChanged(const QModelIndex& index);
+	void					on_m_lpMainTab_tabCloseRequested(int index);
 };
 
 #endif // CMAINWINDOW_H

@@ -40,6 +40,12 @@ public:
 
 	bool					somethingChanged();
 	bool					somethingSelected();
+
+	void					partAdd();
+	void					partEdit();
+	void					partDelete();
+
+	bool					canClose();
 private slots:
 	void					on_m_lpName_textChanged(const QString &arg1);
 //	void					on_m_lpPartList_doubleClicked(const QModelIndex &index);
@@ -50,12 +56,15 @@ private slots:
 	void					onPartEdit();
 	void					onPartDelete();
 
+	void					onPartlistItemChanged(QStandardItem*);
+
 signals:
 	void					partlistChanged(QWidget* lpWidget) const;
 	void					selectionChanged(const QModelIndex& index) const;
 
 private:
 	Ui::cPartlistWindow*	ui;
+	bool					m_bPartlistLoading;
 	QTabWidget*				m_lpMainTab;
 	QStandardItemModel*		m_lpPartListModel;
 	qint32					m_id;

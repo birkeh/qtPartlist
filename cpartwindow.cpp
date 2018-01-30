@@ -280,3 +280,8 @@ void cPartWindow::on_m_lpPartList_doubleClicked(const QModelIndex &/*index*/)
 {
 	onEdit();
 }
+
+bool cPartWindow::canClose()
+{
+	return(true);
+}

@@ -717,5 +717,8 @@
         <file>icons/normal/Zoom in.png</file>
         <file>icons/normal/Zoom out.png</file>
         <file>icons/normal/Zoom.png</file>
+        <file>icons/disabled/Export.png</file>
+        <file>icons/hot/Export.png</file>
+        <file>icons/normal/Export.png</file>
     </qresource>
 </RCC>

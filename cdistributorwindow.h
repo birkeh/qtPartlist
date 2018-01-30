@@ -26,6 +26,10 @@ public:
 	void					addDistributor();
 	void					editDistributor();
 	void					deleteDistributor();
+
+	bool					canClose();
+
+	void					exportList(const QString& szFileName);
 private slots:
 	void					on_m_lpDistributorList_clicked(const QModelIndex &index);
 	void					on_m_lpDistributorList_doubleClicked(const QModelIndex &index);

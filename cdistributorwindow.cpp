@@ -3,6 +3,8 @@
 
 #include "cdistributoreditdialog.h"
 
+#include "xlsxdocument.h"
+
 #include "common.h"
 
 #include <QString>
@@ -247,4 +249,21 @@ void cDistributorWindow::onDelete()
 void cDistributorWindow::on_m_lpDistributorList_doubleClicked(const QModelIndex &/*index*/)
 {
 	onEdit();
+}
+
+bool cDistributorWindow::canClose()
+{
+	return(true);
+}
+
+void cDistributorWindow::exportList(const QString& szFileName)
+{
+//	QXlsx::Document xlsx;
+//	xlsx.write("A1", "Hello Qt!");
+//	xlsx.saveAs("c:\\temp\\Test.xlsx");
+
+	QXlsx::Document		xlsx;
+	xlsx.write("A1", "Hello Qt!");
+	xlsx.write("B1", "DaWig woa do!");
+	xlsx.saveAs(szFileName);
 }

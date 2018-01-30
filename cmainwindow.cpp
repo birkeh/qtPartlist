@@ -67,7 +67,7 @@ void cMainWindow::createActions()
 	createAction(m_lpMenuFile, m_lpToolBarFile, &m_lpActionFileOpenProject, ":/icons/normal/Open file.png", ":/icons/hot/Open file.png", ":/icons/disabled/Open file.png", tr("&Open Project..."), QKeySequence::Open, tr("Open a project"), &cMainWindow::onMenuFileOpenProject);
 	createAction(m_lpMenuFile, 0, &m_lpActionFileCloseProject, "", "", "", tr("&Close Project..."), QKeySequence::Close, tr("Close project"), &cMainWindow::onMenuFileCloseProject);
 	createSeparator(m_lpMenuFile, m_lpToolBarFile);
-	createAction(m_lpMenuFile, m_lpToolBarFile, &m_lpActionFileExport, ":/icons/normal/Save file.png",":/icons/hot/Save file.png", ":/icons/disabled/Save file", tr("&Export..."), QKeySequence::UnknownKey, tr("Export project"), &cMainWindow::onMenuFileExport);
+	createAction(m_lpMenuFile, m_lpToolBarFile, &m_lpActionFileExport, ":/icons/normal/Export.png",":/icons/hot/Export.png", ":/icons/disabled/Export.png", tr("&Export..."), QKeySequence::UnknownKey, tr("Export project"), &cMainWindow::onMenuFileExport);
 	createSeparator(m_lpMenuFile, m_lpToolBarFile);
 	createAction(m_lpMenuFile, 0, &m_lpActionFileClose, "", "", "", tr("&Close"), QKeySequence::Quit, tr("Close application"), &cMainWindow::onMenuFileClose);
 
@@ -78,6 +78,8 @@ void cMainWindow::createActions()
 	createAction(m_lpMenuDistributor, m_lpToolBarDistributor, &m_lpActionDistributorAdd, ":/icons/normal/Add.png", ":/icons/hot/Add.png", ":/icons/disabled/Add.png", tr("&add distributor..."), QKeySequence::UnknownKey, tr("Add distributor"), &cMainWindow::onMenuDistributorAdd);
 	createAction(m_lpMenuDistributor, m_lpToolBarDistributor, &m_lpActionDistributorEdit, ":/icons/normal/Edit.png", ":/icons/hot/Edit.png", ":/icons/disabled/Edit.png", tr("&edit distributor..."), QKeySequence::UnknownKey, tr("Edit distributor"), &cMainWindow::onMenuDistributorEdit);
 	createAction(m_lpMenuDistributor, m_lpToolBarDistributor, &m_lpActionDistributorDelete, ":/icons/normal/Delete.png", ":/icons/hot/Delete.png", ":/icons/disabled/Delete.png", tr("&delete distributor..."), QKeySequence::UnknownKey, tr("Delete distributor"), &cMainWindow::onMenuDistributorDelete);
+	createSeparator(m_lpMenuDistributor, m_lpToolBarDistributor);
+	createAction(m_lpMenuDistributor, m_lpToolBarDistributor, &m_lpActionDistributorExport, ":/icons/normal/Export.png",":/icons/hot/Export.png", ":/icons/disabled/Export.png", tr("&Export..."), QKeySequence::UnknownKey, tr("Export distributor list"), &cMainWindow::onMenuDistributorExport);
 
 	m_lpMenuParts				= menuBar()->addMenu(tr("&Part"));
 	m_lpToolBarParts			= addToolBar(tr("Part"));
@@ -86,6 +88,8 @@ void cMainWindow::createActions()
 	createAction(m_lpMenuParts, m_lpToolBarParts, &m_lpActionPartsAdd, ":/icons/normal/Add.png", ":/icons/hot/Add.png", ":/icons/disabled/Add.png", tr("&add part..."), QKeySequence::UnknownKey, tr("Add part"), &cMainWindow::onMenuPartsAdd);
 	createAction(m_lpMenuParts, m_lpToolBarParts, &m_lpActionPartsEdit, ":/icons/normal/Edit.png", ":/icons/hot/Edit.png", ":/icons/disabled/Edit.png", tr("&edit part..."), QKeySequence::UnknownKey, tr("Edit part"), &cMainWindow::onMenuPartsEdit);
 	createAction(m_lpMenuParts, m_lpToolBarParts, &m_lpActionPartsDelete, ":/icons/normal/Delete.png", ":/icons/hot/Delete.png", ":/icons/disabled/Delete.png", tr("&delete part..."), QKeySequence::UnknownKey, tr("Delete part"), &cMainWindow::onMenuPartsDelete);
+	createSeparator(m_lpMenuParts, m_lpToolBarParts);
+	createAction(m_lpMenuParts, m_lpToolBarParts, &m_lpActionPartsExport, ":/icons/normal/Export.png",":/icons/hot/Export.png", ":/icons/disabled/Export.png", tr("&Export..."), QKeySequence::UnknownKey, tr("Export parts"), &cMainWindow::onMenuPartsExport);
 
 	m_lpMenuPartlist			= menuBar()->addMenu(tr("Part&list"));
 	m_lpToolBarPartlist			= addToolBar(tr("Partlist"));
@@ -101,6 +105,8 @@ void cMainWindow::createActions()
 	createAction(m_lpMenuPartlist, m_lpToolBarPartlist, &m_lpActionPartlistPartAdd, ":/icons/normal/Add.png", ":/icons/hot/Add.png", ":/icons/disabled/Add.png", tr("&add part..."), QKeySequence::UnknownKey, tr("Add part"), &cMainWindow::onMenuPartlistPartAdd);
 	createAction(m_lpMenuPartlist, m_lpToolBarPartlist, &m_lpActionPartlistPartEdit, ":/icons/normal/Edit.png", ":/icons/hot/Edit.png", ":/icons/disabled/Edit.png", tr("&edit part..."), QKeySequence::UnknownKey, tr("Edit part"), &cMainWindow::onMenuPartlistPartEdit);
 	createAction(m_lpMenuPartlist, m_lpToolBarPartlist, &m_lpActionPartlistPartDelete, ":/icons/normal/Delete.png", ":/icons/hot/Delete.png", ":/icons/disabled/Delete.png", tr("&delete part..."), QKeySequence::UnknownKey, tr("Delete part"), &cMainWindow::onMenuPartlistPartDelete);
+	createSeparator(m_lpMenuPartlist, m_lpToolBarPartlist);
+	createAction(m_lpMenuPartlist, m_lpToolBarPartlist, &m_lpActionPartlistExport, ":/icons/normal/Export.png",":/icons/hot/Export.png", ":/icons/disabled/Export.png", tr("&Export..."), QKeySequence::UnknownKey, tr("Export part list"), &cMainWindow::onMenuPartlistExport);
 }
 
 cMainWindow::~cMainWindow()
@@ -425,6 +431,12 @@ void cMainWindow::onMenuDistributorDelete()
 	m_lpDistributorWindow->deleteDistributor();
 }
 
+void cMainWindow::onMenuDistributorExport()
+{
+	if(m_lpDistributorWindow)
+		m_lpDistributorWindow->exportList("c:\\temp\\test99.xlsx");
+}
+
 void cMainWindow::onMenuPartsShow()
 {
 	if(!m_lpPartWindow)
@@ -463,6 +475,10 @@ void cMainWindow::onMenuPartsDelete()
 	m_lpPartWindow->deletePart();
 }
 
+void cMainWindow::onMenuPartsExport()
+{
+}
+
 void cMainWindow::updateMenu()
 {
 	QWidget*			lpWidget			= ui->m_lpMainTab->currentWidget();
@@ -472,11 +488,13 @@ void cMainWindow::updateMenu()
 		m_lpActionDistributorAdd->setEnabled(false);
 		m_lpActionDistributorEdit->setEnabled(false);
 		m_lpActionDistributorDelete->setEnabled(false);
+		m_lpActionDistributorExport->setEnabled(false);
 
 		m_lpActionPartsShow->setEnabled(true);
 		m_lpActionPartsAdd->setEnabled(false);
 		m_lpActionPartsEdit->setEnabled(false);
 		m_lpActionPartsDelete->setEnabled(false);
+		m_lpActionPartsExport->setEnabled(false);
 
 		m_lpActionPartlistNew->setEnabled(true);
 		m_lpActionPartlistOpen->setEnabled(true);
@@ -486,6 +504,7 @@ void cMainWindow::updateMenu()
 		m_lpActionPartlistPartAdd->setEnabled(false);
 		m_lpActionPartlistPartEdit->setEnabled(false);
 		m_lpActionPartlistPartDelete->setEnabled(false);
+		m_lpActionPartlistExport->setEnabled(false);
 
 		return;
 	}
@@ -498,6 +517,7 @@ void cMainWindow::updateMenu()
 	{
 		m_lpActionDistributorShow->setEnabled(false);
 		m_lpActionDistributorAdd->setEnabled(true);
+		m_lpActionDistributorExport->setEnabled(true);
 		if(lpDistributorWindow->somethingSelected())
 		{
 			m_lpActionDistributorEdit->setEnabled(true);
@@ -513,6 +533,7 @@ void cMainWindow::updateMenu()
 		m_lpActionPartsAdd->setEnabled(false);
 		m_lpActionPartsEdit->setEnabled(false);
 		m_lpActionPartsDelete->setEnabled(false);
+		m_lpActionPartsExport->setEnabled(false);
 
 		m_lpActionPartlistNew->setEnabled(true);
 		m_lpActionPartlistOpen->setEnabled(true);
@@ -522,6 +543,7 @@ void cMainWindow::updateMenu()
 		m_lpActionPartlistPartAdd->setEnabled(false);
 		m_lpActionPartlistPartEdit->setEnabled(false);
 		m_lpActionPartlistPartDelete->setEnabled(false);
+		m_lpActionPartlistExport->setEnabled(false);
 	}
 	else if(lpPartWindow)
 	{
@@ -537,11 +559,13 @@ void cMainWindow::updateMenu()
 			m_lpActionPartsEdit->setEnabled(false);
 			m_lpActionPartsDelete->setEnabled(false);
 		}
+		m_lpActionPartsExport->setEnabled(true);
 
 		m_lpActionDistributorShow->setEnabled(true);
 		m_lpActionDistributorAdd->setEnabled(false);
 		m_lpActionDistributorEdit->setEnabled(false);
 		m_lpActionDistributorDelete->setEnabled(false);
+		m_lpActionDistributorExport->setEnabled(false);
 
 		m_lpActionPartlistNew->setEnabled(true);
 		m_lpActionPartlistOpen->setEnabled(true);
@@ -551,6 +575,7 @@ void cMainWindow::updateMenu()
 		m_lpActionPartlistPartAdd->setEnabled(false);
 		m_lpActionPartlistPartEdit->setEnabled(false);
 		m_lpActionPartlistPartDelete->setEnabled(false);
+		m_lpActionPartlistExport->setEnabled(false);
 	}
 	else if(lpPartlistWindow)
 	{
@@ -559,16 +584,19 @@ void cMainWindow::updateMenu()
 		m_lpActionPartlistClose->setEnabled(true);
 		m_lpActionPartlistSave->setEnabled(lpPartlistWindow->somethingChanged());
 		m_lpActionPartlistSaveAs->setEnabled(true);
+		m_lpActionPartlistExport->setEnabled(true);
 
 		m_lpActionDistributorShow->setEnabled(true);
 		m_lpActionDistributorAdd->setEnabled(false);
 		m_lpActionDistributorEdit->setEnabled(false);
 		m_lpActionDistributorDelete->setEnabled(false);
+		m_lpActionDistributorExport->setEnabled(false);
 
 		m_lpActionPartsShow->setEnabled(true);
 		m_lpActionPartsAdd->setEnabled(false);
 		m_lpActionPartsEdit->setEnabled(false);
 		m_lpActionPartsDelete->setEnabled(false);
+		m_lpActionPartsExport->setEnabled(false);
 
 		m_lpActionPartlistPartAdd->setEnabled(true);
 		if(lpPartlistWindow->somethingSelected())
@@ -760,20 +788,77 @@ void cMainWindow::onMenuPartlistSaveAs()
 
 void cMainWindow::onMenuPartlistPartAdd()
 {
+	cPartlistWindow*	lpPartlistWindow	= qobject_cast<cPartlistWindow*>(ui->m_lpMainTab->widget(ui->m_lpMainTab->currentIndex()));
 
+	if(!lpPartlistWindow)
+		return;
+
+	lpPartlistWindow->partAdd();
 }
 
 void cMainWindow::onMenuPartlistPartEdit()
 {
+	cPartlistWindow*	lpPartlistWindow	= qobject_cast<cPartlistWindow*>(ui->m_lpMainTab->widget(ui->m_lpMainTab->currentIndex()));
 
+	if(!lpPartlistWindow)
+		return;
+
+	lpPartlistWindow->partEdit();
 }
 
 void cMainWindow::onMenuPartlistPartDelete()
 {
+	cPartlistWindow*	lpPartlistWindow	= qobject_cast<cPartlistWindow*>(ui->m_lpMainTab->widget(ui->m_lpMainTab->currentIndex()));
 
+	if(!lpPartlistWindow)
+		return;
+
+	lpPartlistWindow->partDelete();
+}
+
+void cMainWindow::onMenuPartlistExport()
+{
 }
 
 void cMainWindow::partlistChanged(QWidget* /*lpWidget*/)
 {
 	updateMenu();
+}
+
+void cMainWindow::on_m_lpMainTab_tabCloseRequested(int index)
+{
+	QWidget*	lpWidget	= ui->m_lpMainTab->widget(index);
+	if(!lpWidget)
+		return;
+
+	cDistributorWindow*	lpDistributorWindow	= qobject_cast<cDistributorWindow*>(lpWidget);
+	cPartWindow*		lpPartWindow		= qobject_cast<cPartWindow*>(lpWidget);
+	cPartlistWindow*	lpPartlistWindow	= qobject_cast<cPartlistWindow*>(lpWidget);
+
+	if(lpDistributorWindow)
+	{
+		if(lpDistributorWindow->canClose())
+		{
+			delete lpDistributorWindow;
+			m_lpDistributorWindow	= 0;
+		}
+		return;
+	}
+
+	if(lpPartWindow)
+	{
+		if(lpPartWindow->canClose())
+		{
+			delete lpPartWindow;
+			m_lpPartWindow	= 0;
+		}
+		return;
+	}
+
+	if(lpPartlistWindow)
+	{
+		if(lpPartlistWindow->canClose())
+			delete lpPartlistWindow;
+		return;
+	}
 }

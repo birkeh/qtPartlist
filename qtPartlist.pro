@@ -8,6 +8,8 @@ QT       += core gui sql
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
+include(3rdparty/qtxlsx/src/xlsx/qtxlsx.pri)
+
 TARGET = qtPartlist
 TEMPLATE = app
 
@@ -42,7 +44,7 @@ SOURCES += \
     cpartlistitem.cpp \
     cpartlistitemdelegate.cpp \
     cpartlistitemeditdialog.cpp \
-    cinputlistdialog.cpp
+    cinputlistdialog.cpp \
 
 HEADERS += \
         cmainwindow.h \
@@ -61,7 +63,7 @@ HEADERS += \
     cpartlistitem.h \
     cpartlistitemdelegate.h \
     cpartlistitemeditdialog.h \
-    cinputlistdialog.h
+    cinputlistdialog.h \
 
 FORMS += \
         cmainwindow.ui \

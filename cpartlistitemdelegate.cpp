@@ -30,7 +30,7 @@ QWidget* cPartListItemDelegate::createEditor( QWidget *parent, const QStyleOptio
 		QTextEdit*				lpEdit		= new QTextEdit(parent);
 		return(lpEdit);
 	}
-	case 3:	// distributor
+	case 4:	// distributor
 	{
 		cPartDistributorList*	lpList		= qvariant_cast<cPartDistributorList*>(index.data(Qt::UserRole+2));
 		QComboBox*				lpComboBox	= new QComboBox(parent);
@@ -48,7 +48,7 @@ QWidget* cPartListItemDelegate::createEditor( QWidget *parent, const QStyleOptio
 		}
 		return(lpComboBox);
 	}
-	case 4:	// state
+	case 5:	// state
 	{
 		QComboBox*				lpComboBox	= new QComboBox(parent);
 
@@ -60,7 +60,7 @@ QWidget* cPartListItemDelegate::createEditor( QWidget *parent, const QStyleOptio
 
 		return(lpComboBox);
 	}
-	case 5:	// price
+	case 6:	// price
 	{
 		QDoubleSpinBox*	lpSpinBox	= new QDoubleSpinBox(parent);
 		lpSpinBox->setMinimum(0);
@@ -68,7 +68,7 @@ QWidget* cPartListItemDelegate::createEditor( QWidget *parent, const QStyleOptio
 		lpSpinBox->setDecimals(2);
 		return(lpSpinBox);
 	}
-	case 6: // description
+	case 7: // description
 		return(QStyledItemDelegate::createEditor(parent, option, index));
 	default:
 		return(0);
@@ -108,10 +108,10 @@ void cPartListItemDelegate::setEditorData ( QWidget *editor, const QModelIndex &
 			lpTextEdit->setText(list.join("\n"));
 		}
 		break;
-	case 3:	// distributor
+	case 4:	// distributor
 		lpComboBox->setCurrentText(index.data(Qt::EditRole).toString());
 		break;
-	case 4:	// state
+	case 5:	// state
 		lpComboBox->setCurrentText(index.data(Qt::EditRole).toString());
 		break;
 	default:
@@ -138,23 +138,27 @@ void cPartListItemDelegate::setModelData ( QWidget *editor, QAbstractItemModel *
 				list1.append(list.at(x));
 		}
 		model->setData(index, list1.join(", "), Qt::EditRole);
+
+		QStandardItemModel*	lpModel		= (QStandardItemModel*)index.model();
+		QStandardItem*		lpItem		= lpModel->itemFromIndex(lpModel->index(index.row(), 1));
+		lpItem->setText(QString::number(list1.count()));
 	}
 		break;
-	case 3:	// distributor
+	case 4:	// distributor
 	{
 		cPartDistributor*		lpPartDistributor	= qvariant_cast<cPartDistributor*>(lpComboBox->currentData());
 
 		model->setData(index, lpComboBox->currentText(), Qt::EditRole);
 //		model->setData(index, QVariant::fromValue(lpPartDistributor), Qt::UserRole+1);
 		QStandardItemModel*	lpModel		= (QStandardItemModel*)index.model();
-		QStandardItem*		lpItem		= lpModel->itemFromIndex(lpModel->index(index.row(), 5));
+		QStandardItem*		lpItem		= lpModel->itemFromIndex(lpModel->index(index.row(), 6));
 		lpItem->setText(QString::number(lpPartDistributor->price(), 'f', 2));
 	}
 		break;
-	case 4:	// state
+	case 5:	// state
 		model->setData(index, lpComboBox->currentText(), Qt::EditRole);
 		break;
-	case 5:	// price
+	case 6:	// price
 		if(lpSpinBox)
 		{
 			QStandardItemModel*	lpModel		= (QStandardItemModel*)index.model();

@@ -18,6 +18,7 @@
 cPartlistWindow::cPartlistWindow(QWidget *parent) :
 	QWidget(parent),
 	ui(new Ui::cPartlistWindow),
+	m_bPartlistLoading(false),
 	m_lpMainTab(0),
 	m_id(-1),
 	m_bSomethingChanged(false),
@@ -31,6 +32,8 @@ cPartlistWindow::cPartlistWindow(QWidget *parent) :
 	m_lpPartListModel	= new QStandardItemModel(0, 3);
 	ui->m_lpPartList->setModel(m_lpPartListModel);
 	ui->m_lpPartList->setItemDelegate(new cPartListItemDelegate());
+
+	connect(m_lpPartListModel, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(onPartlistItemChanged(QStandardItem*)));
 }
 
 cPartlistWindow::~cPartlistWindow()
@@ -47,7 +50,8 @@ void cPartlistWindow::setPartlistName(const QString& szPartlistName)
 {
 	setWindowTitle(szPartlistName);
 	ui->m_lpName->setText(szPartlistName);
-	m_bSomethingChanged	= true;
+	if(!m_bPartlistLoading)
+		m_bSomethingChanged	= true;
 }
 
 QString cPartlistWindow::partlistName()
@@ -57,7 +61,8 @@ QString cPartlistWindow::partlistName()
 
 void cPartlistWindow::setPartlistID(const qint32& id)
 {
-	m_id	= id;
+	m_bPartlistLoading	= true;
+	m_id				= id;
 
 	QSqlQuery	query;
 
@@ -67,12 +72,14 @@ void cPartlistWindow::setPartlistID(const qint32& id)
 	if(!query.exec())
 	{
 		myDebug << query.lastError().text();
+		m_bPartlistLoading	= false;
 		return;
 	}
 
 	if(!query.next())
 	{
 		myDebug << query.lastError().text();
+		m_bPartlistLoading	= false;
 		return;
 	}
 
@@ -108,6 +115,8 @@ void cPartlistWindow::setPartlistID(const qint32& id)
 	}
 
 	showPartList();
+
+	m_bPartlistLoading	= false;
 }
 
 void cPartlistWindow::setList(cDistributorList* lpDistributorList, cPartGroupList* lpPartGroupList, cPartList* lpPartList, cPartDistributorList* lpPartDistributorList)
@@ -120,6 +129,9 @@ void cPartlistWindow::setList(cDistributorList* lpDistributorList, cPartGroupLis
 
 void cPartlistWindow::on_m_lpName_textChanged(const QString &arg1)
 {
+	if(m_bPartlistLoading)
+		return;
+
 	if(m_lpMainTab)
 	{
 		m_bSomethingChanged	= true;
@@ -214,7 +226,7 @@ void cPartlistWindow::showPartList()
 	m_lpPartListModel->clear();
 
 	QStringList	header;
-	header << tr("reference") << ("group") << tr("part") << tr("distributor") << tr("state") << tr("price") << tr("description");
+	header << tr("reference") << tr("count") << tr("group") << tr("part") << tr("distributor") << tr("state") << tr("price") << tr("description");
 	m_lpPartListModel->setHorizontalHeaderLabels(header);
 	ui->m_lpPartList->header()->setMinimumSectionSize(50);
 
@@ -259,6 +271,7 @@ QStandardItem* cPartlistWindow::findItem(qint32 itemID)
 		if(lpPartlistItem->id() == itemID)
 			return(lpItem);
 	}
+	return(0);
 }
 
 void cPartlistWindow::addItem(cPartlistItem* lpPartlistItem, QStandardItem *lpRoot)
@@ -269,18 +282,20 @@ void cPartlistWindow::addItem(cPartlistItem* lpPartlistItem, QStandardItem *lpRo
 		lpItems.append(new QStandardItem);
 
 	lpItems.at(0)->setText(lpPartlistItem->reference());
-	lpItems.at(1)->setText(m_lpPartList->find(lpPartlistItem->partID())->partGroup()->name());
-	lpItems.at(2)->setText(m_lpPartList->find(lpPartlistItem->partID())->name());
-	lpItems.at(2)->setData(lpPartlistItem->partID(), Qt::UserRole);
+	lpItems.at(1)->setText(QString::number(lpPartlistItem->reference().split(", ").count()));
+	lpItems.at(1)->setTextAlignment(Qt::AlignRight);
+	lpItems.at(2)->setText(m_lpPartList->find(lpPartlistItem->partID())->partGroup()->name());
+	lpItems.at(3)->setText(m_lpPartList->find(lpPartlistItem->partID())->name());
+	lpItems.at(3)->setData(lpPartlistItem->partID(), Qt::UserRole);
 	if(lpPartlistItem->distributorID())
 	{
-		lpItems.at(3)->setText(m_lpDistributorList->find(lpPartlistItem->distributorID())->name());
-		lpItems.at(3)->setData(QVariant::fromValue(lpPartlistItem->distributorID()), Qt::UserRole);
+		lpItems.at(4)->setText(m_lpDistributorList->find(lpPartlistItem->distributorID())->name());
+		lpItems.at(4)->setData(QVariant::fromValue(lpPartlistItem->distributorID()), Qt::UserRole);
 	}
-	lpItems.at(4)->setText(lpPartlistItem->stateString());
-	lpItems.at(5)->setText(QString::number(lpPartlistItem->price(), 'f', 2));
-	lpItems.at(5)->setTextAlignment(Qt::AlignRight);
-	lpItems.at(6)->setText(lpPartlistItem->description());
+	lpItems.at(5)->setText(lpPartlistItem->stateString());
+	lpItems.at(6)->setText(QString::number(lpPartlistItem->price(), 'f', 2));
+	lpItems.at(6)->setTextAlignment(Qt::AlignRight);
+	lpItems.at(7)->setText(lpPartlistItem->description());
 
 	for(int z = 0;z < m_lpPartListModel->columnCount();z++)
 	{
@@ -293,6 +308,8 @@ void cPartlistWindow::addItem(cPartlistItem* lpPartlistItem, QStandardItem *lpRo
 		lpRoot->appendRow(lpItems);
 	else
 		m_lpPartListModel->appendRow(lpItems);
+	if(!m_bPartlistLoading)
+		m_bSomethingChanged	= true;
 }
 
 bool cPartlistWindow::save(qint32 id)
@@ -320,11 +337,11 @@ bool cPartlistWindow::save(qint32 id)
 	for(int x = 0;x < m_lpPartListModel->rowCount();x++)
 	{
 		QStandardItem*	lpReferenceItem		= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 0));
-		QStandardItem*	lpPartItem			= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 2));
-		QStandardItem*	lpDistributorItem	= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 3));
-		QStandardItem*	lpStateItem			= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 4));
-		QStandardItem*	lpPriceItem			= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 5));
-		QStandardItem*	lpDescriptionItem	= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 6));
+		QStandardItem*	lpPartItem			= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 3));
+		QStandardItem*	lpDistributorItem	= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 4));
+		QStandardItem*	lpStateItem			= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 5));
+		QStandardItem*	lpPriceItem			= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 6));
+		QStandardItem*	lpDescriptionItem	= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 7));
 
 		QSqlQuery		query;
 		cDistributor*	lpDistributor		= m_lpDistributorList->find(lpDistributorItem->text());
@@ -350,6 +367,10 @@ bool cPartlistWindow::save(qint32 id)
 		}
 	}
 
+	m_bSomethingChanged	= false;
+
+	partlistChanged(this);
+
 	return(true);
 }
 
@@ -369,6 +390,21 @@ bool cPartlistWindow::somethingSelected()
 //{
 //	onPartEdit();
 //}
+
+void cPartlistWindow::partAdd()
+{
+	onPartAdd();
+}
+
+void cPartlistWindow::partEdit()
+{
+	onPartEdit();
+}
+
+void cPartlistWindow::partDelete()
+{
+	onPartDelete();
+}
 
 void cPartlistWindow::on_m_lpPartList_clicked(const QModelIndex &index)
 {
@@ -414,18 +450,20 @@ void cPartlistWindow::onPartAdd()
 		lpItems.append(new QStandardItem);
 
 	lpItems.at(0)->setText(szReference.split("\n").join(", "));
+	lpItems.at(1)->setText(QString::number(szReference.split("\n").join(", ").split(", ").count()));
+	lpItems.at(1)->setTextAlignment(Qt::AlignRight);
 	if(lpPart)
 	{
-		lpItems.at(1)->setText(lpPart->partGroup()->name());
-		lpItems.at(2)->setText(lpPart->name());
-		lpItems.at(2)->setData(lpPart->id(), Qt::UserRole);
+		lpItems.at(2)->setText(lpPart->partGroup()->name());
+		lpItems.at(3)->setText(lpPart->name());
+		lpItems.at(3)->setData(lpPart->id(), Qt::UserRole);
 	}
 	if(lpDistributor)
-		lpItems.at(3)->setText(lpDistributor->name());
-	lpItems.at(4)->setText(szState);
-	lpItems.at(5)->setText(QString::number(dPrice, 'f', 2));
-	lpItems.at(5)->setTextAlignment(Qt::AlignRight);
-	lpItems.at(6)->setText(szDescription);
+		lpItems.at(4)->setText(lpDistributor->name());
+	lpItems.at(5)->setText(szState);
+	lpItems.at(6)->setText(QString::number(dPrice, 'f', 2));
+	lpItems.at(6)->setTextAlignment(Qt::AlignRight);
+	lpItems.at(7)->setText(szDescription);
 
 	for(int z = 0;z < m_lpPartListModel->columnCount();z++)
 	{
@@ -436,6 +474,9 @@ void cPartlistWindow::onPartAdd()
 	m_lpPartListModel->appendRow(lpItems);
 
 	delete lpDialog;
+
+	if(!m_bPartlistLoading)
+		m_bSomethingChanged	= true;
 
 	partlistChanged(this);
 }
@@ -449,6 +490,7 @@ void cPartlistWindow::onPartEdit()
 	QStandardItem*				lpItem		= m_lpPartListModel->itemFromIndex(index);
 
 	QStandardItem*				lpReferenceItem;
+	QStandardItem*				lpCountItem;
 	QStandardItem*				lpPartGroupItem;
 	QStandardItem*				lpPartItem;
 	QStandardItem*				lpDistributorItem;
@@ -460,22 +502,24 @@ void cPartlistWindow::onPartEdit()
 	{
 		QStandardItem*	lpParent	= lpItem->parent();
 		lpReferenceItem		= lpParent->child(index.row(), 0);
-		lpPartGroupItem		= lpParent->child(index.row(), 1);
-		lpPartItem			= lpParent->child(index.row(), 2);
-		lpDistributorItem	= lpParent->child(index.row(), 3);
-		lpStateItem			= lpParent->child(index.row(), 4);
-		lpPriceItem			= lpParent->child(index.row(), 5);
-		lpDescriptionItem	= lpParent->child(index.row(), 6);
+		lpCountItem			= lpParent->child(index.row(), 1);
+		lpPartGroupItem		= lpParent->child(index.row(), 2);
+		lpPartItem			= lpParent->child(index.row(), 3);
+		lpDistributorItem	= lpParent->child(index.row(), 4);
+		lpStateItem			= lpParent->child(index.row(), 5);
+		lpPriceItem			= lpParent->child(index.row(), 6);
+		lpDescriptionItem	= lpParent->child(index.row(), 7);
 	}
 	else
 	{
 		lpReferenceItem		= m_lpPartListModel->itemFromIndex(index.model()->index(index.row(), 0));
-		lpPartGroupItem		= m_lpPartListModel->itemFromIndex(index.model()->index(index.row(), 1));
-		lpPartItem			= m_lpPartListModel->itemFromIndex(index.model()->index(index.row(), 2));
-		lpDistributorItem	= m_lpPartListModel->itemFromIndex(index.model()->index(index.row(), 3));
-		lpStateItem			= m_lpPartListModel->itemFromIndex(index.model()->index(index.row(), 4));
-		lpPriceItem			= m_lpPartListModel->itemFromIndex(index.model()->index(index.row(), 5));
-		lpDescriptionItem	= m_lpPartListModel->itemFromIndex(index.model()->index(index.row(), 6));
+		lpCountItem			= m_lpPartListModel->itemFromIndex(index.model()->index(index.row(), 1));
+		lpPartGroupItem		= m_lpPartListModel->itemFromIndex(index.model()->index(index.row(), 2));
+		lpPartItem			= m_lpPartListModel->itemFromIndex(index.model()->index(index.row(), 3));
+		lpDistributorItem	= m_lpPartListModel->itemFromIndex(index.model()->index(index.row(), 4));
+		lpStateItem			= m_lpPartListModel->itemFromIndex(index.model()->index(index.row(), 5));
+		lpPriceItem			= m_lpPartListModel->itemFromIndex(index.model()->index(index.row(), 6));
+		lpDescriptionItem	= m_lpPartListModel->itemFromIndex(index.model()->index(index.row(), 7));
 	}
 
 	lpDialog->setValues(lpReferenceItem->text(), lpPartGroupItem->text(), lpPartItem->text(), lpDistributorItem->text(), lpStateItem->text(), lpPriceItem->text().toDouble(), lpDescriptionItem->text());
@@ -485,12 +529,13 @@ void cPartlistWindow::onPartEdit()
 		for(int x = 0;x < lpItem->rowCount();x++)
 		{
 			lpReferenceItem		= lpItem->child(x, 0);
-			lpPartGroupItem		= lpItem->child(x, 1);
-			lpPartItem			= lpItem->child(x, 2);
-			lpDistributorItem	= lpItem->child(x, 3);
-			lpStateItem			= lpItem->child(x, 4);
-			lpPriceItem			= lpItem->child(x, 5);
-			lpDescriptionItem	= lpItem->child(x, 6);
+			lpCountItem			= lpItem->child(x, 1);
+			lpPartGroupItem		= lpItem->child(x, 2);
+			lpPartItem			= lpItem->child(x, 3);
+			lpDistributorItem	= lpItem->child(x, 4);
+			lpStateItem			= lpItem->child(x, 5);
+			lpPriceItem			= lpItem->child(x, 6);
+			lpDescriptionItem	= lpItem->child(x, 7);
 			lpDialog->addReplace(lpReferenceItem->text(), lpPartGroupItem->text(), lpPartItem->text(), lpDistributorItem->text(), lpStateItem->text(), lpPriceItem->text().toDouble(), lpDescriptionItem->text());
 		}
 	}
@@ -509,6 +554,7 @@ void cPartlistWindow::onPartEdit()
 	QString			szDescription	= lpDialog->description();
 
 	lpReferenceItem->setText(szReference.split("\n").join(", "));
+	lpCountItem->setText(QString::number(szReference.split("\n").join(", ").split(", ").count()));
 	if(lpPart)
 	{
 		lpPartGroupItem->setText(lpPart->partGroup()->name());
@@ -529,6 +575,9 @@ void cPartlistWindow::onPartEdit()
 
 	delete lpDialog;
 
+	if(!m_bPartlistLoading)
+		m_bSomethingChanged	= true;
+
 	partlistChanged(this);
 }
 
@@ -543,5 +592,22 @@ void cPartlistWindow::onPartDelete()
 
 	m_lpPartListModel->removeRow(lpItem->row());
 
+	if(!m_bPartlistLoading)
+		m_bSomethingChanged	= true;
+
 	partlistChanged(this);
+}
+
+void cPartlistWindow::onPartlistItemChanged(QStandardItem*)
+{
+	if(m_bPartlistLoading)
+		return;
+
+	m_bSomethingChanged	= true;
+	partlistChanged(this);
+}
+
+bool cPartlistWindow::canClose()
+{
+	return(close());
 }
