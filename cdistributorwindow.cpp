@@ -321,6 +321,33 @@ void cDistributorWindow::writeXLSXLine(QXlsx::Document& xlsx, qint32 line, const
 
 void cDistributorWindow::writeText(const QString& szFileName)
 {
+	QFile	file(szFileName);
+
+	if(!file.open(QFile::WriteOnly | QFile::Text))
+		return;
+
+	QTextStream out(&file);
+
+	out << "\"" << tr("Name") << "\";\"" << tr("Phone") << "\";\"" << tr("Fax") << "\";\"" << tr("Email") << "\";\"" << tr("address") << "\";\"" << tr("postal") << "\";\"" << tr("city") << "\";\"" << tr("country") << "\";\"" << tr("link") << "\";\"" << tr("description") << "\"\n";
+
+	for(int x = 0;x < m_lpDistributorListModel->rowCount();x++)
+	{
+		QStandardItem*	lpNameItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 0));
+		QStandardItem*	lpPhoneItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 1));
+		QStandardItem*	lpFaxItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 2));
+		QStandardItem*	lpEmailItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 3));
+		QStandardItem*	lpAddressItem		= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 4));
+		QStandardItem*	lpPostalItem		= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 5));
+		QStandardItem*	lpCityItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 6));
+		QStandardItem*	lpCountryItem		= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 7));
+		QStandardItem*	lpLinkItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 8));
+		QStandardItem*	lpDescriptionItem	= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 9));
+
+		out << "\"" << lpNameItem->text() << "\";\"" << lpPhoneItem->text() << "\";\"" << lpFaxItem->text() << "\";\"" << lpEmailItem->text() << "\";\"" << lpAddressItem->text() << "\";\"" << lpPostalItem->text() << "\";\"" << lpCityItem->text() << "\";\"" << lpCountryItem->text() << "\";\"" << lpLinkItem->text() << "\";\"" << lpDescriptionItem->text() << "\"\n";
+	}
+
+	file.flush();
+	file.close();
 }
 
 void cDistributorWindow::writeXML(const QString& szFileName)

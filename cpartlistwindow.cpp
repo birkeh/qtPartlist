@@ -33,6 +33,11 @@ cPartlistWindow::cPartlistWindow(QWidget *parent) :
 	ui->m_lpPartList->setModel(m_lpPartListModel);
 	ui->m_lpPartList->setItemDelegate(new cPartListItemDelegate());
 
+	QStringList	header;
+	header << tr("reference") << tr("count") << tr("group") << tr("part") << tr("distributor") << tr("state") << tr("price") << tr("description");
+	m_lpPartListModel->setHorizontalHeaderLabels(header);
+	ui->m_lpPartList->header()->setMinimumSectionSize(50);
+
 	connect(m_lpPartListModel, SIGNAL(itemChanged(QStandardItem*)), this, SLOT(onPartlistItemChanged(QStandardItem*)));
 }
 
