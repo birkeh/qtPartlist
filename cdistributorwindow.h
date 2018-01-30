@@ -4,6 +4,8 @@
 
 #include "cdistributor.h"
 
+#include "xlsxdocument.h"
+
 #include <QWidget>
 #include <QStandardItemModel>
 
@@ -49,6 +51,15 @@ private:
 	cDistributorList*		m_lpDistributorList;
 
 	void					showDistributorList();
+
+	void					writeXLSX(const QString& szFileName);
+	void					writeXLSXLine(QXlsx::Document& xlsx, qint32 line, const QString& szName, const QString& szPhone, const QString& szFax, const QString& szEmail, const QString& szAddress, const QString& szPostal, const QString& szCity, const QString& szCountry, const QString& szLink, const QString& szDescription);
+
+	void					writeText(const QString& szFileName);
+
+	void					writeXML(const QString& szFileName);
+
+	void					writePDF(const QString& szFileName);
 };
 
 #endif // CDISTRIBUTORWINDOW_H

@@ -3,8 +3,6 @@
 
 #include "cdistributoreditdialog.h"
 
-#include "xlsxdocument.h"
-
 #include "common.h"
 
 #include <QString>
@@ -12,6 +10,10 @@
 #include <QSqlError>
 
 #include <QMenu>
+
+#include <QFileInfo>
+#include <QFile>
+#include <QTextStream>
 
 #include <QMessageBox>
 #include <QDebug>
@@ -258,12 +260,73 @@ bool cDistributorWindow::canClose()
 
 void cDistributorWindow::exportList(const QString& szFileName)
 {
-//	QXlsx::Document xlsx;
-//	xlsx.write("A1", "Hello Qt!");
-//	xlsx.saveAs("c:\\temp\\Test.xlsx");
+	QFileInfo	fileInfo(szFileName);
+	QString		szType	= fileInfo.suffix();
 
+	if(!szType.compare("xlsx", Qt::CaseInsensitive))
+		writeXLSX(szFileName);
+	else if(!szType.compare("csv", Qt::CaseInsensitive))
+		writeText(szFileName);
+	else if(!szType.compare("txt", Qt::CaseInsensitive))
+		writeText(szFileName);
+	else if(!szType.compare("xml", Qt::CaseInsensitive))
+		writeXML(szFileName);
+	else if(!szType.compare("pdf", Qt::CaseInsensitive))
+		writePDF(szFileName);
+}
+
+void cDistributorWindow::writeXLSX(const QString& szFileName)
+{
 	QXlsx::Document		xlsx;
-	xlsx.write("A1", "Hello Qt!");
-	xlsx.write("B1", "DaWig woa do!");
+
+	writeXLSXLine(xlsx, 1, tr("Name"), tr("Phone"), tr("Fax"), tr("Email"), tr("address"), tr("postal"), tr("city"), tr("country"), tr("link"), tr("description"));
+
+	for(int x = 0;x < m_lpDistributorListModel->rowCount();x++)
+	{
+		QStandardItem*	lpNameItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 0));
+		QStandardItem*	lpPhoneItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 1));
+		QStandardItem*	lpFaxItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 2));
+		QStandardItem*	lpEmailItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 3));
+		QStandardItem*	lpAddressItem		= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 4));
+		QStandardItem*	lpPostalItem		= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 5));
+		QStandardItem*	lpCityItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 6));
+		QStandardItem*	lpCountryItem		= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 7));
+		QStandardItem*	lpLinkItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 8));
+		QStandardItem*	lpDescriptionItem	= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 9));
+
+		writeXLSXLine(xlsx, x+2, lpNameItem->text(), lpPhoneItem->text(), lpFaxItem->text(), lpEmailItem->text(), lpAddressItem->text(), lpPostalItem->text(), lpCityItem->text(), lpCountryItem->text(), lpLinkItem->text(), lpDescriptionItem->text());
+	}
+
 	xlsx.saveAs(szFileName);
+}
+
+void cDistributorWindow::writeXLSXLine(QXlsx::Document& xlsx, qint32 line, const QString& szName, const QString& szPhone, const QString& szFax, const QString& szEmail, const QString& szAddress, const QString& szPostal, const QString& szCity, const QString& szCountry, const QString& szLink, const QString& szDescription)
+{
+	QXlsx::Format	format;
+
+	if(line == 1)
+		format.setFontBold(true);
+
+	xlsx.write(line,  1, szName, format);
+	xlsx.write(line,  2, szPhone, format);
+	xlsx.write(line,  3, szFax, format);
+	xlsx.write(line,  4, szEmail, format);
+	xlsx.write(line,  5, szAddress, format);
+	xlsx.write(line,  6, szPostal, format);
+	xlsx.write(line,  7, szCity, format);
+	xlsx.write(line,  8, szCountry, format);
+	xlsx.write(line,  9, szLink, format);
+	xlsx.write(line, 10, szDescription, format);
+}
+
+void cDistributorWindow::writeText(const QString& szFileName)
+{
+}
+
+void cDistributorWindow::writeXML(const QString& szFileName)
+{
+}
+
+void cDistributorWindow::writePDF(const QString& szFileName)
+{
 }

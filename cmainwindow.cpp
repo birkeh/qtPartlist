@@ -13,8 +13,11 @@
 
 #include <QSettings>
 #include <QDir>
+#include <QFileInfo>
 
-//#include <QInputDialog>
+#include <QFileDialog>
+
+#include <QSettings>
 
 #include <QDebug>
 
@@ -433,8 +436,20 @@ void cMainWindow::onMenuDistributorDelete()
 
 void cMainWindow::onMenuDistributorExport()
 {
-	if(m_lpDistributorWindow)
-		m_lpDistributorWindow->exportList("c:\\temp\\test99.xlsx");
+	if(!m_lpDistributorWindow)
+		return;
+
+	QSettings	settings;
+	QString		szPath		= settings.value("lastPath", QVariant::fromValue(QDir::homePath())).toString();
+	QString		szFileName	= QFileDialog::getSaveFileName(this, tr("Export"), szPath, tr("Excel 2007+ (*.xlsx);;Text files (*.txt *.csv);;XML files (*.xml);;PDF (*.pdf)"));
+
+	if(szFileName.isEmpty())
+		return;
+
+	QFileInfo	fileInfo(szFileName);
+	settings.setValue("lastPath", fileInfo.absolutePath());
+
+	m_lpDistributorWindow->exportList(szFileName);
 }
 
 void cMainWindow::onMenuPartsShow()
