@@ -191,7 +191,7 @@ bool cDistributorEditDialog::add()
 		return(false);
 	}
 
-	szQuery		= QString("INSERT INTO distributor (name, link, address, postal_code, city, country, phone, fax, email, description) VALUES (:name, :link, :address, :postal_code, :city, :country, :phone, :fax, :email, :description, :logo);");
+	szQuery		= QString("INSERT INTO distributor (name, link, address, postal_code, city, country, phone, fax, email, description, logo) VALUES (:name, :link, :address, :postal_code, :city, :country, :phone, :fax, :email, :description, :logo);");
 	query.prepare(szQuery);
 	query.bindValue(":name", ui->m_lpName->text());
 	query.bindValue(":link", ui->m_lpLink->text());
@@ -220,6 +220,7 @@ bool cDistributorEditDialog::add()
 
 	if(!query.exec())
 	{
+		myDebug << query.executedQuery();
 		myDebug << query.lastError().text();
 		return(false);
 	}
