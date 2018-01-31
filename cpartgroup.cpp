@@ -60,3 +60,13 @@ cPartGroup* cPartGroupList::find(qint32 id)
 	}
 	return(0);
 }
+
+cPartGroup* cPartGroupList::find(const QString& szGroup)
+{
+	for(int x = 0;x < count();x++)
+	{
+		if(at(x)->name() == szGroup)
+			return(at(x));
+	}
+	return(0);
+}

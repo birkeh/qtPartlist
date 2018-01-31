@@ -11,6 +11,10 @@
 
 #include <QMenu>
 
+#include <QFileInfo>
+#include <QFile>
+#include <QTextStream>
+
 #include <QMessageBox>
 #include <QDebug>
 
@@ -284,4 +288,112 @@ void cPartWindow::on_m_lpPartList_doubleClicked(const QModelIndex &/*index*/)
 bool cPartWindow::canClose()
 {
 	return(true);
+}
+
+void cPartWindow::exportList(const QString& szFileName)
+{
+	QFileInfo	fileInfo(szFileName);
+	QString		szType	= fileInfo.suffix();
+
+	if(!szType.compare("xlsx", Qt::CaseInsensitive))
+		writeXLSX(szFileName);
+	else if(!szType.compare("csv", Qt::CaseInsensitive))
+		writeText(szFileName);
+	else if(!szType.compare("txt", Qt::CaseInsensitive))
+		writeText(szFileName);
+	else if(!szType.compare("xml", Qt::CaseInsensitive))
+		writeXML(szFileName);
+	else if(!szType.compare("pdf", Qt::CaseInsensitive))
+		writePDF(szFileName);
+}
+
+void cPartWindow::writeXLSX(const QString& szFileName)
+{
+	QXlsx::Document		xlsx;
+	qint32				iLine	= 1;
+	QXlsx::Format		format;
+	QXlsx::Format		formatMerged;
+	QXlsx::Format		formatCurrency;
+	QString				szNumberFormat("_-\"€\"\\ * #,##0.00_-;\\-\"€\"\\ * #,##0.00_-;_-\"€\"\\ * \"-\"??_-;_-@_-");
+
+	format.setFontBold(true);
+
+	formatMerged.setHorizontalAlignment(QXlsx::Format::AlignLeft);
+	formatMerged.setVerticalAlignment(QXlsx::Format::AlignTop);
+
+	formatCurrency.setNumberFormat(szNumberFormat);
+
+	xlsx.write(iLine,  1, tr("Group"), format);
+	xlsx.write(iLine,  2, tr("Name"), format);
+	xlsx.write(iLine,  3, tr("Description"), format);
+	xlsx.write(iLine,  4, tr("Link"), format);
+	xlsx.write(iLine,  5, tr("Distributor"), format);
+	xlsx.write(iLine,  6, tr("Part Name"), format);
+	xlsx.write(iLine,  7, tr("Price"), format);
+	iLine++;
+
+	for(int x = 0;x < m_lpPartList->count();x++)
+	{
+		cPart*	lpPart	= m_lpPartList->at(x);
+
+		xlsx.write(iLine,  1, lpPart->partGroup()->name());
+		xlsx.write(iLine,  2, lpPart->name());
+		xlsx.write(iLine,  3, lpPart->description());
+		xlsx.write(iLine,  4, lpPart->link());
+
+		qint32	iLineTemp	= 0;
+		for(int y = 0;y < m_lpPartDistributorList->count();y++)
+		{
+			cPartDistributor*	lpPartDistributor	= m_lpPartDistributorList->at(y);
+
+			if(lpPartDistributor->part() == lpPart)
+			{
+				xlsx.write(iLine+iLineTemp, 5, lpPartDistributor->distributor()->name());
+				xlsx.write(iLine+iLineTemp, 6, lpPartDistributor->name());
+				xlsx.write(iLine+iLineTemp, 7, lpPartDistributor->price(), formatCurrency);
+				iLineTemp++;
+			}
+		}
+		if(iLineTemp)
+		{
+			xlsx.mergeCells(QString("A%1:A%2").arg(iLine).arg(iLine+iLineTemp-1), formatMerged);
+			xlsx.mergeCells(QString("B%1:B%2").arg(iLine).arg(iLine+iLineTemp-1), formatMerged);
+			xlsx.mergeCells(QString("C%1:C%2").arg(iLine).arg(iLine+iLineTemp-1), formatMerged);
+			xlsx.mergeCells(QString("D%1:D%2").arg(iLine).arg(iLine+iLineTemp-1), formatMerged);
+			iLine += iLineTemp;
+		}
+		else
+			iLine++;
+	}
+
+	xlsx.saveAs(szFileName);
+}
+
+void cPartWindow::writeText(const QString& szFileName)
+{
+	QFile	file(szFileName);
+
+	if(!file.open(QFile::WriteOnly | QFile::Text))
+		return;
+
+	QTextStream out(&file);
+
+	out << "\"" << tr("Group") << "\";\"" << tr("Name") << "\";\"" << tr("Description") << "\";\"" << tr("Link") << "\"\n";
+
+	for(int x = 0;x < m_lpPartList->count();x++)
+	{
+		cPart*	lpPart	= m_lpPartList->at(x);
+		out << "\"" << lpPart->partGroup()->name() << "\";\"" << lpPart->name() << "\";\"" << lpPart->description() << "\";\"" << lpPart->link() << "\";\"" << "\"\n";
+	}
+
+	file.flush();
+	file.close();
+}
+
+void cPartWindow::writeXML(const QString& szFileName)
+{
+}
+
+void cPartWindow::writePDF(const QString& szFileName)
+{
 }

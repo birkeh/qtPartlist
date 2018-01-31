@@ -42,6 +42,7 @@ class cPartList : public QList<cPart*>
 public:
 	cPart*				add(qint32 id);
 	cPart*				find(qint32 id);
+	cPart*				find(const QString& szGroup, const QString& szPart);
 };
 
 #endif // CPART_H

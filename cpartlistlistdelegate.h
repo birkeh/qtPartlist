@@ -1,17 +1,17 @@
-#ifndef CPARTLISTITEMDELEGATE_H
-#define CPARTLISTITEMDELEGATE_H
+#ifndef CPARTLISTLISTDELEGATE_H
+#define CPARTLISTLISTDELEGATE_H
 
 
 #include <QStyledItemDelegate>
 #include <QStandardItem>
 
 
-class cPartListItemDelegate : public QStyledItemDelegate
+class cPartlistListDelegate : public QStyledItemDelegate
 {
 	Q_OBJECT
 public:
-	cPartListItemDelegate(QObject* parent = 0);
-	~cPartListItemDelegate();
+	cPartlistListDelegate(QObject* parent = 0);
+	~cPartlistListDelegate();
 
 	virtual QWidget*	createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const;
 	virtual void		setEditorData(QWidget *editor, const QModelIndex &index) const;
@@ -21,4 +21,4 @@ public:
 signals:
 };
 
-#endif // CPARTLISTITEMDELEGATE_H
+#endif // CPARTLISTLISTDELEGATE_H

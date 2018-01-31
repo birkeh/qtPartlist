@@ -281,20 +281,10 @@ void cDistributorWindow::writeXLSX(const QString& szFileName)
 
 	writeXLSXLine(xlsx, 1, tr("Name"), tr("Phone"), tr("Fax"), tr("Email"), tr("address"), tr("postal"), tr("city"), tr("country"), tr("link"), tr("description"));
 
-	for(int x = 0;x < m_lpDistributorListModel->rowCount();x++)
+	for(int x = 0;x < m_lpDistributorList->count();x++)
 	{
-		QStandardItem*	lpNameItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 0));
-		QStandardItem*	lpPhoneItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 1));
-		QStandardItem*	lpFaxItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 2));
-		QStandardItem*	lpEmailItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 3));
-		QStandardItem*	lpAddressItem		= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 4));
-		QStandardItem*	lpPostalItem		= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 5));
-		QStandardItem*	lpCityItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 6));
-		QStandardItem*	lpCountryItem		= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 7));
-		QStandardItem*	lpLinkItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 8));
-		QStandardItem*	lpDescriptionItem	= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 9));
-
-		writeXLSXLine(xlsx, x+2, lpNameItem->text(), lpPhoneItem->text(), lpFaxItem->text(), lpEmailItem->text(), lpAddressItem->text(), lpPostalItem->text(), lpCityItem->text(), lpCountryItem->text(), lpLinkItem->text(), lpDescriptionItem->text());
+		cDistributor*	lpDistributor	= m_lpDistributorList->at(x);
+		writeXLSXLine(xlsx, x+2, lpDistributor->name(), lpDistributor->phone(), lpDistributor->fax(), lpDistributor->eMail(), lpDistributor->address(), QString::number(lpDistributor->postalCode()), lpDistributor->city(), lpDistributor->country(), lpDistributor->link(), lpDistributor->description());
 	}
 
 	xlsx.saveAs(szFileName);
@@ -330,20 +320,10 @@ void cDistributorWindow::writeText(const QString& szFileName)
 
 	out << "\"" << tr("Name") << "\";\"" << tr("Phone") << "\";\"" << tr("Fax") << "\";\"" << tr("Email") << "\";\"" << tr("address") << "\";\"" << tr("postal") << "\";\"" << tr("city") << "\";\"" << tr("country") << "\";\"" << tr("link") << "\";\"" << tr("description") << "\"\n";
 
-	for(int x = 0;x < m_lpDistributorListModel->rowCount();x++)
+	for(int x = 0;x < m_lpDistributorList->count();x++)
 	{
-		QStandardItem*	lpNameItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 0));
-		QStandardItem*	lpPhoneItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 1));
-		QStandardItem*	lpFaxItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 2));
-		QStandardItem*	lpEmailItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 3));
-		QStandardItem*	lpAddressItem		= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 4));
-		QStandardItem*	lpPostalItem		= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 5));
-		QStandardItem*	lpCityItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 6));
-		QStandardItem*	lpCountryItem		= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 7));
-		QStandardItem*	lpLinkItem			= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 8));
-		QStandardItem*	lpDescriptionItem	= m_lpDistributorListModel->itemFromIndex(m_lpDistributorListModel->index(x, 9));
-
-		out << "\"" << lpNameItem->text() << "\";\"" << lpPhoneItem->text() << "\";\"" << lpFaxItem->text() << "\";\"" << lpEmailItem->text() << "\";\"" << lpAddressItem->text() << "\";\"" << lpPostalItem->text() << "\";\"" << lpCityItem->text() << "\";\"" << lpCountryItem->text() << "\";\"" << lpLinkItem->text() << "\";\"" << lpDescriptionItem->text() << "\"\n";
+		cDistributor*	lpDistributor	= m_lpDistributorList->at(x);
+		out << "\"" << lpDistributor->name() << "\";\"" << lpDistributor->phone() << "\";\"" << lpDistributor->fax() << "\";\"" << lpDistributor->eMail() << "\";\"" << lpDistributor->address() << "\";\"" << lpDistributor->postalCode() << "\";\"" << lpDistributor->city() << "\";\"" << lpDistributor->country() << "\";\"" << lpDistributor->link() << "\";\"" << lpDistributor->description() << "\"\n";
 	}
 
 	file.flush();

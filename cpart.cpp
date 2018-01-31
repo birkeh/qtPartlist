@@ -82,3 +82,13 @@ cPart* cPartList::find(qint32 id)
 	}
 	return(0);
 }
+
+cPart* cPartList::find(const QString& szGroup, const QString& szPart)
+{
+	for(int x = 0;x < count();x++)
+	{
+		if(at(x)->partGroup()->name() == szGroup && at(x)->name() == szPart)
+			return(at(x));
+	}
+	return(0);
+}

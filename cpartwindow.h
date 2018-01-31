@@ -7,6 +7,8 @@
 #include "cdistributor.h"
 #include "cpartdistributor.h"
 
+#include "xlsxdocument.h"
+
 #include <QWidget>
 #include <QStandardItemModel>
 
@@ -32,6 +34,8 @@ public:
 	void					deletePart();
 
 	bool					canClose();
+
+	void					exportList(const QString& szFileName);
 private slots:
 	void					on_m_lpPartList_clicked(const QModelIndex &index);
 	void					on_m_lpPartList_customContextMenuRequested(const QPoint &pos);
@@ -55,6 +59,11 @@ private:
 	cPartDistributorList*	m_lpPartDistributorList;
 
 	void					showPartList(qint32 id = -1);
+
+	void					writeXLSX(const QString& szFileName);
+	void					writeText(const QString& szFileName);
+	void					writeXML(const QString& szFileName);
+	void					writePDF(const QString& szFileName);
 };
 
 #endif // CPARTWINDOW_H

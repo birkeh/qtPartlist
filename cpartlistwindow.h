@@ -9,6 +9,8 @@
 
 #include "cpartlistitem.h"
 
+#include "xlsxdocument.h"
+
 #include <QWidget>
 #include <QTabWidget>
 #include <QStandardItemModel>
@@ -46,6 +48,10 @@ public:
 	void					partDelete();
 
 	bool					canClose();
+
+	cPartlistItemList		itemList(bool bMerge = false);
+
+	void					exportList(const QString& szFileName);
 private slots:
 	void					on_m_lpName_textChanged(const QString &arg1);
 //	void					on_m_lpPartList_doubleClicked(const QModelIndex &index);
@@ -82,6 +88,11 @@ private:
 	QStandardItem*			findItem(qint32 itemID);
 
 	bool					save(qint32 id);
+
+	void					writeXLSX(const QString& szFileName);
+	void					writeText(const QString& szFileName);
+	void					writeXML(const QString& szFileName);
+	void					writePDF(const QString& szFileName);
 };
 
 #endif // CPARTLISTWINDOW_H

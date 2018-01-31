@@ -45,6 +45,8 @@ SOURCES += \
     cpartlistitemdelegate.cpp \
     cpartlistitemeditdialog.cpp \
     cinputlistdialog.cpp \
+    cpartlistselectdialog.cpp \
+    cpartlistlistdelegate.cpp
 
 HEADERS += \
         cmainwindow.h \
@@ -64,6 +66,8 @@ HEADERS += \
     cpartlistitemdelegate.h \
     cpartlistitemeditdialog.h \
     cinputlistdialog.h \
+    cpartlistselectdialog.h \
+    cpartlistlistdelegate.h
 
 FORMS += \
         cmainwindow.ui \
@@ -74,7 +78,8 @@ FORMS += \
     cparteditdialog.ui \
     cpartdistributoreditdialog.ui \
     cpartlistitemeditdialog.ui \
-    cinputlistdialog.ui
+    cinputlistdialog.ui \
+    cpartlistselectdialog.ui
 
 RESOURCES += \
     qtpartlist.qrc

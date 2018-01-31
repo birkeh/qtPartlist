@@ -11,6 +11,10 @@
 
 #include <QMenu>
 
+#include <QFileInfo>
+#include <QFile>
+#include <QTextStream>
+
 #include <QMessageBox>
 #include <QDebug>
 
@@ -615,4 +619,172 @@ void cPartlistWindow::onPartlistItemChanged(QStandardItem*)
 bool cPartlistWindow::canClose()
 {
 	return(close());
+}
+
+cPartlistItemList cPartlistWindow::itemList(bool bMerge)
+{
+	cPartlistItemList	list;
+
+	for(int x = 0;x < m_lpPartListModel->rowCount();x++)
+	{
+		QStandardItem*	lpReferenceItem		= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 0));
+		//QStandardItem*	lpCountItem			= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 1));
+		QStandardItem*	lpGroupItem			= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 2));
+		QStandardItem*	lpPartItem			= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 3));
+		QStandardItem*	lpDistributorItem	= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 4));
+		QStandardItem*	lpStateItem			= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 5));
+		QStandardItem*	lpPriceItem			= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 6));
+		QStandardItem*	lpDescriptionItem	= m_lpPartListModel->itemFromIndex(m_lpPartListModel->index(x, 7));
+
+		QString			szReference			= lpReferenceItem->text();
+		cPart*			lpPart				= m_lpPartList->find(lpGroupItem->text(), lpPartItem->text());
+		cDistributor*	lpDistributor		= m_lpDistributorList->find(lpDistributorItem->text());
+		QString			szState				= lpStateItem->text();
+		qreal			dPrice				= lpPriceItem->text().toDouble();
+		QString			szDescription		= lpDescriptionItem->text();
+
+		if(bMerge)
+		{
+			cPartlistItem*	lpPartlistItem	= 0;
+			for(int y = 0;y < list.count();y++)
+			{
+				if(list.at(y)->partID() == lpPart->id())
+				{
+					if(lpDistributor)
+					{
+						if(list.at(y)->distributorID() == lpDistributor->id())
+							lpPartlistItem	= list.at(y);
+					}
+				}
+				if(lpPartlistItem)
+					lpPartlistItem->setReference(QString("%1, %2").arg(lpPartlistItem->reference()).arg(szReference));
+			}
+
+			if(!lpPartlistItem)
+			{
+				lpPartlistItem		= list.add(x);
+				lpPartlistItem->setReference(szReference);
+				lpPartlistItem->setPartID(lpPart->id());
+				if(lpDistributor)
+					lpPartlistItem->setDistributorID(lpDistributor->id());
+				lpPartlistItem->setState(cPartlistItem::state(szState));
+				lpPartlistItem->setPrice(dPrice);
+				lpPartlistItem->setDescription(szDescription);
+			}
+		}
+		else
+		{
+			cPartlistItem*	lpPartlistItem		= list.add(x);
+			lpPartlistItem->setReference(szReference);
+			lpPartlistItem->setPartID(lpPart->id());
+			if(lpDistributor)
+				lpPartlistItem->setDistributorID(lpDistributor->id());
+			lpPartlistItem->setState(cPartlistItem::state(szState));
+			lpPartlistItem->setPrice(dPrice);
+			lpPartlistItem->setDescription(szDescription);
+		}
+	}
+
+	return(list);
+}
+
+void cPartlistWindow::exportList(const QString& szFileName)
+{
+	QFileInfo	fileInfo(szFileName);
+	QString		szType	= fileInfo.suffix();
+
+	if(!szType.compare("xlsx", Qt::CaseInsensitive))
+		writeXLSX(szFileName);
+	else if(!szType.compare("csv", Qt::CaseInsensitive))
+		writeText(szFileName);
+	else if(!szType.compare("txt", Qt::CaseInsensitive))
+		writeText(szFileName);
+	else if(!szType.compare("xml", Qt::CaseInsensitive))
+		writeXML(szFileName);
+	else if(!szType.compare("pdf", Qt::CaseInsensitive))
+		writePDF(szFileName);
+}
+
+void cPartlistWindow::writeXLSX(const QString& szFileName)
+{
+	QXlsx::Document		xlsx;
+	QXlsx::Format		format;
+	QXlsx::Format		formatBig;
+	QXlsx::Format		formatMerged;
+	QXlsx::Format		formatCurrency;
+	QString				szNumberFormat("_-\"€\"\\ * #,##0.00_-;\\-\"€\"\\ * #,##0.00_-;_-\"€\"\\ * \"-\"??_-;_-@_-");
+
+	format.setFontBold(true);
+
+	formatBig.setFontBold(true);
+	formatBig.setFontSize(16);
+
+	formatMerged.setHorizontalAlignment(QXlsx::Format::AlignLeft);
+	formatMerged.setVerticalAlignment(QXlsx::Format::AlignTop);
+
+	formatCurrency.setNumberFormat(szNumberFormat);
+
+	xlsx.write(1,  1, ui->m_lpName->text(), formatBig);
+	xlsx.write(2,  1, ui->m_lpDescription->toPlainText());
+
+	xlsx.write(4,  1, tr("reference"), format);
+	xlsx.write(4,  2, tr("count"), format);
+	xlsx.write(4,  3, tr("group"), format);
+	xlsx.write(4,  4, tr("part"), format);
+	xlsx.write(4,  5, tr("distributor"), format);
+	xlsx.write(4,  6, tr("state"), format);
+	xlsx.write(4,  7, tr("price"), format);
+	xlsx.write(4,  8, tr("description"), format);
+
+	cPartlistItemList	list	= itemList(true);
+
+	for(int x = 0;x < list.count();x++)
+	{
+		cPartlistItem*	lpItem			= list.at(x);
+		cPart*			lpPart			= m_lpPartList->find(lpItem->partID());
+		cDistributor*	lpDistributor	= m_lpDistributorList->find(lpItem->distributorID());
+
+		xlsx.write(x+5,  1, lpItem->reference());
+		xlsx.write(x+5,  2, lpItem->reference().split(", ").count());
+		xlsx.write(x+5,  3, lpPart->partGroup()->name());
+		xlsx.write(x+5,  4, lpPart->name());
+		if(lpDistributor)
+			xlsx.write(x+5,  5, lpDistributor->name());
+		xlsx.write(x+5,  6, lpItem->stateString());
+		xlsx.write(x+5,  7, lpItem->price(), formatCurrency);
+		xlsx.write(x+5,  8, lpItem->description());
+	}
+
+	xlsx.saveAs(szFileName);
+}
+
+void cPartlistWindow::writeText(const QString& szFileName)
+{
+/*
+	QFile	file(szFileName);
+
+	if(!file.open(QFile::WriteOnly | QFile::Text))
+		return;
+
+	QTextStream out(&file);
+
+	out << "\"" << tr("Group") << "\";\"" << tr("Name") << "\";\"" << tr("Description") << "\";\"" << tr("Link") << "\"\n";
+
+	for(int x = 0;x < m_lpPartList->count();x++)
+	{
+		cPart*	lpPart	= m_lpPartList->at(x);
+		out << "\"" << lpPart->partGroup()->name() << "\";\"" << lpPart->name() << "\";\"" << lpPart->description() << "\";\"" << lpPart->link() << "\";\"" << "\"\n";
+	}
+
+	file.flush();
+	file.close();
+*/
+}
+
+void cPartlistWindow::writeXML(const QString& szFileName)
+{
+}
+
+void cPartlistWindow::writePDF(const QString& szFileName)
+{
 }

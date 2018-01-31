@@ -32,6 +32,7 @@ class cPartGroupList : public QList<cPartGroup*>
 public:
 	cPartGroup*		add(qint32 id);
 	cPartGroup*		find(qint32 id);
+	cPartGroup*		find(const QString& szGroup);
 };
 
 #endif // CPARTGROUP_H

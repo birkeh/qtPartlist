@@ -4,6 +4,8 @@
 #include "cpartlistwindow.h"
 #include "cinputlistdialog.h"
 
+#include "cpartlistselectdialog.h"
+
 #include "common.h"
 
 #include <QSqlQuery>
@@ -19,7 +21,11 @@
 
 #include <QSettings>
 
+#include <QMap>
+
 #include <QDebug>
+
+#include "xlsxdocument.h"
 
 
 cMainWindow::cMainWindow(QWidget *parent) :
@@ -388,7 +394,199 @@ void cMainWindow::onMenuFileCloseProject()
 
 void cMainWindow::onMenuFileExport()
 {
-	QMessageBox::information(this, "bla", "Export Project");
+	cPartlistSelectDialog*	lpDialog	= new cPartlistSelectDialog(this);
+
+	if(lpDialog->exec() == QDialog::Rejected)
+	{
+		delete lpDialog;
+		return;
+	}
+
+	QString					szFileName	= lpDialog->fileName();
+	QMap<qint32, qint32>	list		= lpDialog->partLists();
+	delete lpDialog;
+
+	if(!list.count())
+		return;
+
+	bool					bXLSX		= false;
+	bool					bTXT		= false;
+	bool					bXML		= false;
+	bool					bPDF		= false;
+
+	QXlsx::Format		format;
+	QXlsx::Format		formatBig;
+	QXlsx::Format		formatMerged;
+	QXlsx::Format		formatCurrency;
+	QXlsx::Format		formatWrap;
+
+	QString				szNumberFormat("_-\"€\"\\ * #,##0.00_-;\\-\"€\"\\ * #,##0.00_-;_-\"€\"\\ * \"-\"??_-;_-@_-");
+
+	format.setFontBold(true);
+
+	formatBig.setFontBold(true);
+	formatBig.setFontSize(16);
+
+	formatMerged.setHorizontalAlignment(QXlsx::Format::AlignLeft);
+	formatMerged.setVerticalAlignment(QXlsx::Format::AlignTop);
+
+	formatCurrency.setNumberFormat(szNumberFormat);
+
+	formatWrap.setTextWarp(true);
+
+	QFileInfo	fileInfo(szFileName);
+	QString		szType	= fileInfo.suffix();
+
+	if(!szType.compare("xlsx", Qt::CaseInsensitive))
+		bXLSX	= true;
+	else if(!szType.compare("csv", Qt::CaseInsensitive))
+		bTXT	= true;
+	else if(!szType.compare("txt", Qt::CaseInsensitive))
+		bTXT	= true;
+	else if(!szType.compare("xml", Qt::CaseInsensitive))
+		bXML	= true;
+	else if(!szType.compare("pdf", Qt::CaseInsensitive))
+		bPDF	= true;
+
+	QStringList				szIDList;
+	QMap<int, int>::const_iterator i;
+	QXlsx::Document			xlsx;
+
+	qint32					iLine	= 1;
+
+	if(bXLSX)
+	{
+		xlsx.write(iLine,  1, tr("count"), format);
+		xlsx.write(iLine,  2, tr("group"), format);
+		xlsx.write(iLine,  3, tr("part"), format);
+		xlsx.write(iLine,  4, tr("description"), format);
+		xlsx.write(iLine,  5, tr("distributor"), format);
+		xlsx.write(iLine,  6, tr("SKU"), format);
+		xlsx.write(iLine,  7, tr("state"), format);
+		xlsx.write(iLine,  8, tr("price"), format);
+		xlsx.write(iLine,  9, tr("project"), format);
+	}
+
+	iLine++;
+
+	i	= list.constBegin();
+	while(i != list.constEnd())
+	{
+		szIDList.append(QString::number(i.key()));
+		i++;
+	}
+
+	QSqlQuery	query;
+	QString		szQuery	= QString("SELECT    partlist.id                  partlistID, "
+								  "          partlist.name                partlistName, "
+								  "          partlist.description         partlistDescription, "
+								  "          partlistitem.id              partlistitemID, "
+								  "          partlistitem.partID          partID, "
+								  "          partlistitem.distributorID   distributorID, "
+								  "          partlistitem.reference       partlistitemReference, "
+								  "          partlistitem.description     partlistitemDescription, "
+								  "          partlistitem.state           partlistitemState, "
+								  "          partlistitem.price           partlistitemPrice, "
+								  "          partgroup.id                 partgroupID, "
+								  "          partgroup.name               partgroupName, "
+								  "          part.name                    partName, "
+								  "          part.description             partDescription, "
+								  "          distributor.name             distributorName, "
+								  "          part_distributor.id          partdistributorID, "
+								  "          part_distributor.name        partdistributorName, "
+								  "          part_distributor.description partdistributorDescription, "
+								  "          part_distributor.link        partdistributorLink, "
+								  "          part_distributor.price       partdistributorPrice "
+								  "FROM      partlist "
+								  "JOIN      partlistitem ON (partlist.id = partlistitem.partlistID) "
+								  "JOIN      part ON (partlistitem.partID = part.id) "
+								  "JOIN      partgroup ON (part.partgroupID = partgroup.id) "
+								  "LEFT JOIN distributor ON (partlistitem.distributorID = distributor.id) "
+								  "LEFT JOIN part_distributor ON (part_distributor.partID = part.id AND part_distributor.distributorID = partlistitem.distributorID) "
+								  "WHERE     partlist.id IN (%1) "
+								  "ORDER BY  LOWER(partgroup.name), "
+								  "          LOWER(part.name), "
+								  "          LOWER(distributor.name), "
+								  "          LOWER(partlist.name);").arg(szIDList.join(", "));
+	query.prepare(szQuery);
+
+	QString		szOldGroup;
+	QString		szOldPart;
+	QString		szOldDistributor;
+	QString		szOldState;
+	QStringList	szPartlist;
+	QString		szDescription;
+	QString		szPartDistributorName;
+	qint32		iCount;
+	qreal		dPrice;
+
+	if(!query.exec())
+	{
+		myDebug << query.lastError().text();
+		return;
+	}
+
+	while(query.next())
+	{
+		if(szOldGroup != query.value("partgroupName").toString() ||
+		   szOldPart != query.value("partName").toString() ||
+		   szOldDistributor != query.value("distributorName").toString() ||
+		   szOldState != cPartlistItem::stateString((cPartlistItem::STATE)query.value("partlistitemState").toInt()))
+		{
+			if(!szOldGroup.isEmpty())
+			{
+				if(bXLSX)
+				{
+					xlsx.write(iLine,  1, iCount);
+					xlsx.write(iLine,  2, szOldGroup);
+					xlsx.write(iLine,  3, szOldPart);
+					xlsx.write(iLine,  4, szDescription);
+					xlsx.write(iLine,  5, szOldDistributor);
+					xlsx.write(iLine,  6, szPartDistributorName);
+					xlsx.write(iLine,  7, szOldState);
+					xlsx.write(iLine,  8, dPrice, formatCurrency);
+					xlsx.write(iLine,  9, szPartlist.join("\n"), formatWrap);
+					iLine++;
+				}
+			}
+			szPartlist.clear();
+
+			szOldGroup				= query.value("partgroupName").toString();
+			szOldPart				= query.value("partName").toString();
+			szOldDistributor		= query.value("distributorName").toString();
+			szOldState				= cPartlistItem::stateString((cPartlistItem::STATE)query.value("partlistitemState").toInt());
+			szPartlist.append(query.value("partlistName").toString());
+			iCount					= query.value("partlistitemReference").toString().split(", ").count() * list.find(query.value("partlistID").toInt()).value();
+			dPrice					= query.value("partdistributorPrice").toDouble();
+			szDescription			= query.value("partDescription").toString();
+			szPartDistributorName	= query.value("partdistributorName").toString();
+		}
+		else
+		{
+			if(!szPartlist.contains(query.value("partlistName").toString()))
+				szPartlist.append(query.value("partlistName").toString());
+			iCount	+= query.value("partlistitemReference").toString().split(", ").count();
+		}
+	}
+
+	if(!szOldGroup.isEmpty())
+	{
+		if(bXLSX)
+		{
+			xlsx.write(iLine,  1, iCount);
+			xlsx.write(iLine,  2, szOldGroup);
+			xlsx.write(iLine,  3, szOldPart);
+			xlsx.write(iLine,  4, szDescription);
+			xlsx.write(iLine,  5, szOldDistributor);
+			xlsx.write(iLine,  6, szPartDistributorName);
+			xlsx.write(iLine,  7, szOldState);
+			xlsx.write(iLine,  8, dPrice, formatCurrency);
+			xlsx.write(iLine,  9, szPartlist.join("\n"), formatWrap);
+		}
+	}
+
+	if(bXLSX)
+		xlsx.saveAs(szFileName);
 }
 
 void cMainWindow::onMenuFileClose()
@@ -492,6 +690,20 @@ void cMainWindow::onMenuPartsDelete()
 
 void cMainWindow::onMenuPartsExport()
 {
+	if(!m_lpPartWindow)
+		return;
+
+	QSettings	settings;
+	QString		szPath		= settings.value("lastPath", QVariant::fromValue(QDir::homePath())).toString();
+	QString		szFileName	= QFileDialog::getSaveFileName(this, tr("Export"), szPath, tr("Excel 2007+ (*.xlsx);;Text files (*.txt *.csv);;XML files (*.xml);;PDF (*.pdf)"));
+
+	if(szFileName.isEmpty())
+		return;
+
+	QFileInfo	fileInfo(szFileName);
+	settings.setValue("lastPath", fileInfo.absolutePath());
+
+	m_lpPartWindow->exportList(szFileName);
 }
 
 void cMainWindow::updateMenu()
@@ -833,6 +1045,22 @@ void cMainWindow::onMenuPartlistPartDelete()
 
 void cMainWindow::onMenuPartlistExport()
 {
+	cPartlistWindow*	lpPartlistWindow	= qobject_cast<cPartlistWindow*>(ui->m_lpMainTab->widget(ui->m_lpMainTab->currentIndex()));
+
+	if(!lpPartlistWindow)
+		return;
+
+	QSettings	settings;
+	QString		szPath		= settings.value("lastPath", QVariant::fromValue(QDir::homePath())).toString();
+	QString		szFileName	= QFileDialog::getSaveFileName(this, tr("Export"), szPath, tr("Excel 2007+ (*.xlsx);;Text files (*.txt *.csv);;XML files (*.xml);;PDF (*.pdf)"));
+
+	if(szFileName.isEmpty())
+		return;
+
+	QFileInfo	fileInfo(szFileName);
+	settings.setValue("lastPath", fileInfo.absolutePath());
+
+	lpPartlistWindow->exportList(szFileName);
 }
 
 void cMainWindow::partlistChanged(QWidget* /*lpWidget*/)
