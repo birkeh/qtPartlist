@@ -451,6 +451,26 @@ void cMainWindow::onMenuFileExport()
 	QStringList				szIDList;
 	QMap<int, int>::const_iterator i;
 	QXlsx::Document			xlsx;
+	QXlsx::Format			fmt;
+	fmt.setFontBold(true);
+	xlsx.write(1, 1, "empty");
+	xlsx.write(2, 1, "empty", fmt);
+	QFont					font		= xlsx.cellAt(1, 1)->format().font();
+	QFont					fontBold	= xlsx.cellAt(2, 1)->format().font();
+	fmt.setFontBold(false);
+	xlsx.write(1, 1, "");
+	xlsx.write(2, 1, "", fmt);
+
+	qint16					iHeight			= 0;
+	qreal					dCount			= 0;
+	qreal					dGroup			= 0;
+	qreal					dPart			= 0;
+	qreal					dDescription	= 0;
+	qreal					dDistributor	= 0;
+	qreal					dSKU			= 0;
+	qreal					dState			= 0;
+	qreal					dPrice			= 0;
+	qreal					dProject		= 0;
 
 	qint32					iLine	= 1;
 
@@ -465,6 +485,16 @@ void cMainWindow::onMenuFileExport()
 		xlsx.write(iLine,  7, tr("state"), format);
 		xlsx.write(iLine,  8, tr("price"), format);
 		xlsx.write(iLine,  9, tr("project"), format);
+
+		metrics(fontBold, dCount, iHeight, tr("Count"));
+		metrics(fontBold, dGroup, iHeight, tr("Group"));
+		metrics(fontBold, dPart, iHeight, tr("Part"));
+		metrics(fontBold, dDescription, iHeight, tr("Description"));
+		metrics(fontBold, dDistributor, iHeight, tr("Distributor"));
+		metrics(fontBold, dSKU, iHeight, tr("SKU"));
+		metrics(fontBold, dState, iHeight, tr("State"));
+		metrics(fontBold, dPrice, iHeight, tr("Price"));
+		metrics(fontBold, dProject, iHeight, tr("Project"));
 	}
 
 	iLine++;
@@ -518,7 +548,7 @@ void cMainWindow::onMenuFileExport()
 	QString		szDescription;
 	QString		szPartDistributorName;
 	qint32		iCount;
-	qreal		dPrice;
+	qreal		dOrderPrice;
 
 	if(!query.exec())
 	{
@@ -544,8 +574,19 @@ void cMainWindow::onMenuFileExport()
 					xlsx.write(iLine,  5, szOldDistributor);
 					xlsx.write(iLine,  6, szPartDistributorName);
 					xlsx.write(iLine,  7, szOldState);
-					xlsx.write(iLine,  8, dPrice, formatCurrency);
+					xlsx.write(iLine,  8, dOrderPrice, formatCurrency);
 					xlsx.write(iLine,  9, szPartlist.join("\n"), formatWrap);
+
+					metrics(font, dCount, iHeight, QString::number(iCount));
+					metrics(font, dGroup, iHeight, szOldGroup);
+					metrics(font, dPart, iHeight, szOldPart);
+					metrics(font, dDescription, iHeight, szDescription);
+					metrics(font, dDistributor, iHeight, szOldDistributor);
+					metrics(font, dSKU, iHeight, szPartDistributorName);
+					metrics(font, dState, iHeight, szOldState);
+					metrics(font, dPrice, iHeight, QString("€ ") + QString::number(dOrderPrice, 'f', 2));
+					metrics(font, dProject, iHeight, szPartlist.join("\n"));
+
 					iLine++;
 				}
 			}
@@ -555,16 +596,16 @@ void cMainWindow::onMenuFileExport()
 			szOldPart				= query.value("partName").toString();
 			szOldDistributor		= query.value("distributorName").toString();
 			szOldState				= cPartlistItem::stateString((cPartlistItem::STATE)query.value("partlistitemState").toInt());
-			szPartlist.append(query.value("partlistName").toString());
+			szPartlist.append(QString("%1 (%2)").arg(query.value("partlistName").toString()).arg(query.value("partlistitemReference").toString().split(", ").count()));
 			iCount					= query.value("partlistitemReference").toString().split(", ").count() * list.find(query.value("partlistID").toInt()).value();
-			dPrice					= query.value("partdistributorPrice").toDouble();
+			dOrderPrice				= query.value("partdistributorPrice").toDouble();
 			szDescription			= query.value("partDescription").toString();
 			szPartDistributorName	= query.value("partdistributorName").toString();
 		}
 		else
 		{
 			if(!szPartlist.contains(query.value("partlistName").toString()))
-				szPartlist.append(query.value("partlistName").toString());
+				szPartlist.append(QString("%1 (%2)").arg(query.value("partlistName").toString()).arg(query.value("partlistitemReference").toString().split(", ").count()));
 			iCount	+= query.value("partlistitemReference").toString().split(", ").count();
 		}
 	}
@@ -582,11 +623,33 @@ void cMainWindow::onMenuFileExport()
 			xlsx.write(iLine,  7, szOldState);
 			xlsx.write(iLine,  8, dPrice, formatCurrency);
 			xlsx.write(iLine,  9, szPartlist.join("\n"), formatWrap);
+
+			metrics(font, dCount, iHeight, QString::number(iCount));
+			metrics(font, dGroup, iHeight, szOldGroup);
+			metrics(font, dPart, iHeight, szOldPart);
+			metrics(font, dDescription, iHeight, szDescription);
+			metrics(font, dDistributor, iHeight, szOldDistributor);
+			metrics(font, dSKU, iHeight, szPartDistributorName);
+			metrics(font, dState, iHeight, szOldState);
+			metrics(font, dPrice, iHeight, QString("€ ") + QString::number(dOrderPrice, 'f', 2));
+			metrics(font, dProject, iHeight, szPartlist.join("\n"));
 		}
 	}
 
 	if(bXLSX)
+	{
+		xlsx.setColumnWidth( 1, dCount*1.2);
+		xlsx.setColumnWidth( 2, dGroup*1.2);
+		xlsx.setColumnWidth( 3, dPart*1.2);
+		xlsx.setColumnWidth( 4, dDescription*1.2);
+		xlsx.setColumnWidth( 5, dDistributor*1.2);
+		xlsx.setColumnWidth( 6, dSKU*1.2);
+		xlsx.setColumnWidth( 7, dState*1.2);
+		xlsx.setColumnWidth( 8, dPrice*1.2);
+		xlsx.setColumnWidth( 9, dProject*1.2);
+
 		xlsx.saveAs(szFileName);
+	}
 }
 
 void cMainWindow::onMenuFileClose()

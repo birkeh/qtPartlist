@@ -708,6 +708,26 @@ void cPartlistWindow::exportList(const QString& szFileName)
 void cPartlistWindow::writeXLSX(const QString& szFileName)
 {
 	QXlsx::Document		xlsx;
+	QXlsx::Format		fmt;
+	fmt.setFontBold(true);
+	xlsx.write(1, 1, "empty");
+	xlsx.write(2, 1, "empty", fmt);
+	QFont				font		= xlsx.cellAt(1, 1)->format().font();
+	QFont				fontBold	= xlsx.cellAt(2, 1)->format().font();
+	fmt.setFontBold(false);
+	xlsx.write(1, 1, "");
+	xlsx.write(2, 1, "", fmt);
+
+	qint16				iHeight			= 0;
+	qreal				dReference		= 0;
+	qreal				dCount			= 0;
+	qreal				dGroup			= 0;
+	qreal				dPart			= 0;
+	qreal				dDistributor	= 0;
+	qreal				dState			= 0;
+	qreal				dPrice			= 0;
+	qreal				dDescription	= 0;
+
 	QXlsx::Format		format;
 	QXlsx::Format		formatBig;
 	QXlsx::Format		formatMerged;
@@ -736,6 +756,15 @@ void cPartlistWindow::writeXLSX(const QString& szFileName)
 	xlsx.write(4,  7, tr("price"), format);
 	xlsx.write(4,  8, tr("description"), format);
 
+	metrics(fontBold, dReference, iHeight, tr("reference"));
+	metrics(fontBold, dCount, iHeight, tr("count"));
+	metrics(fontBold, dGroup, iHeight, tr("group"));
+	metrics(fontBold, dPart, iHeight, tr("part"));
+	metrics(fontBold, dDistributor, iHeight, tr("distributor"));
+	metrics(fontBold, dState, iHeight, tr("state"));
+	metrics(fontBold, dPrice, iHeight, tr("price"));
+	metrics(fontBold, dDescription, iHeight, tr("description"));
+
 	cPartlistItemList	list	= itemList(true);
 
 	for(int x = 0;x < list.count();x++)
@@ -753,7 +782,28 @@ void cPartlistWindow::writeXLSX(const QString& szFileName)
 		xlsx.write(x+5,  6, lpItem->stateString());
 		xlsx.write(x+5,  7, lpItem->price(), formatCurrency);
 		xlsx.write(x+5,  8, lpItem->description());
+
+		metrics(font, dReference, iHeight, lpItem->reference());
+		metrics(font, dCount, iHeight, QString::number(lpItem->reference().split(", ").count()));
+		metrics(font, dGroup, iHeight, lpPart->partGroup()->name());
+		metrics(font, dPart, iHeight, lpPart->name());
+		if(lpDistributor)
+			metrics(font, dDistributor, iHeight, lpDistributor->name());
+		metrics(font, dState, iHeight, lpItem->stateString());
+		metrics(font, dPrice, iHeight, QString("€ ") + QString::number(lpItem->price(), 'f', 2));
+		metrics(font, dDescription, iHeight, lpItem->description());
 	}
+
+	if(dReference > 25)
+		dReference	= 50;
+	xlsx.setColumnWidth( 1, dReference*1.2);
+	xlsx.setColumnWidth( 2, dCount*1.2);
+	xlsx.setColumnWidth( 3, dGroup*1.2);
+	xlsx.setColumnWidth( 4, dPart*1.2);
+	xlsx.setColumnWidth( 5, dDistributor*1.2);
+	xlsx.setColumnWidth( 6, dState*1.2);
+	xlsx.setColumnWidth( 7, dPrice*1.2);
+	xlsx.setColumnWidth( 8, dDescription*1.2);
 
 	xlsx.saveAs(szFileName);
 }

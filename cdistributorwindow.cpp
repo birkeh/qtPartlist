@@ -15,6 +15,8 @@
 #include <QFile>
 #include <QTextStream>
 
+#include <QFontMetrics>
+
 #include <QMessageBox>
 #include <QDebug>
 
@@ -278,14 +280,73 @@ void cDistributorWindow::exportList(const QString& szFileName)
 void cDistributorWindow::writeXLSX(const QString& szFileName)
 {
 	QXlsx::Document		xlsx;
+	QXlsx::Format		fmt;
+	fmt.setFontBold(true);
+	xlsx.write(1, 1, "empty");
+	xlsx.write(2, 1, "empty", fmt);
+	QFont				font		= xlsx.cellAt(1, 1)->format().font();
+	QFont				fontBold	= xlsx.cellAt(2, 1)->format().font();
+	fmt.setFontBold(false);
+	xlsx.write(1, 1, "");
+	xlsx.write(2, 1, "", fmt);
+
+	qint16				iHeight			= 0;
+	qreal				dName			= 0;
+	qreal				dPhone			= 0;
+	qreal				dFax			= 0;
+	qreal				dEmail			= 0;
+	qreal				dAddress		= 0;
+	qreal				dPostal			= 0;
+	qreal				dCity			= 0;
+	qreal				dCountry		= 0;
+	qreal				dLink			= 0;
+	qreal				dDescription	= 0;
 
 	writeXLSXLine(xlsx, 1, tr("Name"), tr("Phone"), tr("Fax"), tr("Email"), tr("address"), tr("postal"), tr("city"), tr("country"), tr("link"), tr("description"));
 
+	metrics(fontBold, dName, iHeight, tr("Name"));
+	metrics(fontBold, dPhone, iHeight, tr("Phone"));
+	metrics(fontBold, dFax, iHeight, tr("Fax"));
+	metrics(fontBold, dEmail, iHeight, tr("Email"));
+	metrics(fontBold, dAddress, iHeight, tr("address"));
+	metrics(fontBold, dPostal, iHeight, tr("postal"));
+	metrics(fontBold, dCity, iHeight, tr("city"));
+	metrics(fontBold, dCountry, iHeight, tr("country"));
+	metrics(fontBold, dLink, iHeight, tr("link"));
+	metrics(fontBold, dDescription, iHeight, tr("description"));
+	xlsx.setRowHeight(1, iHeight);
+
 	for(int x = 0;x < m_lpDistributorList->count();x++)
 	{
+		iHeight			= 0;
+
 		cDistributor*	lpDistributor	= m_lpDistributorList->at(x);
 		writeXLSXLine(xlsx, x+2, lpDistributor->name(), lpDistributor->phone(), lpDistributor->fax(), lpDistributor->eMail(), lpDistributor->address(), QString::number(lpDistributor->postalCode()), lpDistributor->city(), lpDistributor->country(), lpDistributor->link(), lpDistributor->description());
+
+		metrics(font, dName, iHeight, lpDistributor->name());
+		metrics(font, dPhone, iHeight, lpDistributor->phone());
+		metrics(font, dFax, iHeight, lpDistributor->fax());
+		metrics(font, dEmail, iHeight, lpDistributor->eMail());
+		metrics(font, dAddress, iHeight, lpDistributor->address());
+		metrics(font, dPostal, iHeight, QString::number(lpDistributor->postalCode()));
+		metrics(font, dCity, iHeight, lpDistributor->city());
+		metrics(font, dCountry, iHeight, lpDistributor->country());
+		metrics(font, dLink, iHeight, lpDistributor->link());
+		metrics(font, dDescription, iHeight, lpDistributor->description());
+
+		xlsx.setRowHeight(x+2, iHeight);
 	}
+
+	xlsx.setColumnWidth( 1, dName*1.2);
+	xlsx.setColumnWidth( 2, dPhone*1.2);
+	xlsx.setColumnWidth( 3, dFax*1.2);
+	xlsx.setColumnWidth( 4, dEmail*1.2);
+	xlsx.setColumnWidth( 5, dAddress*1.2);
+	xlsx.setColumnWidth( 6, dPostal*1.2);
+	xlsx.setColumnWidth( 7, dCity*1.2);
+	xlsx.setColumnWidth( 8, dCountry*1.2);
+	xlsx.setColumnWidth( 9, dLink*1.2);
+	xlsx.setColumnWidth(10, dDescription*1.2);
 
 	xlsx.saveAs(szFileName);
 }

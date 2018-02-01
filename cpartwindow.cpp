@@ -310,6 +310,25 @@ void cPartWindow::exportList(const QString& szFileName)
 void cPartWindow::writeXLSX(const QString& szFileName)
 {
 	QXlsx::Document		xlsx;
+	QXlsx::Format		fmt;
+	fmt.setFontBold(true);
+	xlsx.write(1, 1, "empty");
+	xlsx.write(2, 1, "empty", fmt);
+	QFont				font		= xlsx.cellAt(1, 1)->format().font();
+	QFont				fontBold	= xlsx.cellAt(2, 1)->format().font();
+	fmt.setFontBold(false);
+	xlsx.write(1, 1, "");
+	xlsx.write(2, 1, "", fmt);
+
+	qint16				iHeight			= 0;
+	qreal				dGroup			= 0;
+	qreal				dName			= 0;
+	qreal				dDescription	= 0;
+	qreal				dLink			= 0;
+	qreal				dDistributor	= 0;
+	qreal				dPartName		= 0;
+	qreal				dPrice			= 0;
+
 	qint32				iLine	= 1;
 	QXlsx::Format		format;
 	QXlsx::Format		formatMerged;
@@ -330,6 +349,14 @@ void cPartWindow::writeXLSX(const QString& szFileName)
 	xlsx.write(iLine,  5, tr("Distributor"), format);
 	xlsx.write(iLine,  6, tr("Part Name"), format);
 	xlsx.write(iLine,  7, tr("Price"), format);
+
+	metrics(fontBold, dGroup, iHeight, tr("Group"));
+	metrics(fontBold, dName, iHeight, tr("Name"));
+	metrics(fontBold, dDescription, iHeight, tr("Description"));
+	metrics(fontBold, dLink, iHeight, tr("Link"));
+	metrics(fontBold, dDistributor, iHeight, tr("Distributor"));
+	metrics(fontBold, dPartName, iHeight, tr("Part Name"));
+	metrics(fontBold, dPrice, iHeight, tr("Price"));
 	iLine++;
 
 	for(int x = 0;x < m_lpPartList->count();x++)
@@ -341,6 +368,11 @@ void cPartWindow::writeXLSX(const QString& szFileName)
 		xlsx.write(iLine,  3, lpPart->description());
 		xlsx.write(iLine,  4, lpPart->link());
 
+		metrics(font, dGroup, iHeight, lpPart->partGroup()->name());
+		metrics(font, dName, iHeight, lpPart->name());
+		metrics(font, dDescription, iHeight, lpPart->description());
+		metrics(font, dLink, iHeight, lpPart->link());
+
 		qint32	iLineTemp	= 0;
 		for(int y = 0;y < m_lpPartDistributorList->count();y++)
 		{
@@ -351,6 +383,11 @@ void cPartWindow::writeXLSX(const QString& szFileName)
 				xlsx.write(iLine+iLineTemp, 5, lpPartDistributor->distributor()->name());
 				xlsx.write(iLine+iLineTemp, 6, lpPartDistributor->name());
 				xlsx.write(iLine+iLineTemp, 7, lpPartDistributor->price(), formatCurrency);
+
+				metrics(font, dDistributor, iHeight, lpPartDistributor->distributor()->name());
+				metrics(font, dPartName, iHeight, lpPartDistributor->name());
+				metrics(font, dPrice, iHeight, QString("€ ") + QString::number(lpPartDistributor->price(), 'f', 2));
+
 				iLineTemp++;
 			}
 		}
@@ -365,6 +402,14 @@ void cPartWindow::writeXLSX(const QString& szFileName)
 		else
 			iLine++;
 	}
+
+	xlsx.setColumnWidth( 1, dGroup*1.2);
+	xlsx.setColumnWidth( 2, dName*1.2);
+	xlsx.setColumnWidth( 3, dDescription*1.2);
+	xlsx.setColumnWidth( 4, dLink*1.2);
+	xlsx.setColumnWidth( 5, dDistributor*1.2);
+	xlsx.setColumnWidth( 6, dPartName*1.2);
+	xlsx.setColumnWidth( 7, dPrice*1.2);
 
 	xlsx.saveAs(szFileName);
 }
