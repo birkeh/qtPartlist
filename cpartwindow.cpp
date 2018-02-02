@@ -191,6 +191,7 @@ void cPartWindow::onAdd()
 
 	delete lpDialog;
 
+	partGroupChanged(0);
 	partChanged(0);
 	showPartList(id);
 }
