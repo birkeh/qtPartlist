@@ -12,6 +12,7 @@
 #include <QDir>
 #include <QFile>
 #include <QBuffer>
+#include <QIntValidator>
 
 #include <QDebug>
 

@@ -1,5 +1,7 @@
 #include "cpartlistitem.h"
 
+#include <QObject>
+
 
 cPartlistItem::cPartlistItem() :
 	m_id(-1),
